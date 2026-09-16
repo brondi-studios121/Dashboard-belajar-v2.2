@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUPINTAR - Portal Kuis Mandiri</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Konten Pilihan Mapel -->
+    <main>
+        <div class="hero-section scroll-reveal">
+            <span class="hero-badge">Pusat Belajar Mandiri</span>
+            <h2 class="hero-title">Asah Kemampuan Akademismu</h2>
+            <p class="hero-subtitle">Silakan pilih salah satu paket mata pelajaran tryout di bawah ini untuk memulai latihan kuis.</p>
+        </div>
+
+        <div class="grid-subjects" id="subjectGrid">
+            <!-- Pilihan mata pelajaran akan di-generate otomatis oleh script.js -->
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- Hubungkan berkas JavaScript Modular -->
+    <script src="script.js"></script>
+</body>
+</html>

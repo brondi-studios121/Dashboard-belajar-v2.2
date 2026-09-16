@@ -1,0 +1,316 @@
+/* ==========================================
+   DESAIN STYLESHEET GLOBAL - EDUPINTAR
+   ========================================== */
+
+:root {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-color: #0f172a;
+    --text-muted: #64748b;
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #e0e7ff;
+    --border-color: #e2e8f0;
+    --hover-bg: #f1f5f9;
+    --success-color: #10b981;
+    --success-bg: #ecfdf5;
+    --success-border: #a7f3d0;
+    --danger-color: #ef4444;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.03);
+}
+
+[data-theme="dark"] {
+    --bg-color: #090d16;
+    --card-bg: #111827;
+    --text-color: #f1f5f9;
+    --text-muted: #94a3b8;
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #1e1b4b;
+    --border-color: #1f2937;
+    --hover-bg: #1f2937;
+    --success-color: #34d399;
+    --success-bg: #064e3b;
+    --success-border: #047857;
+    --danger-color: #f87171;
+    --danger-bg: #7f1d1d;
+    --danger-border: #b91c1c;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header & Navigasi */
+header {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 2rem;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.header-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-box {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #ffffff;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.logo-title h1 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    background: linear-gradient(to right, var(--primary-color), var(--text-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-title p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.theme-toggle-btn {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--border-color);
+}
+
+/* Kontainer Utama */
+main {
+    flex-grow: 1;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Dashboard Card Mapel */
+.hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.hero-badge {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.35rem 0.85rem;
+    border-radius: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.hero-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-top: 1rem;
+    letter-spacing: -0.03em;
+}
+
+.hero-subtitle {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+}
+
+.grid-subjects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card-subject {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 240px;
+    box-shadow: var(--shadow-sm);
+    transform: translateY(0);
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.card-subject:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Status Card Kosong / Segera Hadir */
+.card-subject.disabled {
+    opacity: 0.55;
+    filter: grayscale(40%);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.card-subject.disabled:hover {
+    transform: none;
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.badge-coming-soon {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #d97706;
+    background-color: rgba(217, 119, 6, 0.1);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    border-radius: 1rem;
+}
+
+[data-theme="dark"] .badge-coming-soon {
+    color: #fbbf24;
+    background-color: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+.subject-icon {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+}
+
+.subject-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.subject-description {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+}
+
+.subject-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.75rem;
+    margin-top: auto;
+}
+
+.soal-count {
+    font-family: monospace;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+.mulai-btn-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: auto;
+}
+
+footer .company-brand {
+    color: var(--primary-color);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+/* Animation Scroll Reveal */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.scroll-reveal.reveal-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media(max-width: 640px) {
+    .grid-subjects {
+        grid-template-columns: 1fr;
+    }
+}
