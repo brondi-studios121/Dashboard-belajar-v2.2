@@ -1,13 +1,13 @@
 // Data Daftar Mata Pelajaran
-// Jika materi sudah siap, cukup ganti 'available: false' menjadi 'available: true'
+// Cukup ubah 'available: false' jadi 'available: true' saat materinya siap
 const subjects = [
-    { id: 'agama', name: 'AGAMA', icon: '📖', desc: 'Pendidikan Agama & Budi Pekerti', available:false },
+    { id: 'agama', name: 'AGAMA', icon: '📖', desc: 'Pendidikan Agama & Budi Pekerti', available: false },
     { id: 'appk', name: 'APPK', icon: '💻', desc: 'Aplikasi Pengolah Kata & Data', available: false },
     { id: 'bind', name: 'BIND (Bahasa Indonesia)', icon: '🇮🇩', desc: 'Bahasa & Sastra Indonesia', available: false },
     { id: 'bing', name: 'BING (Bahasa Inggris)', icon: '🇬🇧', desc: 'English Literacy & Grammar', available: false },
     { id: 'bjawa', name: 'B JAWA', icon: '📜', desc: 'Basa lan Sastra Jawa', available: false },
     { id: 'bk', name: 'BK', icon: '💬', desc: 'Bimbingan Konseling', available: false },
-    { id: 'digma', name: 'DIGMA', icon: '📱', desc: 'Pemasaran & Media Digital', available: false },
+    { id: 'digma', name: 'DIGMA', icon: '📱', desc: 'Pemasaran & Media Digital', available: true }, // Aktif -> Otomatis ke Atas
     { id: 'kkppl', name: 'KKPPL', icon: '⚙️', desc: 'Keterampilan Komputer & Pemrograman', available: false },
     { id: 'mtk', name: 'MTK (Matematika)', icon: '📐', desc: 'Logika, Aljabar & Geometri', available: false },
     { id: 'opkom', name: 'OPKOM', icon: '🖥️', desc: 'Operasi & Sistem Komputer', available: false },
@@ -48,13 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. RENDER DAFTAR MATA PELAJARAN
+    // 2. SORTING OTOMATIS: Mapel aktif (available: true) dipindah ke paling atas
+    const sortedSubjects = [...subjects].sort((a, b) => b.available - a.available);
+
+    // 3. RENDER DAFTAR MATA PELAJARAN
     const container = document.getElementById('subjectGrid');
 
-    subjects.forEach(subject => {
+    sortedSubjects.forEach(subject => {
         const card = document.createElement('a');
         card.className = `card-subject scroll-reveal ${subject.available ? '' : 'disabled'}`;
-        card.href = subject.available ? `quiz.html?subject=${subject.id}` : '#';
+        card.href = subject.available ? `${subject.id}.html` : '#';
 
         if (subject.available) {
             card.innerHTML = `
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="subject-description">${subject.desc}</p>
                 </div>
                 <div class="subject-meta">
-                    <span class="soal-count">20 SOAL</span>
+                    <span class="soal-count">50 SOAL</span>
                     <span class="mulai-btn-text">Mulai Tryout →</span>
                 </div>
             `;
@@ -85,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(card);
     });
 
-    // 3. ENGINE SCROLL REVEAL (INTERSECTION OBSERVER)
+    // 4. ENGINE SCROLL REVEAL (INTERSECTION OBSERVER)
     const reveals = document.querySelectorAll('.scroll-reveal');
     
     const revealCallback = (entries, observer) => {
