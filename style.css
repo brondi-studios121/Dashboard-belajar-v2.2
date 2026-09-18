@@ -149,10 +149,10 @@ main {
     justify-content: center;
 }
 
-/* Dashboard Card Mapel */
+/* Hero Section */
 .hero-section {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .hero-badge {
@@ -179,6 +179,37 @@ main {
     font-size: 1.05rem;
 }
 
+/* Kolom Pencarian (Search Bar) */
+.search-container {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto 2.5rem auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Dashboard Grid & Card Mapel */
 .grid-subjects {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -205,6 +236,37 @@ main {
     transform: translateY(-4px);
     border-color: var(--primary-color);
     box-shadow: var(--shadow-lg);
+}
+
+/* Styling Ikon Modern (SVG Badge Container) */
+.subject-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 0.85rem;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
+    border: 1px solid var(--border-color);
+}
+
+.subject-icon svg {
+    width: 1.65rem;
+    height: 1.65rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.card-subject:hover .subject-icon {
+    background: var(--primary-color);
+    color: #ffffff;
+    transform: scale(1.05);
 }
 
 /* Status Card Kosong / Segera Hadir */
@@ -236,11 +298,6 @@ main {
     color: #fbbf24;
     background-color: rgba(251, 191, 36, 0.15);
     border-color: rgba(251, 191, 36, 0.3);
-}
-
-.subject-icon {
-    font-size: 2.25rem;
-    margin-bottom: 1rem;
 }
 
 .subject-title {
@@ -277,7 +334,7 @@ main {
     color: var(--primary-color);
 }
 
-/* Tampilan Form Setup & Kuis */
+/* Tampilan Form Setup & Card Kuis */
 .quiz-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);

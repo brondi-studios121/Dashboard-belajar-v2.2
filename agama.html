@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis PAI - EDUPINTAR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: PAI</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin Anda kerjakan di bawah ini untuk memulai latihan mandiri Pendidikan Agama Islam.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Semua pertanyaan diacak secara dinamis berdasarkan Kisi-Kisi PAI.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✔ Definisi & Tujuan Berpikir Kritis</div>
+                        <div>✔ Kandungan Q.S. Ali 'Imran 190-191</div>
+                        <div>✔ Janji & Q.S. Al-Isra' 34</div>
+                        <div>✔ Hakikat & Bentuk Syukur Nikmat</div>
+                        <div>✔ Bahaya & Dampak Buruk Miras</div>
+                        <div>✔ Menjaga Aib & Menjauhi Fitnah/Buhtan</div>
+                        <div>✔ Dampak Perkelahian Pelajar</div>
+                        <div>✔ Penanggulangan Kenakalan Remaja</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: PAI</span>
+                    <span id="progressText">Soal 1 dari 15</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+
+                <ul class="options-list" id="optionsContainer"></ul>
+
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi simulasi ujian Pendidikan Agama Islam (PAI).</p>
+
+                <div class="score-num" id="scoreValue">0</div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA PAI SESUAI KISI-KISI RESMI (50 SOAL) -->
+    <script>
+        const bankSoal = [
+            // BAB 1: BERPIKIR KRITIS & ALI IMRAN 190-191
+            { kategori: "Bab 1: Berpikir Kritis", q: "Manakah definisi yang paling tepat mengenai konsep berpikir kritis dalam ajaran Islam?", o: ["A. Proses menganalisis ciptaan Allah untuk memahami keagungan-Nya.", "B. Sikap meragukan semua perintah agama yang disampaikan oleh ulama.", "C. Mengkritik kelemahan orang lain untuk menunjukkan kelebihan diri.", "D. Memikirkan zat Allah secara mendalam tanpa batas menggunakan akal.", "E. Mengabaikan penemuan ilmu pengetahuan yang berkembang saat ini."], a: 0, p: "Berpikir kritis dalam Islam adalah menggunakan akal untuk merenungkan ciptaan Allah guna makin meyakini keagungan-Nya." },
+            { kategori: "Bab 1: Berpikir Kritis", q: "Tujuan utama seorang muslim membiasakan perilaku berpikir kritis adalah...", o: ["A. Agar dapat memenangkan setiap perdebatan antar umat beragama.", "B. Untuk meningkatkan keimanan dan ketakwaan kepada Allah SWT.", "C. Supaya dianggap sebagai seorang cendekiawan yang sangat pintar.", "D. Untuk menemukan kelemahan hukum-hukum alam yang ada di bumi.", "E. Agar mendapat pujian serta penghargaan tinggi dari masyarakat."], a: 1, p: "Tujuan utama berpikir kritis adalah memperkuat keimanan melalui fenomena alam ciptaan Allah." },
+            { kategori: "Bab 1: Q.S. Ali-Imran 190-191", q: "Kandungan utama yang terkandung dalam Q.S. Ali 'Imran ayat 190 adalah tentang...", o: ["A. Kewajiban menjalankan ibadah puasa pada bulan Ramadan.", "B. Anjuran untuk saling menghormati perbedaan suku dan bangsa.", "C. Penciptaan langit bumi dan pergantian malam siang sebagai tanda Allah.", "D. Tata cara pembagian harta warisan sesuai kaidah fiqih Islam.", "E. Larangan berbuat zalim dan sombong terhadap sesama manusia."], a: 2, p: "Ayat 190 menjelaskan bahwa penciptaan alam semesta dan pergantian malam siang adalah tanda kekuasaan Allah." },
+            { kategori: "Bab 1: Q.S. Ali-Imran 190-191", q: "Menurut Q.S. Ali 'Imran ayat 191, sosok Ulul Albab didefinisikan sebagai orang yang...", o: ["A. Selalu beribadah di masjid tanpa peduli urusan kehidupan dunia.", "B. Memiliki kekayaan melimpah dan suka bersedekah kepada fakir miskin.", "C. Menguasai berbagai ilmu pengetahuan modern tanpa belajar agama.", "D. Meninggalkan seluruh aktivitas keduniaan untuk fokus berzikir.", "E. Mengingat Allah dalam segala kondisi serta merenungkan ciptaan-Nya."], a: 4, p: "Ulul Albab adalah orang yang berzikir dalam keadaan berdiri, duduk, atau berbaring serta memikirkan penciptaan alam." },
+            { kategori: "Bab 1: Berpikir Kritis", q: "Perilaku yang paling mencerminkan penerapan Q.S. Ali 'Imran ayat 190-191 adalah...", o: ["A. Meneliti fenomena alam untuk makin bersyukur atas keagungan Allah.", "B. Mempelajari ilmu astronomi dengan tujuan meramal nasib seseorang.", "C. Mengagumi keindahan alam tanpa mengingat siapa Sang Penciptanya.", "D. Memanfaatkan sumber daya alam secara berlebihan tanpa kepedulian.", "E. Menghabiskan waktu untuk memikirkan wujud fisik dari zat Allah."], a: 0, p: "Mengkaji alam untuk menambah rasa syukur dan iman merupakan wujud nyata sikap Ulul Albab." },
+            { kategori: "Bab 1: Berpikir Kritis", q: "Arti istilah tadabbur dalam konteks merenungi ayat-ayat kekuasaan Allah adalah...", o: ["A. Menghafal teks tanpa memahami maknanya.", "B. Merenungkan makna mendalam dari ciptaan Allah.", "C. Membaca dengan nada yang sangat merdu.", "D. Menulis kembali ayat dalam bentuk kaligrafi.", "E. Membandingkan kitab suci dengan buku umum."], a: 1, p: "Tadabbur berarti merenungkan dan memahami makna di balik ayat-ayat Allah." },
+            { kategori: "Bab 1: Berpikir Kritis", q: "Salah satu hikmah penting yang didapatkan dari kebiasaan berpikir kritis adalah...", o: ["A. Menjadi pribadi yang selalu curiga pada orang lain.", "B. Terhindar dari kepercayaan takhayul dan kesesatan.", "C. Merasa diri paling benar di antara orang lain.", "D. Mampu memprediksi kejadian masa depan dengan tepat.", "E. Bebas dari kewajiban beribadah ritual sehari-hari."], a: 1, p: "Berpikir kritis menghindarkan diri dari dogma bodoh, doktrin sesat, dan kepercayaan takhayul." },
+            { kategori: "Bab 1: Q.S. Ali-Imran 190-191", q: "Kalimat doa yang diucapkan oleh Ulul Albab saat merenungi ciptaan Allah adalah...", o: ["A. Ya Allah berikanlah kami kekayaan melimpah.", "B. Wahai Tuhan kami ampunilah dosa kedua orang tua.", "C. Ya Tuhan kami tidaklah Engkau ciptakan ini sia-sia.", "D. Wahai Pencipta wajarkanlah segala kesalahan kami.", "E. Ya Allah jauhkanlah kami dari kemiskinan dunia."], a: 2, p: "Ulul Albab berkata: 'Rabbana ma khalaqta hadza bathilan' (Ya Tuhan kami, tidaklah Engkau menciptakan ini sia-sia)." },
+            { kategori: "Bab 1: Berpikir Kritis", q: "Objek yang diperbolehkan untuk dipikirkan dan direnungkan oleh akal manusia adalah...", o: ["A. Wujud fisik zat Allah secara mendalam.", "B. Cara memodifikasi hukum syariat Islam.", "C. Kapan terjadinya hari kiamat secara pasti.", "D. Seluruh fenomena ciptaan Allah di alam semesta.", "E. Nasib gaib seseorang di alam kubur kelak."], a: 3, p: "Rasulullah melarang memikirkan zat Allah, namun memerintahkan memikirkan ciptaan-Nya." },
+            { kategori: "Bab 1: Berpikir Kritis", q: "Manakah yang bukan merupakan karakteristik dari seorang pemikir kritis muslim?", o: ["A. Bersikap objektif dalam menerima setiap informasi.", "B. Memasrahkan segala urusan setelah berusaha maksimal.", "C. Senantiasa menghubungkan fenomena alam dengan keagungan Allah.", "D. Tergesa-gesa menyimpulkan berita tanpa konfirmasi.", "E. Terbuka terhadap kebenaran yang bersumber dari Al-Qur'an."], a: 3, p: "Tergesa-gesa menyimpulkan informasi tanpa klarifikasi (tabayyun) bertentangan dengan prinsip berpikir kritis." },
+
+            // BAB 2: JANJI & Q.S. AL-ISRA 34
+            { kategori: "Bab 2: Definisi Janji", q: "Definisi yang paling tepat mengenai konsep janji dalam ajaran Islam adalah...", o: ["A. Ucapan kesediaan untuk melakukan sesuatu di masa mendatang.", "B. Kalimat rayuan untuk mendapatkan simpati dari sesama manusia.", "C. Kesepakatan rahasia untuk menyembunyikan kejahatan teman.", "D. Sumpah palsu yang diucapkan saat menghadapi persidangan.", "E. Rencana kegiatan pribadi yang tidak melibatkan orang lain."], a: 0, p: "Janji adalah pengakuan yang mengikat diri sendiri untuk memenuhi ucapan kesediaan kepada orang lain." },
+            { kategori: "Bab 2: Kandungan Q.S. Al-Isra 34", q: "Kandungan utama dari potongan Q.S. Al-Isra' ayat 34 adalah perintah untuk...", o: ["A. Melaksanakan salat tepat pada waktunya.", "B. Menepati janji karena janji pasti dimintai pertanggungjawaban.", "C. Mengeluarkan zakat mal secara rutin.", "D. Menjauhi perbuatan prasangka buruk.", "E. Berbakti kepada kedua orang tua tua."], a: 1, p: "Al-Isra' ayat 34 menegaskan: 'Dan penuhilah janji, sesungguhnya janji itu pasti dimintai pertanggungjawaban.'" },
+            { kategori: "Bab 2: Dampak Janji", q: "Mengapa setiap muslim diwajibkan untuk selalu menepati janji yang telah dibuat?", o: ["A. Karena janji adalah bagian dari norma adat istiadat.", "B. Supaya tidak dituntut secara hukum oleh pihak pemerintah.", "C. Karena janji akan dimintai pertanggungjawaban di akhirat.", "D. Agar mendapat imbalan uang yang banyak dari manusia.", "E. Supaya dianggap sebagai orang yang sangat berkuasa."], a: 2, p: "Menepati janji adalah perintah Allah yang kelak akan dimintai pertanggungjawaban moral dan akhirat." },
+            { kategori: "Bab 2: Dampak Janji", q: "Salah satu dampak negatif yang dialami oleh orang yang sering mengingkari janji adalah...", o: ["A. Mendapatkan rezeki yang melimpah dan berkah.", "B. Dipercaya oleh banyak pengusaha besar.", "C. Dihormati oleh seluruh lapisan masyarakat.", "D. Hilangnya kepercayaan dari sesama dan berdosa besar.", "E. Terbebas dari segala tanggungan masa depan."], a: 3, p: "Mengingkari janji merusak krisis kepercayaan sosial dan digolongkan sebagai salah satu tanda orang munafik." },
+            { kategori: "Bab 2: Dampak Janji", q: "Manakah yang merupakan dampak positif dari kebiasaan selalu menepati janji?", o: ["A. Disukai oleh rekan bisnis karena mudah dimanfaatkan.", "B. Terhindar dari keharusan membayar hutang usaha.", "C. Bebas dari pengawasan hukum yang berlaku.", "D. Dipandang rendah karena dianggap terlalu jujur.", "E. Mempererat tali silaturahmi dan ketaatan kepada Allah."], a: 4, p: "Menepati janji menumbuhkan rasa percaya, mempererat persaudaraan, dan mendatangkan keridaan Allah." },
+            { kategori: "Bab 2: Definisi Janji", q: "Ancaman rasul bagi orang yang memiliki ciri sering memungkiri janji adalah dimasukkan golongan...", o: ["A. Orang munafik.", "B. Orang fasik.", "C. Orang kafir.", "D. Orang murtad.", "E. Orang musyrik."], a: 0, p: "Nabi bersabda tanda orang munafik ada tiga: jika berkata dusta, jika berjanji ingkar, jika dipercaya khianat." },
+            { kategori: "Bab 2: Kandungan Q.S. Al-Isra 34", q: "Janji seperti apakah yang diperbolehkan untuk tidak ditepati menurut hukum Islam?", o: ["A. Janji yang membutuhkan biaya yang lumayan besar.", "B. Janji yang mengandung perbuatan maksiat dan dosa.", "C. Janji yang diucapkan kepada orang non-muslim.", "D. Janji yang dibuat tanpa saksi dari pihak keluarga.", "E. Janji yang diucapkan pada saat cuaca sedang buruk."], a: 1, p: "Tidak ada ketaatan dalam kemaksiatan. Janji untuk berbuat dosa atau maksiat wajib dibatalkan." },
+            { kategori: "Bab 2: Dampak Janji", q: "Akibat utama dari ingkar janji dalam kehidupan bermasyarakat adalah timbulnya...", o: ["A. Kedamaian antawarga.", "B. Perpecahan dan ketidakharmonisan.", "C. Kemajuan ekonomi pesat.", "D. Kerukunan antarsuku.", "E. Keadilan yang merata."], a: 1, p: "Mengingkari janji merusak ikatan sosial dan menimbulkan rasa prasangka buruk serta perpecahan." },
+            { kategori: "Bab 2: Definisi Janji", q: "Menepati janji merupakan salah satu indikator utama dari tingkat...", o: ["A. Kekayaan seseorang.", "B. Kedudukan jabatan.", "C. Popularitas diri.", "D. Kesempurnaan iman.", "E. Kecerdasan otak."], a: 3, p: "Nabi bersabda: 'Tidak ada iman bagi orang yang tidak memegang amanah/janji.'" },
+            { kategori: "Bab 2: Dampak Janji", q: "Balasan yang disiapkan Allah bagi hamba-Nya yang senantiasa menepati janji adalah...", o: ["A. Pujian dari manusia.", "B. Bebas dari ujian.", "C. Pahala yang besar.", "D. Kedudukan raja.", "E. Surga Firdaus."], a: 4, p: "Allah menjanjikan pahala besar dan Surga bagi hamba-Nya yang bertakwa dan menepati janji." },
+
+            // BAB 2: SYUKUR & AIB
+            { kategori: "Bab 2: Definisi Syukur", q: "Pengertian syukur secara bahasa dan istilah yang tepat adalah...", o: ["A. Mengakui nikmat Allah dan menggunakannya pada kebaikan.", "B. Mengagumi keindahan dunia tanpa mengingat pencipta.", "C. Memamerkan harta kekayaan kepada orang yang kurang mampu.", "D. Menyimpan seluruh harta agar tidak habis digunakan.", "E. Menggunakan nikmat untuk bersenang-senang tanpa batas."], a: 0, p: "Syukur adalah bentuk pengakuan atas kebaikan Allah yang diwujudkan dengan memanfaatkan nikmat sesuai aturan-Nya." },
+            { kategori: "Bab 2: Definisi Syukur", q: "Pernyataan syukur yang diucapkan melalui lisan dilakukan dengan cara...", o: ["A. Mengeluhkan kekurangan fasilitas hidup.", "B. Mengucapkan kalimat alhamdulillah dan pujian.", "C. Menceritakan kebaikan diri sendiri.", "D. Menyembunyikan nikmat yang didapat.", "E. Membandingkan rezeki dengan orang lain."], a: 1, p: "Syukur lisan diwujudkan dengan memperbanyak zikir, pujian, dan ucapan 'Alhamdulillah'." },
+            { kategori: "Bab 2: Definisi Syukur", q: "Contoh penerapan syukur menggunakan anggota badan dalam kehidupan sehari-hari adalah...", o: ["A. Menggunakan mata untuk membaca buku fiksi.", "B. Menggunakan tangan untuk bersedekah kepada yang membutuhkan.", "C. Menggunakan kaki untuk berjalan ke tempat hiburan.", "D. Menggunakan fisik untuk bekerja tanpa beribadah.", "E. Menggunakan waktu luang untuk tidur seharian."], a: 2, p: "Syukur anggota badan dilakukan dengan mengoperasikan organ tubuh untuk ketaatan dan kebaikan." },
+            { kategori: "Bab 2: Definisi Syukur", q: "Ancaman Allah bagi orang yang kufur nikmat (tidak mau bersyukur) adalah...", o: ["A. Dicabut nyawanya saat itu juga.", "B. Dijauhkan dari seluruh teman.", "C. Diturunkan jabatannya di dunia.", "D. Azab Allah yang sangat pedih.", "E. Dihapus nama baiknya di masyarakat."], a: 3, p: "Q.S. Ibrahim ayat 7 menegaskan jika kufur nikmat, maka sesungguhnya azab-Ku sangat pedih." },
+            { kategori: "Bab 2: Aib", q: "Secara istilah, yang dimaksud dengan aib pada diri seseorang adalah...", o: ["A. Keunggulan bakat yang dimiliki.", "B. Prestasi yang membanggakan.", "C. Kekayaan harta yang melimpah.", "D. Ciri fisik yang menawan.", "E. Cacat, cela, atau keburukan."], a: 4, p: "Aib adalah cela, keburukan, atau cacat (baik fisik maupun perilaku) yang dapat membuat malu jika diketahui." },
+            { kategori: "Bab 2: Aib", q: "Sikap yang harus diambil seorang muslim ketika mengetahui aib saudara sesama muslim adalah...", o: ["A. Menutupinya dan tidak menyebarkannya.", "B. Menceritakannya kepada teman dekat.", "C. Menuliskannya di media sosial.", "D. Menjadikannya bahan lelucon.", "E. Merekamnya sebagai bukti ancaman."], a: 0, p: "Nabi bersabda: 'Barangsiapa menutup aib seorang muslim, Allah akan menutup aibnya di dunia dan akhirat.'" },
+            { kategori: "Bab 2: Aib", q: "Bahaya utama dari perilaku gemar menyebarkan aib orang lain adalah...", o: ["A. Menghilangkan stress pikiran.", "B. Mendatangkan murka Allah dan dosa.", "C. Menambah populasi teman baru.", "D. Meningkatkan popularitas akun.", "E. Mempererat tali silaturahmi."], a: 1, p: "Membuka aib orang lain mendatangkan dosa besar dan ancaman dibukanya aib sendiri oleh Allah." },
+            { kategori: "Bab 2: Aib", q: "Sikap terbaik dalam menghadapi aib atau kekurangan yang ada pada diri sendiri adalah...", o: ["A. Menyalahkan takdir yang diberikan.", "B. Pamer keburukan sebagai bentuk kebebasan.", "C. Bertaubat dan berusaha membenahi diri.", "D. Acuh tak acuh tanpa ada perbaikan.", "E. Mengkritik keburukan orang lain."], a: 2, p: "Aib diri ditutupi dengan taubat nasuha dan introspeksi membenahi kesalahan." },
+
+            // BAB 2: DAMPAK MIRAS (KHAMAR)
+            { kategori: "Bab 2: Dampak Miras", q: "Pengertian khamar atau minuman keras dalam hukum Islam mencakup...", o: ["A. Segala jenis minuman beracun.", "B. Minuman yang memiliki warna pekat.", "C. Minuman yang dijual dengan harga mahal.", "D. Segala zat yang memabukkan dan merusak akal.", "E. Minuman yang diimpor dari luar negeri."], a: 3, p: "Khamar adalah segala sesuatu yang memabukkan dan menghilangkan kesadaran akal sehat." },
+            { kategori: "Bab 2: Dampak Miras", q: "Dampak buruk utama konsumsi minuman keras terhadap kesehatan akal adalah...", o: ["A. Menajamkan daya ingat otak.", "B. Meningkatkan fokus saat belajar.", "C. Mempercepat kemampuan berpikir.", "D. Menguatkan kestabilan emosi.", "E. Hilangnya kesadaran dan kontrol diri."], a: 4, p: "Miras merusak saraf otak sehingga mengikis akal sehat dan kontrol emosi seseorang." },
+            { kategori: "Bab 2: Dampak Miras", q: "Dampak sosial yang ditimbulkan dari maraknya pemuda mengonsumsi miras adalah...", o: ["A. Timbulnya kriminalitas dan perkelahian.", "B. Meningkatnya tingkat kesejahteraan warga.", "C. Terciptanya keamanan lingkungan desa.", "D. Makin eratnya persaudaraan antarpemuda.", "E. Menurunnya angka pengangguran daerah."], a: 0, p: "Miras adalah induk kejahatan (ummul khaba'ith) yang memicu perkelahian dan tindak kriminal." },
+            { kategori: "Bab 2: Dampak Miras", q: "Hukum mengonsumsi minuman keras dalam ajaran agama Islam adalah...", o: ["A. Makruh jika hanya sedikit.", "B. Haram hukumnya secara mutlak.", "C. Mubah bila untuk penghangat.", "D. Sunah bila saat perayaan.", "E. Halal bila dicampur herbal."], a: 1, p: "Miras hukumnya haram mutlak, baik dikonsumsi dalam jumlah banyak maupun sedikit." },
+            { kategori: "Bab 2: Dampak Miras", q: "Alasan Al-Qur'an mengategorikan miras sebagai perbuatan 'rijs' (keji) adalah karena...", o: ["A. Harganya sangat mahal.", "B. Rasanya sangat pahit.", "C. Mengandung dosa dan keburukan.", "D. Warnanya kurang menarik.", "E. Mengurangi nafsu makan."], a: 2, p: "Al-Qur'an menyebut khamar sebagai perbuatan 'rijs' (keji) karena bersumber dari godaan setan yang merusak." },
+            { kategori: "Bab 2: Dampak Miras", q: "Pengharaman khamar dalam Al-Qur'an dilakukan secara bertahap bertujuan untuk...", o: ["A. Memberi waktu kepada produsen.", "B. Menguji kesabaran para sahabat.", "C. Menyesuaikan dengan iklim Arab.", "D. Mendidik masyarakat secara bertahap.", "E. Mengurangi kerugian para pedagang."], a: 3, p: "Pengharaman bertahap (tadrj) mendidik kecanduan masyarakat Arab zaman dahulu secara bijaksana." },
+            { kategori: "Bab 2: Dampak Miras", q: "Cara terbaik untuk menghindari bahaya ajakan mengonsumsi minuman keras adalah...", o: ["A. Mencoba sedikit sebagai rasa hormat.", "B. Membeli tapi tidak meminumnya.", "C. Menyimpan miras di dalam kamar.", "D. Menghadiri pesta yang ada mirasnya.", "E. Menolak tegas dan memilih pergaulan baik."], a: 4, p: "Menolak tegas dan menjauhi lingkungan atau pergaulan yang mengonsumsi miras adalah benteng terkuat." },
+
+            // BAB 2: FITNAH & BUHTAN
+            { kategori: "Bab 2: Fitnah dan Buhtan", q: "Secara istilah, yang dimaksud dengan kebiasaan fitnah adalah...", o: ["A. Menyebarkan berita bohong untuk menjatuhkan seseorang.", "B. Membicarakan kebaikan orang lain di belakangnya.", "C. Mengkritik kebijakan pemerintah secara santun.", "D. Menegur kesalahan teman secara terang-terangan.", "E. Meminta maaf atas kesalahan yang diperbuat."], a: 0, p: "Fitnah adalah perkataan bohong tanpa bukti yang disebarkan dengan maksud merusak reputasi orang lain." },
+            { kategori: "Bab 2: Fitnah dan Buhtan", q: "Definisi dari perbuatan buhtan dalam ajaran Islam adalah...", o: ["A. Membicarakan kebenaran keburukan orang lain.", "B. Dusta besar yang mengada-ada tuduhan palsu.", "C. Prasangka buruk yang disimpankan dalam hati.", "D. Mengadu domba dua pihak yang sedang berdamai.", "E. Menceritakan kebalikan dari kenyataan sebenarnya."], a: 1, p: "Buhtan adalah kebohongan atau tuduhan palsu yang direka-reka padahal korban sama sekali tidak melakukannya." },
+            { kategori: "Bab 2: Fitnah dan Buhtan", q: "Perbedaan mendasar antara perbuatan ghibah dan buhtan terletak pada...", o: ["A. Ghibah itu kebohongan, buhtan itu kenyataan.", "B. Ghibah itu pujian, buhtan itu celaan.", "C. Ghibah fakta keburukan, buhtan tuduhan palsu.", "D. Ghibah dilakukan terang-terangan, buhtan sembunyi.", "E. Ghibah berdosa kecil, buhtan tidak berdosa."], a: 2, p: "Ghibah membicarakan keburukan yang benar-benar ada, sedangkan buhtan mengada-ada tuduhan palsu." },
+            { kategori: "Bab 2: Fitnah dan Buhtan", q: "Bahaya utama dari maraknya perilaku fitnah di tengah masyarakat adalah...", o: ["A. Terciptanya suasana persaingan yang sehat.", "B. Meningkatnya rasa waspada antar warga.", "C. Mempercepat penyelesaian masalah sosial.", "D. Hancurnya tatanan kerukunan dan rasa aman.", "E. Makin kuatnya ikatan tali silaturahmi."], a: 3, p: "Fitnah menghancurkan tali persaudaraan, menciptakan permusuhan, dan merusak rasa aman warga." },
+            { kategori: "Bab 2: Fitnah dan Buhtan", q: "Sikap islami dalam menghadapi berita bohong atau tuduhan fitnah dinamakan...", o: ["A. Langsung menyebarkan berita.", "B. Marah dan membalas dendam.", "C. Mengabaikan tanpa klarifikasi.", "D. Mengancam pelaku di medsos.", "E. Tabayyun (konfirmasi kebenaran)."], a: 4, p: "Tabayyun adalah melakukan meneliti dan mengonfirmasi kebenaran informasi sebelum mempercayainya." },
+
+            // BAB 2: PERKELAHIAN PELAJAR & KENAKALAN REMAJA
+            { kategori: "Bab 2: Perkelahian Pelajar", q: "Salah satu faktor internal yang memicu terjadinya perkelahian antar pelajar adalah...", o: ["A. Ketidakmampuan mengontrol emosi dan krisis identitas.", "B. Pengaruh buruk dari media sosial dan game.", "C. Kurangnya fasilitas olahraga di lingkungan sekolah.", "D. Tekanan akademis dari guru di dalam kelas.", "E. Kondisi lalu lintas jalan raya yang padat."], a: 0, p: "Faktor internal meliputi ketidakstabilan emosi, pencarian identitas diri yang salah, dan kontrol diri yang lemah." },
+            { kategori: "Bab 2: Perkelahian Pelajar", q: "Faktor eksternal yang turut menjadi penyebab timbulnya aksi tawuran pelajar adalah...", o: ["A. Tingginya rasa empati antarsiswa.", "B. Lingkungan pergaulan dan alumni yang provokatif.", "C. Kebiasaan membaca buku di perpustakaan.", "D. Kedisiplinan jadwal kegiatan sekolah.", "E. Banyaknya jumlah ekstrakurikuler."], a: 1, p: "Faktor eksternal mencakup provokasi kelompok alumni, lingkungan pergaulan toksik, dan iklim sosial buruk." },
+            { kategori: "Bab 2: Perkelahian Pelajar", q: "Dampak buruk utama dari perkelahian pelajar bagi masa depan diri sendiri adalah...", o: ["A. Disukai oleh teman-teman segeng.", "B. Dianggap sebagai pahlawan sekolah.", "C. Luka fisik, cacat, hingga sanksi pidana.", "D. Otomatis diterima di perguruan tinggi.", "E. Terbebas dari tugas ujian sekolah."], a: 2, p: "Tawuran mengakibatkan cedera fisik, kematian, penyesalan masa depan, hingga sanksi hukum pidana." },
+            { kategori: "Bab 2: Kenakalan Remaja", q: "Upaya preventif (pencegahan) yang paling efektif untuk menanggulangi kenakalan remaja adalah...", o: ["A. Memasukkan pelaku ke dalam penjara.", "B. Memberikan sanksi denda berupa uang.", "C. Menutup sekolah yang sering tawuran.", "D. Pembinaan keagamaan dan kegiatan positif.", "E. Mengeluarkan siswa dari seluruh sekolah."], a: 3, p: "Upaya preventif berfokus pada benteng akidah, akhlak mulia, dan penyaluran bakat melalui kegiatan positif." },
+            { kategori: "Bab 2: Kenakalan Remaja", q: "Tindakan represif yang dilakukan pihak berwenang terhadap pelaku kenakalan remaja bertujuan untuk...", o: ["A. Melakukan balas dendam pribadi.", "B. Memamerkan kekuatan aparat hukum.", "C. Merusak masa depan para remaja.", "D. Menghabiskan anggaran kepolisian.", "E. Penindakan tegas dan penegakan hukum."], a: 4, p: "Tindakan represif berupa sanksi tegas dan hukum bertujuan memberikan efek jera bagi pelaku kejahatan." },
+            { kategori: "Bab 2: Kenakalan Remaja", q: "Peran utama orang tua dalam mencegah anak terjerumus ke dalam kenakalan remaja adalah...", o: ["A. Memberikan perhatian, kasih sayang, dan pendidikan agama.", "B. Memenuhi seluruh permintaan uang tanpa batas.", "C. Membebaskan anak pulang larut malam.", "D. Membiarkan anak memilih pergaulan sesuka hati.", "E. Mempercayakan sepenuhnya pendampingan anak ke sekolah."], a: 0, p: "Keluarga adalah madrasah pertama. Kasih sayang dan kontrol orang tua merupakan benteng utama." },
+            { kategori: "Bab 2: Perkelahian Pelajar", q: "Langkah konkrit yang dapat dilakukan sekolah untuk meminimalisir tawuran antar pelajar adalah...", o: ["A. Mengurangi jam pelajaran agama.", "B. Mengembangkan kegiatan ekstrakurikuler religius dan bakat.", "C. Melarang siswa berinteraksi dengan sekolah lain.", "D. Memberikan tugas PR dalam jumlah banyak.", "E. Menghilangkan jam istirahat sekolah."], a: 1, p: "Sekolah memfasilitasi wadah positif seperti ekskul seni, olahraga, dan rohis agar energi remaja tersalurkan baik." },
+            { kategori: "Bab 2: Kenakalan Remaja", q: "Ciri pelajar yang memiliki karakter berakhlak mulia sesuai nilai Islam adalah...", o: ["A. Selalu menang saat diajak berkelahi.", "B. Menolak diajak tawuran dan menghormati sesama.", "C. Memiliki banyak tato di tubuhnya.", "D. Takut dipanggil oleh guru bimbingan konseling.", "E. Suka pamer kekuatan fisik di media sosial."], a: 2, p: "Pelajar muslim sejati menjauhi kekerasan, berani menolak ajakan negatif, dan menjaga nama baik sekolah." },
+            { kategori: "Bab 2: Kenakalan Remaja", q: "Dampak sosial dari kenakalan remaja terhadap ketenteraman masyarakat adalah...", o: ["A. Meningkatnya harga barang pokok.", "B. Terciptanya lapangan kerja baru.", "C. Makin berkembangnya fasilitas umum.", "D. Resahnya warga dan terganggunya ketertiban.", "E. Meningkatnya wisatawan luar daerah."], a: 3, p: "Kenakalan remaja menimbulkan ketakutan warga, merusak fasilitas umum, dan mengganggu ketertiban umum." },
+            { kategori: "Bab 2: Perkelahian Pelajar", q: "Solusi islami paling mendasar untuk mengatasi fenomena perkelahian antar pelajar adalah...", o: ["A. Menyiapkan senjata untuk membela diri.", "B. Menjauhi teman yang tidak mau diajak berkelahi.", "C. Membalas setiap ejekan dengan kekerasan.", "D. Melaporkan teman yang lemah kepada alumni.", "E. Menguatkan ukhuwah islamiyah dan rasa kasih sayang."], a: 4, p: "Islam mengajarkan ukhuwah (persaudaraan), saling mengasihi, dan menahan amarah demi kedamaian bersama." }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                themeToggleIcon.textContent = '☀️';
+                themeToggleText.textContent = 'Mode Siang';
+            } else {
+                themeToggleIcon.textContent = '🌙';
+                themeToggleText.textContent = 'Mode Malam';
+            }
+        }
+
+        function shuffleQuestions(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            const shuffled = shuffleQuestions([...bankSoal]);
+            quizQuestions = shuffled.slice(0, maxCount);
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "PAI";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✔ JAWABAN BENAR!</strong><br>${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>❌ JAWABAN SALAH!</strong><br>Jawaban benar adalah: <strong>${activeQuestion.o[activeQuestion.a]}</strong><br>${activeQuestion.p}`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis PKK (Bab 1) - EDUPINTAR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: PKK (Bab 1)</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin Anda kerjakan di bawah ini untuk latihan khusus Bab 1 Peluang Usaha.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Semua pertanyaan diacak secara dinamis khusus materi BAB 1 LKS PKK.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✔ Pengertian & Hakikat Peluang Usaha</div>
+                        <div>✔ Ciri-Ciri Peluang Usaha Potensial</div>
+                        <div>✔ Sumber Peluang Usaha Internal</div>
+                        <div>✔ Sumber Peluang Usaha Eksternal</div>
+                        <div>✔ Identifikasi & Pemetaan Peluang</div>
+                        <div>✔ Analisis SWOT (S, W, O, T)</div>
+                        <div>✔ Analisis Pendekatan 5W + 1H</div>
+                        <div>✔ Faktor Keberhasilan & Kegagalan Usaha</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: PKK (Bab 1)</span>
+                    <span id="progressText">Soal 1 dari 15</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+
+                <ul class="options-list" id="optionsContainer"></ul>
+
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi simulasi ujian PKK Bab 1 Peluang Usaha.</p>
+
+                <div class="score-num" id="scoreValue">0</div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA KHUSUS BAB 1 PKK (50 SOAL SEIMBANG A, B, C, D, E) -->
+    <script>
+        const bankSoal = [
+            // KUNCI JAWABAN A (10 SOAL)
+            { kategori: "Bab 1: Peluang Usaha", q: "Manakah yang merupakan sumber peluang usaha yang berasal dari faktor internal wirausaha?", o: ["A. Keahlian, wawasan, dan pengalaman pribadi wirausaha.", "B. Perubahan tren dan kebiasaan hidup warga sekitar.", "C. Permintaan barang dari calon konsumen di pasar.", "D. Kebijakan regulasi yang ditetapkan pemerintah.", "E. Masalah sosial yang belum teratasi di lingkungan."], a: 0, p: "Faktor internal mencakup keahlian, pengalaman, wawasan, dan minat yang ada di dalam diri wirausahawan." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Dalam analisis SWOT, komponen 'Threats' mengacu pada aspek penting berupa...", o: ["A. Ancaman eksternal yang berpotensi merugikan bisnis.", "B. Keunggulan unik yang dimiliki oleh produk sendiri.", "C. Kelemahan manajemen internal dalam mengelola modal.", "D. Peluang pasar dari luar yang bisa dimanfaatkan.", "E. Keterampilan teknis para karyawan di tempat kerja."], a: 0, p: "Threats adalah ancaman atau hambatan luar yang dapat merugikan keberlangsungan usaha." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Langkah awal yang paling tepat untuk dilakukan dalam mengidentifikasi peluang usaha adalah...", o: ["A. Mengamati kebutuhan serta permasalahan konsumen di sekitar.", "B. Meminjam uang dari bank dalam jumlah yang sangat besar.", "C. Membeli mesin produksi canggih tanpa melakukan riset.", "D. Menyewa lokasi toko yang mahal di pusat kota.", "E. Mengutip konsep bisnis pesaing tanpa ada modifikasi."], a: 0, p: "Mengamati permasalahan dan kebutuhan konsumen di sekitar adalah pijakan awal menemukan peluang." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Ciri utama seorang wirausahawan yang tanggap dalam memanfaatkan peluang bisnis adalah...", o: ["A. Proaktif dan berani mengambil keputusan terukur.", "B. Cenderung pasif menunggu arahan ide dari orang lain.", "C. Selalu ragu-ragu saat diharuskan mengambil tindakan.", "D. Menolak perubahan teknologi terkini dalam bisnisnya.", "E. Membiarkan masalah usaha berlarut tanpa perbaikan."], a: 0, p: "Wirausahawan sejati bersifat proaktif, peka terhadap perubahan, dan berani mengambil keputusan terukur." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Pertanyaan 'What' dalam analisis 5W + 1H untuk pemetaan peluang usaha bertujuan untuk...", o: ["A. Menentukan jenis produk barang/jasa yang dibuat.", "B. Alasan mengapa bisnis tersebut perlu dirintis.", "C. Penargetan calon pembeli utama produk usaha.", "D. Lokasi geografis tempat usaha akan didirikan.", "E. Metode teknis dalam menjalankan proses produksi."], a: 0, p: "What bertugas menjawab jenis produk barang atau jasa apa yang akan diproduksi." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Salah satu unsur penting yang melatarbelakangi lahirnya peluang usaha kreatif adalah...", o: ["A. Kemampuan berpikir inovatif dalam mengatasi masalah.", "B. Keinginan meraih modal tanpa mau bekerja keras.", "C. Sikap cepat puas dengan pencapaian yang ada.", "D. Ketergantungan penuh pada bantuan dana investor.", "E. Keinginan meniru produk orang lain tanpa diubah."], a: 0, p: "Kreativitas dan inovasi dalam memecahkan masalah adalah pendorong utama lahirnya peluang usaha." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Tujuan utama diadakannya analisis SWOT pada tahap awal perencanaan bisnis adalah...", o: ["A. Menilai posisi persaingan serta kelayakan usaha.", "B. Mengurangi persentase denda pajak perusahaan.", "C. Menghapus persaingan dengan pelaku usaha sejenis.", "D. Mempercepat masa kadaluarsa barang hasil jadi.", "E. Menghandle pembayaran transaksi secara otomatis."], a: 0, p: "Analisis SWOT memetakan kekuatan, kelemahan, peluang, dan ancaman guna mengukur kelayakan bisnis." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Peluang usaha yang baik hendaknya memiliki sifat konkrit, artinya ide bisnis tersebut...", o: ["A. Dapat diwujudkan secara nyata dan bernilai ekonomis.", "B. Hanya sebatas angan-angan teoretis di dalam pikiran.", "C. Membutuhkan waktu bertahun-tahun untuk dicoba.", "D. Tidak memerlukan perencanaan keuangan yang jelas.", "E. Bergantung pada keberuntungan semata tanpa usaha."], a: 0, p: "Konkrit artinya ide tersebut realistis, dapat dieksekusi menjadi usaha nyata, dan bernilai jual." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Informasi mengenai tren kebutuhan masyarakat yang sedang populer tergolong sebagai sumber peluang...", o: ["A. Eksternal yang bersumber dari perubahan lingkungan.", "B. Internal yang lahir dari bakat bawaan pemilik bisnis.", "C. Pokok yang bersumber dari latar pendidikan formal.", "D. Buatan yang sengaja diciptakan produsen besar.", "E. Tetap yang tidak akan pernah berubah oleh waktu."], a: 0, p: "Tren gaya hidup masyarakat merupakan faktor eksternal dari dinamika lingkungan luar bisnis." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Sikap wirausahawan terhadap risiko usaha yang mungkin terjadi di masa depan adalah...", o: ["A. Menganalisis potensi risiko dan menyusun mitigasi.", "B. Menghindari semua usaha yang memiliki risiko kecil.", "C. Membiarkan risiko terjadi tanpa ada antisipasi awal.", "D. Menyalahkan pihak lain jika bisnis mengalami rugi.", "E. Menutup usaha saat menghadapi hambatan pertama."], a: 0, p: "Wirausahawan yang baik tidak menghindari risiko, melainkan menganalisis dan menyiapkan pencegahannya." },
+
+            // KUNCI JAWABAN B (10 SOAL)
+            { kategori: "Bab 1: Peluang Usaha", q: "Pengertian yang paling tepat mengenai konsep peluang usaha adalah...", o: ["A. Risiko kegagalan yang harus ditanggung oleh pemilik modal.", "B. Kesempatan positif untuk meraih keuntungan bisnis.", "C. Kerugian yang dialami akibat kesalahan manajemen usaha.", "D. Hambatan yang dihadapi saat memasarkan produk ke pembeli.", "E. Keadaan di mana pebisnis memutuskan untuk gulung tikar."], a: 1, p: "Peluang usaha adalah kesempatan positif yang dapat dimanfaatkan wirausahawan untuk memperoleh keuntungan." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Dalam analisis SWOT, elemen 'Weakness' menggambarkan kondisi internal berupa...", o: ["A. Keunggulan unik yang dimiliki oleh barang produksi.", "B. Kelemahan internal yang harus diperbaiki usaha.", "C. Kesempatan dari lingkungan luar yang menguntungkan.", "D. Hambatan regulasi hukum yang dibuat oleh pemerintah.", "E. Ancaman langsung dari para pesaing di pasar lokal."], a: 1, p: "Weakness merujuk pada kelemahan atau keterbatasan internal yang dimiliki oleh usaha." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Di bawah ini yang merupakan contoh sumber peluang usaha dari faktor eksternal adalah...", o: ["A. Pengalaman kerja yang pernah dialami di masa lalu.", "B. Keluhan dan kebutuhan konsumen yang belum teratasi.", "C. Keahlian mengoperasikan mesin canggih buatan pabrik.", "D. Minat dan hobi pribadi yang rutin dilakukan harian.", "E. Pendidikan formal yang berhasil diselesaikan usaha."], a: 1, p: "Masalah, keluhan, dan kebutuhan konsumen yang belum terpenuhi merupakan sumber peluang eksternal." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Salah satu penyebab utama kegagalan usaha dalam memanfaatkan peluang adalah...", o: ["A. Melakukan evaluasi berkala terhadap kualitas barang.", "B. Kurangnya perencanaan matang dan ketidakdisiplinan.", "C. Memperhitungkan kelayakan modal dengan sangat cermat.", "D. Mengikuti perkembangan tren teknologi terkini di pasar.", "E. Memiliki strategi mitigasi risiko yang sangat kuat."], a: 1, p: "Kurangnya riset, perencanaan buruk, dan eksekusi yang tidak disiplin memicu kegagalan peluang." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Unsur 'Why' dalam metode analisis 5W + 1H digunakan untuk mengetahui...", o: ["A. Siapa saja target konsumen yang dituju oleh usaha.", "B. Alasan latar belakang pentingnya merintis usaha.", "C. Kapan waktu yang tepat untuk meluncurkan produk.", "D. Di mana lokasi toko usaha akan didirikan nantinya.", "E. Bagaimana strategi operasional pembuatan produk."], a: 1, p: "Why bertugas menjelaskan alasan dasar atau urgensi mengapa bisnis tersebut bernilai untuk didirikan." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Ciri produk hasil pemanfaatan peluang usaha yang baik adalah...", o: ["A. Mengikuti bentuk produk pesaing tanpa perubahan.", "B. Memiliki nilai tambah dan mampu menjadi solusi.", "C. Dijual dengan harga mahal agar terlihat bernilai.", "D. Dibuat menggunakan bahan baku yang cepat rusak.", "E. Hanya bisa diproduksi dalam jumlah yang terbatas."], a: 1, p: "Produk yang baik memiliki nilai tambah (value added) dan menjadi jawaban atas masalah pembeli." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Manakah yang merupakan langkah dalam melakukan riset pasar sederhana?", o: ["A. Membeli tanah untuk area pabrik tanpa data pembeli.", "B. Menyebar kuesioner wawancara kebutuhan konsumen.", "C. Mengurangi gaji staf pemasaran demi hemat anggaran.", "D. Mengabaikan saran masukan dari calon pembeli produk.", "E. Menentukan harga jual produk secara asal-asalan."], a: 1, p: "Riset pasar dilakukan lewat survei, kuesioner, atau wawancara untuk memahami kebutuhan pembeli." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Mengapa seorang wirausahawan perlu memiliki sikap inovatif dalam membaca peluang?", o: ["A. Agar dapat menjual barang yang sama persis pesaing.", "B. Untuk menciptakan keunggulan beda di mata konsumen.", "C. Supaya tidak perlu membayar modal operasional awal.", "D. Agar terhindar dari kewajiban pencatatan kas usaha.", "E. Untuk mempercepat proses penutupan izin bisnis."], a: 1, p: "Inovasi menciptakan keunggulan kompetitif yang membedakan produk dari produk kompetitor." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Perubahan demografi kependudukan seperti peningkatan jumlah usia muda tergolong peluang...", o: ["A. Internal yang berasal dari dorongan minat pribadi.", "B. Eksternal yang berasal dari dinamika sosial pasar.", "C. Buatan yang diciptakan oleh pemilik bisnis lokal.", "D. Sementara yang akan hilang dalam hitungan hari.", "E. Pokok yang bersumber dari keahlian teknis kerja."], a: 1, p: "Perubahan struktur demografi masyarakat merupakan faktor eksternal dari lingkungan pasar." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Faktor penentu keberhasilan usaha dalam mengelola peluang bisnis adalah...", o: ["A. Mengabaikan kritik dan masukan dari pelanggan.", "B. Kepemimpinan yang kuat dan pengelolaan keuangan rapi.", "C. Menjual barang tanpa memperhitungkan modal pokok.", "D. Menolak kerja sama dengan mitra penyedia bahan.", "E. Menggunakan seluruh modal untuk promosi mewah."], a: 1, p: "Manajemen keuangan yang rapi dan kepemimpinan yang adaptif adalah kunci sukses memanfaatkan peluang." },
+
+            // KUNCI JAWABAN C (10 SOAL)
+            { kategori: "Bab 1: Peluang Usaha", q: "Salah satu ciri dari sebuah peluang usaha yang bernilai jual baik adalah...", o: ["A. Mengutip barang yang sudah dibuat massal pesaing.", "B. Hanya mampu bertahan dalam rentang waktu singkat.", "C. Memiliki orisinalitas serta mampu menjawab kebutuhan.", "D. Membutuhkan modal sangat mahal yang sulit dijangkau.", "E. Tidak dapat dikembangkan menjadi skala lebih besar."], a: 2, p: "Peluang yang baik bersifat orisinal, bernilai tambah, dan menjawab kebutuhan pasar secara nyata." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Dalam analisis SWOT, komponen 'Opportunity' menggambarkan keadaan berupa...", o: ["A. Kekuatan modal finansial internal milik pebisnis.", "B. Kelemahan manajemen kerja dalam mengelola staf.", "C. Peluang positif dari lingkungan luar untuk maju.", "D. Ancaman persaingan harga dari bisnis kompetitor.", "E. Hambatan pasokan bahan baku dari distributor."], a: 2, p: "Opportunity adalah peluang atau kesempatan menguntungkan yang berasal dari lingkungan luar." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Langkah pemetaan peluang usaha dilakukan wirausahawan dengan tujuan...", o: ["A. Menghilangkan kewajiban membayar pajak perusahaan.", "B. Mengetahui kelemahan lawan untuk dijatuhkan salah.", "C. Menemukan sektor bisnis potensial berisiko terukur.", "D. Menghitung keuntungan bersih tanpa data modal.", "E. Menjual barang dengan harga mahal ke masyarakat."], a: 2, p: "Pemetaan peluang usaha bertujuan menemukan sektor bisnis yang tepat dengan tingkat risiko minim." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Pertanyaan 'Who' dalam analisis pemetaan peluang 5W + 1H difokuskan untuk...", o: ["A. Mengetahui lokasi fisik toko usaha akan dibuka.", "B. Alasan utama produk barang tersebut harus dibuat.", "C. Menentukan target konsumen utama sasaran bisnis.", "D. Rincian biaya yang harus dikeluarkan saat awal.", "E. Jadwal waktu operasional pembuatan barang jadi."], a: 2, p: "Who bertugas mengidentifikasi siapa target konsumen atau segmen pembeli yang dituju." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Gagasan usaha yang muncul akibat adanya hobi atau kegemaran pribadi tergolong sumber peluang...", o: ["A. Eksternal yang dipicu oleh instruksi pemerintah.", "B. Buatan yang dirancang oleh lembaga penelitian.", "C. Internal yang berasal dari minat dalam diri sendiri.", "D. Campuran yang bersumber dari dorongan kompetitor.", "E. Sementara yang tidak memiliki nilai jual barang."], a: 2, p: "Hobi, minat, dan kegemaran pribadi merupakan sumber peluang internal yang tumbuh dari dalam diri." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Aspek 'Strength' dalam analisis SWOT dapat dikembangkan usaha melalui...", o: ["A. Mengabaikan keunggulan kualitas barang produksi.", "B. Menjual produk tanpa garansi purna jual barang.", "C. Meningkatkan keunikan fitur produk yang dimiliki.", "D. Membiarkan kualitas layanan konsumen buruk.", "E. Mengurangi standar keamanan penggunaan produk."], a: 2, p: "Strength dikembangkan dengan memaksimalkan keunggulan dan nilai keunikan internal produk." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Kemampuan wirausahawan dalam melihat peluang dari masalah lingkungan sekitar dinamakan...", o: ["A. Jiwa keagamaan yang tinggi dalam kehidupan.", "B. Keterampilan membuat laporan pembukuan usaha.", "C. Peka terhadap kebutuhan masyarakat di sekitarnya.", "D. Kemampuan mengendalikan pergerakan harga barang.", "E. Keterbatasan dalam berpikir inovatif dan kreatif."], a: 2, p: "Kepekaan terhadap masalah lingkungan (problem solver) merupakan pondasi menangkap peluang bisnis." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Penggunaan media sosial untuk mengamati ide produk yang disukai warga tergolong metode...", o: ["A. Pembuatan sampel barang produksi secara langsung.", "B. Penghitungan biaya operasional bulanan usaha.", "C. Riset pasar secara digital untuk membaca peluang.", "D. Penyusunan laporan utang piutang perusahaan.", "E. Evaluasi kerja harian bagi para karyawan pabrik."], a: 2, p: "Mengamati interaksi di media sosial merupakan bentuk riset pasar digital yang efisien." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Risiko usaha yang timbul akibat adanya perubahan gaya hidup konsumen tergolong risiko...", o: ["A. Internal akibat kesalahan kelola manajemen.", "B. Teknis akibat kerusakan mesin pembuatan barang.", "C. Pasar akibat pergeseran minat dari pembeli.", "D. Bencana akibat kejadian alam yang merugikan.", "E. Peraturan akibat kebijakan baru daerah tempat."], a: 2, p: "Risiko pasar bersumber dari dinamika permintaan dan perubahan selera pembeli di pasar." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Upaya yang dapat dilakukan untuk meminimalkan risiko kegagalan usaha adalah...", o: ["A. Melakukan investasi modal tanpa riset awal.", "B. Mengabaikan perkembangan teknologi dalam bisnis.", "C. Melakukan perencanaan matang dan diversifikasi.", "D. Menjual barang tanpa memperhitungkan kualitas.", "E. Mengganti jenis usaha setiap minggu sekali."], a: 2, p: "Perencanaan matang, pemetaan risiko, dan diversifikasi produk memperkecil dampak kegagalan." },
+
+            // KUNCI JAWABAN D (10 SOAL)
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Dalam analisis SWOT, unsur 'Strength' mengacu pada aspek penting berupa...", o: ["A. Kekurangan internal yang harus segera diperbaiki.", "B. Peluang positif dari lingkungan luar untuk maju.", "C. Tantangan persaingan dari bisnis kompetitor.", "D. Keunggulan internal produk dibanding pesaing.", "E. Hambatan regulasi hukum buatan pemerintah."], a: 3, p: "Strength adalah kekuatan atau keunggulan internal yang menjadi kelebihan daya saing produk." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Pertanyaan 'Where' pada pendekatan analisis 5W + 1H digunakan untuk menentukan...", o: ["A. Jenis produk barang yang akan buat oleh usaha.", "B. Alasan urgensi mengapa usaha tersebut dirintis.", "C. Target segmen konsumen yang akan membeli produk.", "D. Lokasi strategis tempat usaha akan dijalankan.", "E. Metode operasional pembuatan barang produksi."], a: 3, p: "Where bertugas menentukan lokasi fisik maupun platform tempat bisnis beroperasi." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Kriteria utama dari suatu produk yang sangat diminati oleh pembeli di pasar adalah...", o: ["A. Tampilannya tidak menarik dan susah didapatkan.", "B. Harganya sangat mahal walau fungsinya biasa saja.", "C. Kualitasnya rendah walau diberi diskon yang besar.", "D. Mampu memberi solusi efektif atas masalah pembeli.", "E. Desainnya sangat rumit sehingga sulit dipakai."], a: 3, p: "Produk yang sukses adalah produk yang mampu menjadi solusi atas permasalahan spesifik konsumen." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Peluang usaha yang menjanjikan dalam jangka panjang memiliki ciri utama berupa...", o: ["A. Bergantung sepenuhnya pada tren singkat semata.", "B. Mudah ditiru tanpa ada pertahanan keunikan.", "C. Membutuhkan modal besar tanpa ada keuntungan.", "D. Memiliki pasar yang jelas dan terus berkembang.", "E. Tidak memerlukan perbaikan inovasi secara berkala."], a: 3, p: "Peluang jangka panjang didukung oleh potensi pasar yang stabil, jelas, dan terus bertumbuh." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Keluhan konsumen atas pelayanan bisnis kompetitor dapat dijadikan wirausahawan sebagai...", o: ["A. Hambatan hukum yang harus dihindari pebisnis.", "B. Kelemahan internal milik perusahaan sendiri.", "C. Ancaman langsung yang membahayakan bisnis.", "D. Peluang baru untuk menghadirkan layanan lebih baik.", "E. Risiko teknis yang sulit untuk diselesaikan."], a: 3, p: "Keluhan pelanggan terhadap pesaing adalah celah peluang untuk menawarkan layanan yang lebih memuaskan." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Kemampuan memodifikasi produk yang sudah ada agar memiliki fungsi baru dinamakan...", o: ["A. Duplikasi persis tanpa ada perubahan bentuk.", "B. Pemborosan modal operasional bisnis tempat.", "C. Penghentian inovasi dalam pembuatan barang.", "D. Inovasi pengembangan produk yang ada di pasar.", "E. Pelanggaran hukum cipta atas karya orang."], a: 3, p: "Inovasi mencakup pengembangan atau modifikasi produk lama agar bernilai guna lebih tinggi." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Analisis kelayakan finansial pada pemetaan peluang usaha bertujuan untuk...", o: ["A. Menghapus kewajiban pembayaran ganti rugi.", "B. Mengabaikan catatan pengeluaran modal usaha.", "C. Menutupi laporan kas dari pengawasan mitra.", "D. Mengukur proyeksi pendapatan dan kebutuhan modal.", "E. Membeli peralatan kerja tanpa memperhitungkan harga."], a: 3, p: "Kelayakan finansial mengukur estimasi modal awal, biaya operasional, dan potensi keuntungan." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Sikap mental wirausahawan yang penting dimiliki saat ide peluang usahanya gagal adalah...", o: ["A. Putus asa dan menghentikan seluruh aktivitas bisnis.", "B. Menyalahkan orang lain atas kegagalan yang dialami.", "C. Menghindari evaluasi penyebab dari masalah gagal.", "D. Evaluasi pantang menyerah dan belajar dari kesalahan.", "E. Meminjam uang tanpa ada rencana pengembalian."], a: 3, p: "Pantang menyerah dan kemampuan belajar dari evaluasi kegagalan adalah mental dasar wirausaha." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Langkah diversifikasi produk dalam mengembangkan peluang usaha bertujuan...", o: ["A. Mengurangi jumlah barang yang diproduksi pabrik.", "B. Mempersempit jangkauan target pasar pembeli.", "C. Menghabiskan pasokan bahan mentah di gudang.", "D. Memperluas pilihan produk untuk memperkecil risiko.", "E. Menaikkan harga jual barang menjadi dua kali lipat."], a: 3, p: "Diversifikasi menambah variasi produk agar bisnis tidak bergantung pada satu jenis barang saja." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Di bawah ini yang tergolong faktor kegagalan usaha dari sisi pengelolaan kas adalah...", o: ["A. Melakukan pencatatan arus kas secara rutin.", "B. Menyiapkan dana cadangan darurat perusahaan.", "C. Menggunakan modal usaha untuk keperluan pribadi.", "D. Menginvestasikan kembali keuntungan ke usaha.", "E. Mengontrol biaya operasional secara ketat."], a: 3, p: "Mencampur adukkan keuangan usaha dengan pengeluaran pribadi adalah pemicu utama kebangkrutan." },
+
+            // KUNCI JAWABAN E (10 SOAL)
+            { kategori: "Bab 1: Peluang Usaha", q: "Tindakan yang harus diambil oleh wirausahawan saat menghadapi risiko bisnis adalah...", o: ["A. Menutup bisnis secara permanen tanpa evaluasi.", "B. Menyalahkan pihak lain atas kerugian yang terjadi.", "C. Membiarkan masalah berlanjut hingga bangkrut.", "D. Mengabaikan laporan keuangan bisnis secara sengaja.", "E. Menganalisis penyebab serta menyiapkan strategi mitigasi."], a: 4, p: "Risiko usaha harus dianalisis akar penyebabnya untuk dirumuskan solusi serta strategi pencegahannya." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Konsep pemetaan ide usaha yang kreatif dan inovatif berfokus pada...", o: ["A. Mempertahankan metode tradisional tanpa perubahan.", "B. Menjual produk seadanya tanpa memedulikan nilai.", "C. Meniru konsep usaha kompetitor secara persis.", "D. Menurunkan standar keamanan demi memotong biaya.", "E. Menciptakan nilai tambah baru yang membedakan dari pesaing."], a: 4, p: "Inovasi dan kreativitas berfokus menciptakan nilai tambah (value added) yang membedakan produk dari pasar." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Pentingnya melakukan riset pasar sebelum meluncurkan produk baru adalah...", o: ["A. Menghabiskan sisa anggaran investasi awal bisnis.", "B. Memaksa masyarakat menyukai barang yang dibuat.", "C. Menunda proses produksi barang setahun lebih lama.", "D. Mengganti seluruh struktur kepemimpinan organisasi.", "E. Memastikan produk sesuai dengan minat dan target pasar."], a: 4, p: "Riset pasar memastikan produk yang dibuat benar-benar relevan dengan kebutuhan calon pembeli." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Pertanyaan 'How' dalam metode analisis 5W + 1H bertujuan menentukan...", o: ["A. Jenis barang yang diproduksi oleh usaha.", "B. Alasan mendasar dirintiskannya bisnis tersebut.", "C. Target konsumen yang dituju oleh perusahaan.", "D. Waktu rilis produk barang menuju pasar.", "E. Strategi operasional dalam menjalankan bisnis."], a: 4, p: "How bertugas menjelaskan bagaimana strategi teknis operasional dalam memproduksi barang/jasa." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Pemanfaatan barang bekas menjadi kerajinan bernilai jual merupakan contoh peluang dari...", o: ["A. Bantuan hibah modal dana dari instansi bank.", "B. Penggunaan mesin canggih impor dari luar negeri.", "C. Kebijakan penurunan tarif pajak dari pemerintah.", "D. Ketersediaan fasilitas pabrik yang sudah lengkap.", "E. Kreativitas mengolah limbah menjadi produk bernilai."], a: 4, p: "Kreativitas mengolah bahan tak terpakai menjadi barang berguna adalah wujud nyata pemanfaatan peluang." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Perkembangan teknologi internet yang dimanfaatkan untuk jualan online tergolong peluang...", o: ["A. Internal akibat keahlian dasar pemilik bisnis.", "B. Buatan akibat intervensi dari asosiasi usaha.", "C. Pasif yang tidak memerlukan tindakan bisnis.", "D. Sementara yang merugikan perkembangan usaha.", "E. Eksternal dari kemajuan teknologi lingkungan."], a: 4, p: "Kemajuan teknologi internet di luar bisnis merupakan faktor peluang eksternal yang siap dimanfaatkan." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Hal yang perlu dievaluasi jika sebuah ide peluang usaha kurang mendapat respon pasar adalah...", o: ["A. Menambah anggaran promosi tanpa ubah produk.", "B. Menyalahkan konsumen yang tidak paham barang.", "C. Mengganti nama merek usaha setiap harinya.", "D. Memaksa pembeli membeli barang yang dibuat.", "E. Kualitas produk, harga, dan strategi pemasaran."], a: 4, p: "Evaluasi menyeluruh mencakup perbaikan kualitas barang, penyesuaian harga, dan cara pemasarannya." },
+            { kategori: "Bab 1: Identifikasi Peluang Usaha", q: "Hubungan antara analisis SWOT dengan penyusunan strategi pemasaran adalah...", o: ["A. Menghapus kebutuhan akan sarana promosi.", "B. Menaikkan modal operasional pembuatan barang.", "C. Memperlama proses distribusi barang ke pembeli.", "D. Mengurangi tingkat kepercayaan investor luar.", "E. Memaksimalkan kekuatan dan memanfaatkan peluang."], a: 4, p: "SWOT memandu strategi dengan memaksimalkan kekuatan internal untuk menangkap peluang eksternal." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Di bawah ini yang merupakan ciri ide peluang usaha yang berisiko tinggi adalah...", o: ["A. Memiliki pasar yang jelas dan permintaan stabil.", "B. Membutuhkan modal terjangkau dengan hasil pasti.", "C. Didukung oleh ketersediaan bahan baku melimpah.", "D. Dikelola oleh tim kerja yang sangat berpengalaman.", "E. Produk belum diuji dan pasarnya tidak jelas."], a: 4, p: "Ketidakjelasan target pasar dan produk yang belum teruji mendatangkan tingkat risiko tinggi." },
+            { kategori: "Bab 1: Peluang Usaha", q: "Manfaat keberadaan kompetitor atau pesaing dalam memicu peluang usaha baru adalah...", o: ["A. Menghentikan niat untuk membuka bisnis baru.", "B. Menurunkan semangat inovasi dalam bekerja.", "C. Memaksa perusahaan menjual barang tanpa untung.", "D. Menghapus daya tarik barang di mata pembeli.", "E. Mendorong wirausaha menciptakan keunggulan baru."], a: 4, p: "Persaingan memicu motivasi wirausahawan untuk terus berinovasi menciptakan keunggulan unik." }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                themeToggleIcon.textContent = '☀️';
+                themeToggleText.textContent = 'Mode Siang';
+            } else {
+                themeToggleIcon.textContent = '🌙';
+                themeToggleText.textContent = 'Mode Malam';
+            }
+        }
+
+        function shuffleQuestions(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            const shuffled = shuffleQuestions([...bankSoal]);
+            quizQuestions = shuffled.slice(0, maxCount);
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "PKK";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✔ JAWABAN BENAR!</strong><br>${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>❌ JAWABAN SALAH!</strong><br>Jawaban benar adalah: <strong>${activeQuestion.o[activeQuestion.a]}</strong><br>${activeQuestion.p}`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
