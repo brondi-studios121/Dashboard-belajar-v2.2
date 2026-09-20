@@ -1,7 +1,6 @@
 /* ==========================================
    DESAIN STYLESHEET GLOBAL - EDUPINTAR
    ========================================== */
-
 :root {
     --bg-color: #f8fafc;
     --card-bg: #ffffff;
@@ -186,9 +185,25 @@ main {
     margin: 0 auto 2.5rem auto;
 }
 
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.15rem;
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-muted);
+    pointer-events: none;
+}
+
 .search-input {
     width: 100%;
-    padding: 0.85rem 1.25rem;
+    padding: 0.85rem 1.25rem 0.85rem 2.85rem;
     border-radius: 2rem;
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);

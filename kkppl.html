@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis KKPPL - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: KKPPL</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan di bawah ini untuk memulai latihan mandiri KKPPL.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Semua pertanyaan dan pilihan jawaban diacak secara dinamis berdasarkan 4 topik terbagi rata.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ KKPPL 1: Dasar Bahasa Pemrograman Java (13 Soal)</div>
+                        <div>✓ KKPPL 2: Versi & Nama Makanan Android (12 Soal)</div>
+                        <div>✓ KKPPL 3: Dasar Web, HTML & CSS (12 Soal)</div>
+                        <div>✓ KKPPL 4: PHP, XAMPP, & Database MySQL (13 Soal)</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: KKPPL</span>
+                    <span id="progressText">Soal 1 dari 15</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi simulasi ujian KKPPL.</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA KKPPL (50 SOAL SEIMBANG) -->
+    <script>
+        const bankSoal = [
+            // ==================== KKPPL 1: DASAR BAHASA JAVA (13 SOAL) ====================
+            { kategori: "KKPPL 1 - Java Dasar", q: "Metode utama yang dijadikan titik awal eksekusi program dalam bahasa Java adalah...", o: ["A. public static void main(String[] args)", "B. public void start()", "C. System.out.println()", "D. private static class Main", "E. void init()"], a: 0, p: "Metode 'public static void main(String[] args)' adalah pintu masuk utama eksekusi program Java." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Perintah standar dalam Java yang digunakan untuk mencetak teks ke layar konsol dengan baris baru adalah...", o: ["A. Console.WriteLine()", "B. System.out.println()", "C. echo()", "D. printf()", "E. document.write()"], a: 1, p: "System.out.println() digunakan untuk menampilkan teks diikuti dengan baris baru (newline)." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Tipe data dalam Java yang digunakan khusus untuk menyimpan nilai bilangan bulat tanpa desimal adalah...", o: ["A. double", "B. float", "C. int", "D. boolean", "E. String"], a: 2, p: "Tipe data 'int' digunakan untuk menyimpan angka atau bilangan bulat." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Ekstensi file mentah kode program bahasa pemrograman Java adalah...", o: ["A. .class", "B. .exe", "C. .java", "D. .js", "E. .apk"], a: 2, p: "File kode sumber Java disimpan dengan ekstensi '.java'." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Cara pendeklarasian variabel angka bernama 'umur' dengan nilai 17 yang benar di Java adalah...", o: ["A. var umur : 17;", "B. int umur = 17;", "C. integer umur := 17;", "D. $umur = 17;", "E. umur = int(17);"], a: 1, p: "Sintaks deklarasi variabel Java diawali tipe data lalu nama variabel, contoh: int umur = 17;" },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Karakter yang digunakan untuk menuliskan komentar satu baris di dalam kode program Java adalah...", o: ["A. <!-- -->", "B. #", "C. //", "D. /* */", "E. --"], a: 2, p: "Tanda '//' digunakan untuk membuat komentar satu baris di Java." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Tipe data yang hanya memiliki dua kemungkinan nilai, yaitu true atau false adalah...", o: ["A. String", "B. char", "C. boolean", "D. byte", "E. double"], a: 2, p: "Tipe data boolean hanya bernilai true (benar) atau false (salah)." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Class di Java yang sering digunakan untuk mengambil input/masukan data dari keyboard pengguna adalah...", o: ["A. System.in", "B. Scanner", "C. BufferWriter", "D. InputReader", "E. OutputCollector"], a: 1, p: "Class java.util.Scanner umum digunakan untuk membaca input dari pengguna." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Operator aritmatika di Java yang berfungsi untuk menghitung sisa hasil bagi adalah...", o: ["A. /", "B. *", "C. %", "D. ^", "E. #"], a: 2, p: "Operator modulo (%) menghasilkan sisa pembagian antara dua bilangan." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Di bawah ini penulisan data berjenis String yang benar di Java adalah...", o: ["A. 'Halo Dunia'", "B. \"Halo Dunia\"", "C. [Halo Dunia]", "D. {Halo Dunia}", "E. <Halo Dunia>"], a: 1, p: "String pada Java disimbolkan dan dihimpit menggunakan tanda petik ganda (\"...\")." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Struktur kontrol keputusan di Java yang dieksekusi jika kondisi bernilai benar (true) adalah...", o: ["A. for", "B. while", "C. if", "D. switch", "E. do-while"], a: 2, p: "Perintah 'if' mengeksekusi blok kode hanya ketika kondisinya terpenuhi (true)." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Sintaks perulangan di Java yang cocok digunakan ketika jumlah iterasi atau perulangannya sudah diketahui pasti adalah...", o: ["A. for loop", "B. while loop", "C. try-catch", "D. class", "E. import"], a: 0, p: "Perulangan 'for' ideal digunakan saat jumlah langkah perulangannya sudah ditentukan." },
+            { kategori: "KKPPL 1 - Java Dasar", q: "Hasil kompilasi dari kode file Java (.java) menggunakan perintah 'javac' akan menghasilkan file ber-ekstensi...", o: ["A. .exe", "B. .class", "C. .dll", "D. .jar", "E. .bin"], a: 1, p: "Kompiler Java (javac) mengubah file .java menjadi bytecode berformat .class." },
+
+            // ==================== KKPPL 2: VERSI & NAMA VERSI ANDROID (12 SOAL) ====================
+            { kategori: "KKPPL 2 - Versi Android", q: "Nama kode resmi makanan manis yang digunakan untuk Android versi 1.5 adalah...", o: ["A. Donut", "B. Cupcake", "C. Eclair", "D. Froyo", "E. Gingerbread"], a: 1, p: "Android 1.5 dirilis dengan nama kode makanan manis 'Cupcake'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Sistem operasi Android versi 1.6 mengusung julukan makanan manis yaitu...", o: ["A. Cupcake", "B. Donut", "C. Eclair", "D. Honeycomb", "E. KitKat"], a: 1, p: "Android versi 1.6 dinamai 'Donut'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Android versi 2.0 dan 2.1 dikenal publik dengan julukan...", o: ["A. Eclair", "B. Froyo", "C. Jelly Bean", "D. Ice Cream Sandwich", "E. Lollipop"], a: 0, p: "Versi 2.0/2.1 mengusung nama makanan penutup Prancis yaitu 'Eclair'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Android versi 2.2 merupakan singkatan dari Frozen Yogurt yang populer disebut...", o: ["A. Donut", "B. Froyo", "C. Gingerbread", "D. Marshmallow", "E. Oreo"], a: 1, p: "Froyo merupakan kepanjangan dari Frozen Yogurt (Android 2.2)." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Versi Android 2.3 yang sangat terkenal pada ponsel jadul mengusung nama...", o: ["A. Gingerbread", "B. Honeycomb", "C. KitKat", "D. Nougat", "E. Pie"], a: 0, p: "Android 2.3 dinamai 'Gingerbread'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Versi Android 3.0 yang dirancang khusus dan dioptimalkan untuk perangkat Tablet adalah...", o: ["A. Gingerbread", "B. Honeycomb", "C. Ice Cream Sandwich", "D. Lollipop", "E. Marshmallow"], a: 1, p: "Android 3.0 'Honeycomb' dikembangkan khusus untuk UI perangkat Tablet." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Versi Android 4.0 yang menyatukan antarmuka Smartphone dan Tablet mengusung nama...", o: ["A. Jelly Bean", "B. Ice Cream Sandwich", "C. KitKat", "D. Oreo", "E. Pie"], a: 1, p: "Android 4.0 dirilis dengan nama 'Ice Cream Sandwich' (ICS)." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Android versi 4.1 hingga 4.3 yang memperkenalkan fitur kehalusan animasi 'Project Butter' dinamai...", o: ["A. KitKat", "B. Jelly Bean", "C. Lollipop", "D. Marshmallow", "E. Nougat"], a: 1, p: "Android 4.1-4.3 dinamakan 'Jelly Bean'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Versi Android 4.4 yang bekerja sama dengan merek cokelat terkenal berjuluk...", o: ["A. Oreo", "B. KitKat", "C. Lollipop", "D. Nougat", "E. Donut"], a: 1, p: "Android 4.4 diberi nama 'KitKat'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Android versi 5.0 yang mulai memperkenalkan filosofi desain 'Material Design' dinamakan...", o: ["A. Lollipop", "B. Marshmallow", "C. Nougat", "D. Oreo", "E. Pie"], a: 0, p: "Android 5.0 dinamai 'Lollipop' sekaligus awal mula penggunaan Material Design." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Android versi 6.0 yang memperkenalkan sistem izin aplikasi dinamis dinamakan...", o: ["A. Marshmallow", "B. Lollipop", "C. Nougat", "D. Oreo", "E. Pie"], a: 0, p: "Android 6.0 bernama 'Marshmallow'." },
+            { kategori: "KKPPL 2 - Versi Android", q: "Android versi 8.0 dan 9.0 secara berturut-turut mengusung nama makanan manis...", o: ["A. Oreo dan Pie", "B. Pie dan Oreo", "C. KitKat dan Lollipop", "D. Marshmallow dan Nougat", "E. Donut dan Eclair"], a: 0, p: "Android 8.0 bernama 'Oreo', sedangkan Android 9.0 bernama 'Pie'." },
+
+            // ==================== KKPPL 3: DASAR WEB, HTML & CSS (12 SOAL) ====================
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Tag HTML yang digunakan untuk membuat judul paling utama atau ukuran paling besar pada halaman web adalah...", o: ["A. <h6>", "B. <heading>", "C. <h1>", "D. <title>", "E. <head>"], a: 2, p: "Tag <h1> digunakan untuk penulisan judul utama (heading level 1) paling besar." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Tag HTML yang digunakan untuk membuat link atau tautan ke halaman web lain adalah...", o: ["A. <link>", "B. <a>", "C. <href>", "D. <url>", "E. <navigate>"], a: 1, p: "Tag <a> (anchor) digunakan membuat hyperlink." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Kepanjangan dari istilah CSS dalam pengembangan web adalah...", o: ["A. Creative Style Sheets", "B. Cascading Style Sheets", "C. Computer Style System", "D. Colorful Style Sheet", "E. Code Structure Sheet"], a: 1, p: "CSS merupakan singkatan dari Cascading Style Sheets." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Properti CSS yang digunakan untuk mengubah warna teks pada elemen web adalah...", o: ["A. font-color", "B. text-style", "C. color", "D. background-color", "E. text-color"], a: 2, p: "Properti 'color' digunakan untuk mengatur warna tulisan/teks." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Tag HTML yang tepat untuk menyisipkan gambar ke dalam dokumen web adalah...", o: ["A. <image>", "B. <img>", "C. <pic>", "D. <photo>", "E. <src>"], a: 1, p: "Tag <img> digunakan untuk menampilkan gambar di HTML." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Properti CSS yang berfungsi untuk mengatur warna latar belakang suatu elemen adalah...", o: ["A. background-color", "B. color", "C. bgcolor", "D. fill-color", "E. canvas-color"], a: 0, p: "Properti 'background-color' digunakan menentukan warna latar belakang." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Elemen HTML yang digunakan untuk membuat daftar berurutan dalam bentuk angka (numbered list) adalah...", o: ["A. <ul>", "B. <ol>", "C. <li>", "D. <dl>", "E. <list>"], a: 1, p: "Tag <ol> (Ordered List) menghasilkan daftar dengan penomoran angka." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Karakter penanda yang digunakan pada CSS untuk memanggil elemen berdasarkan atribut 'id' adalah...", o: ["A. Titik (.)", "B. Pagar (#)", "C. Bintang (*)", "D. Dolar ($)", "E. At (@)"], a: 1, p: "Atribut ID dipanggil di CSS menggunakan tanda pagar (#id_nama)." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Karakter penanda yang digunakan pada CSS untuk memanggil elemen berdasarkan atribut 'class' adalah...", o: ["A. Titik (.)", "B. Pagar (#)", "C. Persen (%)", "D. Ampersand (&)", "E. Seru (!)"], a: 0, p: "Atribut Class dipanggil di CSS menggunakan tanda titik (.class_nama)." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Tag HTML yang digunakan untuk membuat baris baru (line break) tanpa membuat paragraf baru adalah...", o: ["A. <p>", "B. <br>", "C. <hr>", "D. <break>", "E. <lb>"], a: 1, p: "Tag <br> digunakan untuk pindah ke baris berikutnya." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Atribut pada tag <a> yang diisi alamat URL tujuan tautan dinamakan...", o: ["A. src", "B. href", "C. target", "D. link", "E. path"], a: 1, p: "Atribut 'href' (Hypertext Reference) menampung alamat URL tujuan link." },
+            { kategori: "KKPPL 3 - Web, HTML & CSS", q: "Protokol standar jaringan yang digunakan untuk mentransfer halaman web di internet adalah...", o: ["A. FTP", "B. SMTP", "C. HTTP / HTTPS", "D. SSH", "E. TCP/IP"], a: 2, p: "HTTP/HTTPS adalah protokol standar pengiriman dokumen web." },
+
+            // ==================== KKPPL 4: PHP, XAMPP, & DATABASE MYSQL (13 SOAL) ====================
+            { kategori: "KKPPL 4 - PHP & Database", q: "Dua layanan/modul utama yang harus diaktifkan (Start) pada XAMPP Control Panel agar web PHP dan Database berjalan adalah...", o: ["A. Apache dan MySQL", "B. FileZilla dan Tomcat", "C. Mercury dan Apache", "D. Nginx dan Postgre", "E. IIS dan Redis"], a: 0, p: "Apache berfungsi sebagai web server, sedangkan MySQL berfungsi sebagai server database." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Tag pembuka standar yang wajib digunakan untuk memulai penulisan skrip bahasa pemrograman PHP adalah...", o: ["A. <script php>", "B. <?php", "C. <% php", "D. <php>", "E. <?javascript"], a: 1, p: "Skrip PHP diawali dengan tag pembuka '<?php'." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Fungsi bawaan PHP yang digunakan untuk menghubungkan skrip PHP ke database server MySQL dinamakan...", o: ["A. connect_db()", "B. mysqli_connect()", "C. pdo_open()", "D. mysql_start()", "E. db_bind()"], a: 1, p: "mysqli_connect() adalah fungsi PHP bawaan untuk membuka koneksi baru ke server MySQL." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Alamat server default (host) yang digunakan saat menghubungkan database MySQL di komputer lokal melalui XAMPP adalah...", o: ["A. 192.168.1.1", "B. localhost", "C. www.mysql.com", "D. mydatabase.local", "E. server.xampp"], a: 1, p: "Host lokal default diset menggunakan 'localhost' atau IP '127.0.0.1'." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Secara default, nama username administrator database MySQL bawaan pada instalasi baru XAMPP adalah...", o: ["A. admin", "B. root", "C. user", "D. system", "E. mysql"], a: 1, p: "Username bawaan MySQL XAMPP adalah 'root' tanpa kata sandi (blank)." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Perintah query SQL yang digunakan untuk membuat struktur tabel baru di dalam database adalah...", o: ["A. MAKE TABLE", "B. CREATE TABLE", "C. NEW TABLE", "D. BUILD TABLE", "E. INSERT TABLE"], a: 1, p: "Perintah 'CREATE TABLE nama_tabel (...)' digunakan membuat tabel baru." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Perintah query SQL yang digunakan untuk memasukkan atau menambahkan data/baris baru ke dalam tabel database adalah...", o: ["A. ADD INTO", "B. INSERT INTO", "C. PUSH TO", "D. UPDATE DATA", "E. SAVE TO"], a: 1, p: "Perintah 'INSERT INTO nama_tabel VALUES (...)' digunakan memasukkan baris data." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Sintaks query SQL untuk menampilkan seluruh kolom dan seluruh baris data dari tabel bernama 'siswa' adalah...", o: ["A. SHOW ALL FROM siswa", "B. SELECT * FROM siswa", "C. GET DATA siswa", "D. FETCH * siswa", "E. READ siswa"], a: 1, p: "'SELECT * FROM siswa' mengambil seluruh kolom (*) data dari tabel siswa." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Aplikasi bawaan XAMPP berbasis web yang digunakan untuk mengelola database MySQL secara visual antarmuka grafis dinamakan...", o: ["A. MySQL Workbench", "B. phpMyAdmin", "C. PostgreSQL Admin", "D. Database Master", "E. XAMPP Admin Web"], a: 1, p: "phpMyAdmin memudahkan pengelolaan database MySQL melalui browser di http://localhost/phpmyadmin." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Karakter khusus yang wajib ditempatkan di depan nama variabel di bahasa pemrograman PHP adalah...", o: ["A. @", "B. #", "C. $", "D. &", "E. %"], a: 2, p: "Setiap variabel di PHP harus diawali dengan simbol dolar '$' (contoh:$nama)." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Perintah atau fungsi dalam PHP yang digunakan untuk menampilkan tulisan atau output ke halaman browser adalah...", o: ["A. print_text()", "B. echo", "C. write()", "D. console.log()", "E. system.out"], a: 1, p: "Perintah 'echo' dipakai untuk mencetak output teks ke layar browser." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Urutan parameter wajib pada fungsi mysqli_connect(host, user, password, database) yang benar untuk XAMPP default adalah...", o: ["A. mysqli_connect('localhost', 'root', '', 'nama_db');", "B. mysqli_connect('root', 'localhost', 'nama_db', '');", "C. mysqli_connect('nama_db', 'root', 'localhost', '');", "D. mysqli_connect('', 'root', 'nama_db', 'localhost');", "E. mysqli_connect('localhost', 'nama_db', 'root', '');"], a: 0, p: "Urutannya: host ('localhost'), user ('root'), password (''), dan nama database." },
+            { kategori: "KKPPL 4 - PHP & Database", q: "Port default yang digunakan oleh database server MySQL di XAMPP adalah...", o: ["A. 80", "B. 8080", "C. 3306", "D. 21", "E. 443"], a: 2, p: "Port standar untuk layanan MySQL adalah 3306." }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E untuk tiap soal secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "KKPPL";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ JAWABAN BENAR!</strong><br>${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ JAWABAN SALAH!</strong><br>Jawaban benar adalah: <strong>${activeQuestion.o[activeQuestion.a]}</strong><br>${activeQuestion.p}`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

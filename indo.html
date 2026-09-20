@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Bahasa Indonesia - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Bahasa Indonesia</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin Anda kerjakan di bawah ini untuk memulai latihan mandiri Teks Argumentasi, Poster, & Teks Berita.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Semua pertanyaan dan pilihan jawaban diacak secara dinamis berdasarkan Kisi-Kisi Resmi Bahasa Indonesia.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✔ Teks Argumentasi (Struktur, Fakta/Opini, Pola Paragraf, Kebahasaan)</div>
+                        <div>✔ Poster (Pengertian, Jenis-jenis, & Pemahaman Pesan)</div>
+                        <div>✔ Teks Berita (5W+1H, Piramida Terbalik, Kalimat Langsung, Narasumber)</div>
+                        <div>✔ Soal Cerita & Analisis Stimulus Literasi</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: BAHASA INDONESIA</span>
+                    <span id="progressText">Soal 1 dari 15</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+
+                <!-- Kotak Stimulus / Teks Bacaan Literasi -->
+                <div id="bacaanBox" style="display: none; background: rgba(79, 70, 229, 0.08); border-left: 4px solid var(--primary-color, #4f46e5); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-style: italic; font-size: 0.95rem; line-height: 1.6; color: var(--text-color);">
+                    <strong style="font-style: normal; display: block; margin-bottom: 4px; color: var(--primary-color, #4f46e5);">📖 Teks Bacaan / Stimulus Literasi:</strong>
+                    <span id="bacaanText"></span>
+                </div>
+
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+
+                <ul class="options-list" id="optionsContainer"></ul>
+
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi simulasi ujian Bahasa Indonesia.</p>
+
+                <div class="score-num" id="scoreValue">0</div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA BAHASA INDONESIA SESUAI KISI-KISI RESMI MATERI GAMBAR -->
+    <script>
+        const bankSoal = [
+            // --- TEKS ARGUMENTASI ---
+            { 
+                kategori: "Teks Argumentasi - Pengertian & Tujuan", 
+                bacaan: "", 
+                q: "Tujuan utama penulisan teks argumentasi yang membedakannya dengan teks narasi atau deskripsi adalah...", 
+                o: ["A. Menghibur pembaca dengan alur cerita rekaan.", "B. Menceritakan urutan peristiwa sejarah secara kronologis.", "C. Meyakinkan dan mempengaruhi pembaca agar menerima pendapat penulis berdasarkan bukti yang logis.", "D. Menggambarkan objek secara mendetail agar pembaca seolah melihatnya.", "E. Memberikan petunjuk langkah demi langkah dalam membuat produk."], 
+                a: 2, 
+                p: "Teks argumentasi disusun untuk membuktikan kebenaran suatu gagasan/pendapat menggunakan data dan alasan logis agar pembaca yakin." 
+            },
+            { 
+                kategori: "Teks Argumentasi - Fakta & Opini", 
+                bacaan: "Penggunaan sampah plastik sekali pakai di pasar tradisional masih sangat tinggi. Berdasarkan data Dinas Lingkungan Hidup tahun 2023, sebanyak 65% limbah rumah tangga di perkotaan terdiri atas plastik. Menurut saya, pemerintah harus segera memberlakukan sanksi denda bagi pembeli yang tidak membawa kantong belanja sendiri.", 
+                q: "Berdasarkan kutipan teks di atas, kalimat yang tergolong ke dalam 'Fakta' adalah...", 
+                o: ["A. Pemerintah harus segera memberlakukan sanksi denda.", "B. Pembeli wajib membawa kantong belanja sendiri.", "C. Penggunaan plastik di pasar tradisional terlampau parah.", "D. Berdasarkan data Dinas Lingkungan Hidup tahun 2023, sebanyak 65% limbah rumah tangga di perkotaan terdiri atas plastik.", "E. Menurut saya, sanksi denda adalah solusi terbaik."], 
+                a: 3, 
+                p: "Fakta ditandai dengan data riil yang teruji kebenarannya (Data DLH 2023 angka 65%), sedangkan kalimat lainnya memuat sudut pandang/opini pribadi." 
+            },
+            { 
+                kategori: "Teks Argumentasi - Fakta & Opini", 
+                bacaan: "Sektor pertanian organik kini makin diminati. Selain lebih ramah lingkungan, hasil panen organik diyakini memiliki kandungan nutrisi yang lebih tinggi. Sebaiknya masyarakat mulai beralih mengonsumsi beras organik demi kesehatan jangka panjang.", 
+                q: "Kalimat yang memuat unsur 'Opini' dalam bacaan di atas ditandai oleh frasa...", 
+                o: ["A. Pertanian organik.", "B. Ramah lingkungan.", "C. Hasil panen organik.", "D. Sebaiknya masyarakat mulai beralih mengonsumsi...", "E. Sektor pertanian kini."], 
+                a: 3, 
+                p: "Kata 'sebaiknya' menandakan usulan, saran, atau saran subjektif penulis yang tergolong opini." 
+            },
+            { 
+                kategori: "Teks Argumentasi - Pola Paragraf", 
+                bacaan: "Hujan deras berdurasi panjang mengguyur wilayah hilir selama dua hari berturut-turut. Saluran drainase buruk dan tertutup tumpukan sampah plastik. Akibatnya, pemukiman warga terendam banjir hingga ketinggian satu meter.", 
+                q: "Pola pengembangan paragraf argumentasi di atas adalah...", 
+                o: ["A. Pola Akibat - Sebab", "B. Pola Sebab - Akibat", "C. Pola Analogi", "D. Pola Generalisasi", "E. Pola Perbandingan"], 
+                a: 1, 
+                p: "Paragraf diawali dengan deretan penyebab (hujan deras, drainase buruk) dan diakhiri dengan simpulan akibat (banjir terendam)." 
+            },
+            { 
+                kategori: "Teks Argumentasi - Kaidah Kebahasaan", 
+                q: "Manakah di bawah ini yang merupakan contoh kalimat argumentasi yang memanfaatkan kata kerja mental dan konjungsi kausalitas?", 
+                o: ["A. Warga berlari kencang saat mendengar suara ledakan di pabrik.", "B. Peneliti memperkirakan bahwa krisis air bersih akan terjadi sebab eksploitasi tanah yang tidak terkendali.", "C. Adik membaca buku cerita lalu menuliskannya di buku catatan.", "D. Petani menanam padi di sawah pada pagi hari.", "E. Burung terbang tinggi di udara saat sore hari."], 
+                a: 1, 
+                p: "Kata 'memperkirakan' adalah kata kerja mental (proses berpikir), dan 'sebab' adalah konjungsi kausalitas (sebab-akibat)." 
+            },
+
+            // --- POSTER ---
+            { 
+                kategori: "Poster - Pengertian & Tujuan", 
+                q: "Pengertian poster yang paling tepat di bawah ini adalah...", 
+                o: ["A. Naskah cerita pendek yang dibacakan di atas panggung.", "B. Plakat berisi kata-kata dan gambar yang dipasang di tempat umum untuk menyampaikan informasi.", "C. Karangan panjang berupa buku ilmiah tanpa gambaran visual.", "D. Lembaran surat berita harian yang terbit setiap pagi.", "E. Catatan keuangan perusahaan yang dipublikasikan."], 
+                a: 1, 
+                p: "Poster adalah media publikasi visual berupa gabungan teks singkat dan gambar menarik yang dipasang di tempat umum." 
+            },
+            { 
+                kategori: "Poster - Jenis Poster", 
+                q: "Poster yang dibuat oleh Departemen Kesehatan berisi imbauan 'Ayo Lakukan 3M Plus untuk Cegah Demam Berdarah!' tergolong ke dalam jenis poster...", 
+                o: ["A. Poster Niaga", "B. Poster Kegiatan", "C. Poster Layanan Masyarakat", "D. Poster Komersial", "E. Poster Karya Seni"], 
+                a: 2, 
+                p: "Poster Layanan Masyarakat bertujuan memberikan edukasi/sosialisasi kesejahteraan publik tanpa mencari keuntungan finasial." 
+            },
+            { 
+                kategori: "Poster - Jenis Poster", 
+                q: "Apabila sebuah perusahaan otomotif meluncurkan gambar mobil terbaru beserta diskon harga dan nomor kontak pembelian, poster tersebut tergolong jenis...", 
+                o: ["A. Poster Pendidikan", "B. Poster Niaga / Komersial", "C. Poster Propaganda", "D. Poster Layanan Masyarakat", "E. Poster Cari Kerja"], 
+                a: 1, 
+                p: "Poster Niaga berfokus pada penawaran, promosi, dan penjualan produk/jasa untuk meraih keuntungan bisnis." 
+            },
+            { 
+                kategori: "Poster - Pemahaman Pesan", 
+                bacaan: "Sebuah poster menampilkan gambar bumi yang sedang memakai masker medis dengan latar belakang pepohonan hijau dan tulisan tebal: 'Jaga Paru-paru Dunia, Hentikan Penebangan Liar Sekarang!'.", 
+                q: "Makna tersirat dari kombinasi visual dan teks pada poster tersebut adalah...", 
+                o: ["A. Manusia dilarang keluar rumah tanpa menggunakan masker.", "B. Hutan berfungsi sebagai penyedia oksigen bumi sehingga harus dilindungi dari kerusakan.", "C. Dokter wajib menanam pohon di sekitar rumah sakit.", "D. Penebangan pohon hanya boleh dilakukan pada malam hari.", "E. Masker medis terbuat dari bahan dasar daun pepohonan."], 
+                a: 1, 
+                p: "Visual bumi bermasker dan pesan 'paru-paru dunia' melambangkan pentingnya melestarikan hutan demi kelangsungan napas kehidupan bumi." 
+            },
+
+            // --- TEKS BERITA ---
+            { 
+                kategori: "Teks Berita - Unsur Berita (5W+1H)", 
+                bacaan: "Jakarta (10/10) - Badan Meteorologi, Klimatologi, dan Geofisika (BMKG) merilis peringatan dini potensi gelombang tinggi hingga 4 meter di perairan selatan Jawa akibat pola angin kencang pada Sabtu pekan ini.", 
+                q: "Unsur 'Who' (Siapa) dan 'Where' (Di mana) dalam cuplikan teks berita di atas adalah...", 
+                o: ["A. BMKG dan Perairan Selatan Jawa", "B. Nelayan dan Jakarta", "C. Gelombang tinggi dan Sabtu pekan ini", "D.BMKG dan Sabtu pekan ini", "E. Pola angin kencang dan Jakarta"], 
+                a: 0, 
+                p: "Unsur 'Who' merujuk pada subjek pemicu/sumber berita (BMKG) dan 'Where' merujuk pada lokasi fokus kejadian (Perairan Selatan Jawa)." 
+            },
+            { 
+                kategori: "Teks Berita - Unsur Berita (5W+1H)", 
+                bacaan: "Tim SAR gabungan berhasil mengevakuasi korban tenggelam di Sungai Serayu pada Minggu sore setelah melakukan penyisiran menggunakan perahu karet selama dua hari.", 
+                q: "Unsur 'How' (Bagaimana) pada kutipan berita di atas ditunjukkan oleh frasa...", 
+                o: ["A. Tim SAR gabungan.", "B. Korban tenggelam di Sungai Serayu.", "C. Minggu sore.", "D. Melakukan penyisiran menggunakan perahu karet selama dua hari.", "E. Di Sungai Serayu."], 
+                a: 3, 
+                p: "Unsur 'How' menjelaskan cara, proses, atau mekanisme dilakukannya suatu tindakan evakuasi dalam peristiwa berita." 
+            },
+            { 
+                kategori: "Teks Berita - Struktur Berita", 
+                q: "Alasan utama penulisan teks berita disusun menggunakan pola 'Piramida Terbalik' adalah...", 
+                o: ["A. Agar pembaca harus membaca seluruh berita sampai baris terakhir untuk tahu isinya.", "B. Menempatkan informasi paling krusial/penting di bagian teras berita (lead) terlebih dahulu.", "C. Menyembunyikan identitas narasumber di bagian paling atas.", "D. Memudahkan penulis membuat cerita rekaan yang panjang.", "E. Agar berita tidak bisa dipotong oleh editor media."], 
+                a: 1, 
+                p: "Pola piramida terbalik mengurutkan informasi dari yang paling penting (Lead) di atas hingga pendukung di bagian bawah." 
+            },
+            { 
+                kategori: "Teks Berita - Kepala Berita (Lead)", 
+                q: "Bagian struktur teks berita yang terletak di paragraf paling awal dan memuat intisari pokok peristiwa dinamakan...", 
+                o: ["A. Judul Berita (Headline)", "B. Teras / Kepala Berita (Lead)", "C. Tubuh Berita (Body)", "D. Ekor Berita (Tail)", "E. Kaki Berita"], 
+                a: 1, 
+                p: "Teras Berita (Lead) diletakkan di paragraf awal untuk menyajikan rangkuman pokok 5W+1H secara singkat." 
+            },
+            { 
+                kategori: "Teks Berita - Kalimat Langsung", 
+                bacaan: "Kutipan langsung: 'Kami mengimbau seluruh warga agar mewaspadai genangan air saat hujan deras,' tegas Kepala BPBD setempat.", 
+                q: "Apabila kutipan langsung di atas diubah menjadi 'Kalimat Tidak Langsung', kalimat yang benar adalah...", 
+                o: ["A. Kepala BPBD bertanya apakah warga mewaspadai genangan air?", "B. Kepala BPBD setempat mengimbau seluruh warga agar mewaspadai genangan air saat hujan deras.", "C. 'Waspadailah genangan air!' kata Kepala BPBD kepada warga.", "D. Genangan air hujan diimbau oleh warga BPBD.", "E. Kepala BPBD setempat tidak tahu ada genangan air."], 
+                a: 1, 
+                p: "Kalimat tidak langsung menyampaikan kembali penyataan tanpa menggunakan tanda petik dua (\") dan menyesuaikan kata ganti." 
+            },
+            { 
+                kategori: "Teks Berita - Narasumber & Jurnalis", 
+                q: "Seseorang yang memberikan keterangan, data, atau kesaksian faktual yang valid untuk memperkuat isi berita dinamakan...", 
+                o: ["A. Jurnalis", "B. Editor", "C. Narasumber", "D. Redaktur", "E. Loper Berita"], 
+                a: 2, 
+                p: "Narasumber adalah individu/pihak yang menjadi sumber rujukan informasi faktual bagi seorang wartawan." 
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                themeToggleIcon.textContent = '☀️';
+                themeToggleText.textContent = 'Mode Siang';
+            } else {
+                themeToggleIcon.textContent = '🌙';
+                themeToggleText.textContent = 'Mode Malam';
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E untuk tiap soal secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Bahasa Indonesia";
+
+            // Render Teks Bacaan Literasi (Jika Ada)
+            const bacaanBox = document.getElementById('bacaanBox');
+            if (activeQuestion.bacaan && activeQuestion.bacaan.trim() !== "") {
+                bacaanBox.style.display = 'block';
+                document.getElementById('bacaanText').textContent = `"${activeQuestion.bacaan}"`;
+            } else {
+                bacaanBox.style.display = 'none';
+            }
+
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✔ JAWABAN BENAR!</strong><br>${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>❌ JAWABAN SALAH!</strong><br>Jawaban benar adalah: <strong>${activeQuestion.o[activeQuestion.a]}</strong><br>${activeQuestion.p}`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

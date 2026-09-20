@@ -1,4 +1,4 @@
- // Data Daftar Mata Pelajaran dengan Ikon SVG Modern
+// Data Daftar Mata Pelajaran dengan Ikon SVG Modern
 const subjects = [
     { 
         id: 'agama', 
@@ -15,11 +15,11 @@ const subjects = [
         available: false 
     },
     { 
-        id: 'bind', 
-        name: 'BIND (Bahasa Indonesia)', 
-        icon: `<svg viewBox="0 0 24 24"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>`, 
-        desc: 'Bahasa & Sastra Indonesia', 
-        available: false 
+        id: 'indo', 
+        name: 'INDO (Bahasa Indonesia)', 
+        icon: `<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`, 
+        desc: 'Teks Argumentasi, Poster, & Teks Berita', 
+        available: true 
     },
     { 
         id: 'bing', 
@@ -54,7 +54,7 @@ const subjects = [
         name: 'KKPPL', 
         icon: `<svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`, 
         desc: 'Keterampilan Komputer & Pemrograman', 
-        available: false 
+        available: true 
     },
     { 
         id: 'mtk', 
@@ -131,21 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
 
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
-    });
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+    }
 
     function setTheme(theme) {
         htmlElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         if (theme === 'dark') {
-            themeToggleIcon.textContent = '☀️';
-            themeToggleText.textContent = 'Mode Siang';
+            if (themeToggleIcon) themeToggleIcon.textContent = '🌙';
+            if (themeToggleText) themeToggleText.textContent = 'Mode Siang';
         } else {
-            themeToggleIcon.textContent = '🌙';
-            themeToggleText.textContent = 'Mode Malam';
+            if (themeToggleIcon) themeToggleIcon.textContent = '☀️';
+            if (themeToggleText) themeToggleText.textContent = 'Mode Malam';
         }
     }
 
@@ -154,53 +156,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. RENDER DAFTAR MATA PELAJARAN
     const container = document.getElementById('subjectGrid');
+    if (container) {
+        sortedSubjects.forEach(subject => {
+            const card = document.createElement('a');
+            card.className = `card-subject scroll-reveal ${subject.available ? '' : 'disabled'}`;
+            card.href = subject.available ? `${subject.id}.html` : '#';
 
-    sortedSubjects.forEach(subject => {
-        const card = document.createElement('a');
-        card.className = `card-subject scroll-reveal ${subject.available ? '' : 'disabled'}`;
-        card.href = subject.available ? `${subject.id}.html` : '#';
-
-        if (subject.available) {
-            card.innerHTML = `
-                <div class="subject-icon">${subject.icon}</div>
-                <div>
-                    <h3 class="subject-title">${subject.name}</h3>
-                    <p class="subject-description">${subject.desc}</p>
-                </div>
-                <div class="subject-meta">
-                    <span class="soal-count">50 SOAL</span>
-                    <span class="mulai-btn-text">Mulai Tryout →</span>
-                </div>
-            `;
-        } else {
-            card.innerHTML = `
-                <div class="subject-icon">${subject.icon}</div>
-                <div>
-                    <h3 class="subject-title">${subject.name}</h3>
-                    <p class="subject-description">${subject.desc}</p>
-                </div>
-                <div class="subject-meta">
-                    <span class="badge-coming-soon">Segera Hadir</span>
-                    <span class="soal-count" style="opacity: 0.4;">0 SOAL</span>
-                </div>
-            `;
-        }
-
-        container.appendChild(card);
-    });
+            if (subject.available) {
+                card.innerHTML = `
+                    <div class="subject-icon">${subject.icon}</div>
+                    <div>
+                        <h3 class="subject-title">${subject.name}</h3>
+                        <p class="subject-description">${subject.desc}</p>
+                    </div>
+                    <div class="subject-meta">
+                        <span class="soal-count">50 SOAL</span>
+                        <span class="mulai-btn-text">Mulai Tryout →</span>
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="subject-icon">${subject.icon}</div>
+                    <div>
+                        <h3 class="subject-title">${subject.name}</h3>
+                        <p class="subject-description">${subject.desc}</p>
+                    </div>
+                    <div class="subject-meta">
+                        <span class="badge-coming-soon">Segera Hadir</span>
+                        <span class="soal-count" style="opacity: 0.4;">0 SOAL</span>
+                    </div>
+                `;
+            }
+            container.appendChild(card);
+        });
+    }
 
     // 4. LOGIKA PENCARIAN (SEARCH FILTER)
     const searchInput = document.getElementById('searchInput');
-    
-    if (searchInput) {
+    if (searchInput && container) {
         searchInput.addEventListener('input', (e) => {
             const keyword = e.target.value.toLowerCase().trim();
             const cards = container.querySelectorAll('.card-subject');
-
             cards.forEach(card => {
                 const title = card.querySelector('.subject-title')?.textContent.toLowerCase() || '';
                 const desc = card.querySelector('.subject-description')?.textContent.toLowerCase() || '';
-
                 if (title.includes(keyword) || desc.includes(keyword)) {
                     card.style.display = 'flex';
                 } else {
@@ -212,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. ENGINE SCROLL REVEAL (INTERSECTION OBSERVER)
     const reveals = document.querySelectorAll('.scroll-reveal');
-    
     const revealCallback = (entries, observer) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
