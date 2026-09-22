@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis APPK - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: APPK</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan berdasarkan kisi-kisi Microsoft Word, Pengolahan Teks, Tata Letak & Daftar Isi Otomatis.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ A. Dasar & Shortcut Microsoft Word</div>
+                        <div>✓ B. Pengaturan Format Teks & Paragraf</div>
+                        <div>✓ C. Tata Letak Halaman & Sisipan Tabel/Objek</div>
+                        <div>✓ D. Pembuatan & Pembaruan Daftar Isi Otomatis, Referensi & Mail Merge</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: APPK</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Aplikasi Pengolahan Kata (APPK).</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA APPK (50 SOAL SESUAI KISI-KISI) -->
+    <script>
+        const bankSoal = [
+            { 
+                kategori: "Dasar MS Word", 
+                q: "Fungsi utama dari aplikasi Microsoft Word dalam pengolahan dokumen adalah...", 
+                o: [
+                    "A. Mengolah dokumen berbasis teks dan surat-menyurat", 
+                    "B. Mengolah data angka dan tabel perhitungan kuantitatif", 
+                    "C. Membuat presentasi multimedia interaktif berpindah slide", 
+                    "D. Mengedit video dan manipulasi gambar grafis vektor", 
+                    "E. Mengelola basis data serta jaringan komputer lokal"
+                ], 
+                a: 0, 
+                p: "Microsoft Word merupakan program word processor untuk membuat, mengedit, dan memformat dokumen berbasis teks." 
+            },
+            { 
+                kategori: "Dasar MS Word", 
+                q: "Format ekstensi file standar untuk menyimpan dokumen pada Microsoft Word versi modern adalah...", 
+                o: [
+                    "A. .docx secara otomatis", 
+                    "B. .xlsx untuk lembar kerja", 
+                    "C. .pptx untuk slide presentasi", 
+                    "D. .pdf untuk dokumen terkunci", 
+                    "E. .txt untuk teks polos tanpa format"
+                ], 
+                a: 0, 
+                p: "Sejak versi 2007 hingga sekarang, format bawaan penyimpanan Microsoft Word adalah .docx." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Kombinasi tombol pintas (shortcut) yang digunakan untuk membuat dokumen baru pada Microsoft Word adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + N", 
+                    "B. Menekan tombol Ctrl + S", 
+                    "C. Menekan tombol Ctrl + O", 
+                    "D. Menekan tombol Ctrl + P", 
+                    "E. Menekan tombol Ctrl + A"
+                ], 
+                a: 0, 
+                p: "Pintasan Ctrl + N berfungsi untuk membuka lembar kerja dokumen baru (New Document)." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Fungsi utama dari kombinasi tombol shortcut Ctrl + S pada aplikasi Microsoft Word adalah...", 
+                o: [
+                    "A. Menyimpan perubahan dokumen", 
+                    "B. Membuka lembar kerja dokumen baru", 
+                    "C. Mencetak dokumen ke mesin printer", 
+                    "D. Memilih seluruh isi teks lembaran", 
+                    "E. Mengubah bentuk huruf menjadi tebal"
+                ], 
+                a: 0, 
+                p: "Ctrl + S (Save) digunakan untuk menyimpan berkas atau dokumen yang sedang dikerjakan." 
+            },
+            { 
+                kategori: "Format Teks", 
+                q: "Fitur yang digunakan untuk mengatur dan memilih gaya jenis huruf pada teks dokumen adalah...", 
+                o: [
+                    "A. Menu pilihan Font Family", 
+                    "B. Fitur pengatur Font Size", 
+                    "C. Pilihan opsi Line Spacing", 
+                    "D. Ikon perintah Text Highlight", 
+                    "E. Menu opsi Page Alignment"
+                ], 
+                a: 0, 
+                p: "Font Family / Font Name berguna untuk mengganti jenis gaya huruf seperti Calibri, Times New Roman, atau Arial." 
+            },
+            { 
+                kategori: "Format Teks", 
+                q: "Fungsi berturut-turut dari kombinasi shortcut Ctrl + B, Ctrl + I, dan Ctrl + U secara berurutan adalah...", 
+                o: [
+                    "A. Cetak tebal, miring, dan garis bawah", 
+                    "B. Cetak miring, tebal, dan rata tengah", 
+                    "C. Garis bawah, cetak miring, dan tebal", 
+                    "D. Rata kanan, rata kiri, dan rata tengah", 
+                    "E. Ukuran besar, huruf kecil, dan kapital"
+                ], 
+                a: 0, 
+                p: "Ctrl+B (Bold) untuk cetak tebal, Ctrl+I (Italic) untuk cetak miring, dan Ctrl+U (Underline) untuk garis bawah." 
+            },
+            { 
+                kategori: "Format Paragraf", 
+                q: "Perintah atau tombol pintas yang digunakan untuk mengatur posisi teks agar rata di tengah lembaran adalah...", 
+                o: [
+                    "A. Align Center atau Ctrl + E", 
+                    "B. Align Left atau Ctrl + L", 
+                    "C. Align Right atau Ctrl + R", 
+                    "D. Justify atau tombol Ctrl + J", 
+                    "E. Line Spacing atau Ctrl + 5"
+                ], 
+                a: 0, 
+                p: "Align Center (Ctrl + E) berfungsi untuk menempatkan paragraf atau teks tepat di tengah-tengah dokumen." 
+            },
+            { 
+                kategori: "Format Paragraf", 
+                q: "Fungsi utama dari penerapan perataan paragraf Justify (Ctrl + J) pada Microsoft Word adalah...", 
+                o: [
+                    "A. Meratakan teks batas kanan dan kiri", 
+                    "B. Menjadikan posisi teks tepat di tengah", 
+                    "C. Meratakan teks hanya pada batas kiri", 
+                    "D. Meratakan teks hanya pada batas kanan", 
+                    "E. Memberi jarak renggang antar paragraf"
+                ], 
+                a: 0, 
+                p: "Justify berguna membuat perataan teks sejajar dan rapi di kedua tepi kanan maupun kiri." 
+            },
+            { 
+                kategori: "Format Paragraf", 
+                q: "Fitur yang digunakan untuk mengatur jarak kerenggangan spasi antar baris kalimat dalam satu paragraf adalah...", 
+                o: [
+                    "A. Fitur pengaturan Line Spacing", 
+                    "B. Fitur pengatur Text Indentation", 
+                    "C. Pilihan ukuran margin halaman", 
+                    "D. Gaya tampilan heading dokumen", 
+                    "E. Pengaturan orientasi kertas lembaran"
+                ], 
+                a: 0, 
+                p: "Line Spacing menentukan besarnya jarak spasi antar baris kalimat secara vertikal." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Menu atau tab yang digunakan untuk memilih dan merubah ukuran standar kertas (seperti A4) adalah...", 
+                o: [
+                    "A. Submenu Size pada tab Layout", 
+                    "B. Menu Margins pada tab Home", 
+                    "C. Fitur Columns pada tab Insert", 
+                    "D. Opsi Orientation pada tab View", 
+                    "E. Pilihan Watermark pada tab Design"
+                ], 
+                a: 0, 
+                p: "Ukuran dimensi kertas diatur melalui ikon Size yang terdapat pada tab Layout / Page Layout." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Jenis ukuran kertas yang paling sering dan umum digunakan dalam penyusunan dokumen standar sekolah adalah...", 
+                o: [
+                    "A. Kertas berukuran standar A4", 
+                    "B. Kertas berukuran standar A3", 
+                    "C. Kertas dengan tipe Envelope", 
+                    "D. Kertas tipe Executive ukuran kecil", 
+                    "E. Kertas berukuran khusus Tabloid"
+                ], 
+                a: 0, 
+                p: "Kertas ukuran A4 (21 x 29.7 cm) merupakan standar paling umum untuk pembuatan laporan dan tugas sekolah." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Fungsi utama dari fitur pengaturan margin pada Microsoft Word adalah...", 
+                o: [
+                    "A. Mengatur jarak batas tepi kertas", 
+                    "B. Menentukan jumlah halaman dokumen", 
+                    "C. Menambahkan gambar latar belakang", 
+                    "D. Mengubah tipe jenis huruf kalimat", 
+                    "E. Membuat penomoran otomatis bab"
+                ], 
+                a: 0, 
+                p: "Margin menentukan batas jarak antara tepi fisik kertas dengan area tempat teks ditulis (Top, Bottom, Left, Right)." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Fitur yang digunakan untuk menentukan posisi arah lembar kertas tercetak tegak (Portrait) atau mendatar (Landscape) adalah...", 
+                o: [
+                    "A. Fitur pengaturan Orientation", 
+                    "B. Fitur pemilihan Page Size", 
+                    "C. Ikon penentu Page Margins", 
+                    "D. Opsi pembuat Page Break", 
+                    "E. Pilihan tata letak Columns"
+                ], 
+                a: 0, 
+                p: "Orientation berfungsi menentukan arah bidang dokumen: Portrait (vertikal/tegak) atau Landscape (horisontal/mendatar)." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Menu utama yang diakses untuk menyisipkan daftar isi otomatis pada Microsoft Word adalah...", 
+                o: [
+                    "A. Table of Contents di tab References", 
+                    "B. Fitur Table pada tab Insert", 
+                    "C. Menu Navigation Pane di tab View", 
+                    "D. Opsi Page Number pada tab Insert", 
+                    "E. Gaya Styles pada tab Home"
+                ], 
+                a: 0, 
+                p: "Fitur pembuatan daftar isi otomatis berada pada grup 'Table of Contents' di dalam tab 'References'." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Langkah format awal yang wajib dilakukan pada judul dan subjudul sebelum daftar isi otomatis dibuat adalah...", 
+                o: [
+                    "A. Menerapkan format Heading Styles", 
+                    "B. Mewarnai teks menjadi tebal bergaris", 
+                    "C. Mengubah jenis ukuran huruf paragraf", 
+                    "D. Memberikan penomoran halaman manual", 
+                    "E. Meratakan seluruh teks ke posisi tengah"
+                ], 
+                a: 0, 
+                p: "Microsoft Word membaca struktur judul dan subjudul berdasarkan penerapan format Heading (Heading 1, Heading 2, dst)." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Fungsi utama dari penggunaan Heading 1 (H1) dan Heading 2 (H2) dalam dokumen adalah...", 
+                o: [
+                    "A. Menentukan struktur bab dan sub-bab", 
+                    "B. Mengubah warna teks secara acak", 
+                    "C. Mengatur spasi antar huruf kalimat", 
+                    "D. Menghapus teks yang salah ketik", 
+                    "E. Menyimpan file secara cepat otomatis"
+                ], 
+                a: 0, 
+                p: "Heading 1 digunakan untuk judul bab utama, sedangkan Heading 2 digunakan untuk tingkatan sub-bab di bawahnya." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Langkah selanjutnya untuk memunculkan daftar isi setelah seluruh bab dan sub-bab diberi Heading adalah...", 
+                o: [
+                    "A. Klik References > Table of Contents", 
+                    "B. Klik File > Print > Preview Document", 
+                    "C. Klik Insert > Blank Page > Save", 
+                    "D. Klik Layout > Spacing > Auto Update", 
+                    "E. Klik View > Zoom > Page Width"
+                ], 
+                a: 0, 
+                p: "Setelah heading disesuaikan, tinggal mengeklik tab References lalu memilih style dari 'Table of Contents'." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Salah satu keuntungan utama menggunakan fitur daftar isi otomatis dibandingkan buatan manual adalah...", 
+                o: [
+                    "A. Nomor halaman ter-update akurat", 
+                    "B. Jenis file otomatis berubah PDF", 
+                    "C. Teks dokumen tidak bisa dihapus", 
+                    "D. Ukuran berkas menjadi lebih kecil", 
+                    "E. Menghemat penggunaan tinta cetak"
+                ], 
+                a: 0, 
+                p: "Daftar isi otomatis menjamin nomor halaman terhubung tepat dan bisa diperbarui cepat tanpa perlu penataan ulang manual." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Fitur yang digunakan untuk memperbarui perubahan judul bab atau penomoran halaman pada daftar isi adalah...", 
+                o: [
+                    "A. Tombol perintah Update Table", 
+                    "B. Ikon pilihan Replace Text", 
+                    "C. Tombol kombinasi Ctrl + Z", 
+                    "D. Perintah Refresh Window", 
+                    "E. Opsi pilihan Format Painter"
+                ], 
+                a: 0, 
+                p: "Tombol 'Update Table' pada daftar isi akan menyelaraskan kembali perubahan nomor halaman dan judul bab secara otomatis." 
+            },
+            { 
+                kategori: "Daftar Isi Otomatis", 
+                q: "Opsi 'Update entire table' pada saat memperbarui daftar isi berfungsi untuk...", 
+                o: [
+                    "A. Memperbarui nomor halaman dan judul", 
+                    "B. Hanya memperbarui angka nomor halaman", 
+                    "C. Menghapus seluruh tabel daftar isi", 
+                    "D. Mengubah gaya tampilan warna lembaran", 
+                    "E. Mengunci tabel agar tidak bisa diedit"
+                ], 
+                a: 0, 
+                p: "Pilihan 'Update entire table' memperbarui keseluruhan struktur, mencakup teks judul yang berubah beserta angka halamannya." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Kombinasi tombol pintas untuk membatalkan perintah atau tindakan terakhir (Undo) di Microsoft Word adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + Z", 
+                    "B. Menekan tombol Ctrl + Y", 
+                    "C. Menekan tombol Ctrl + X", 
+                    "D. Menekan tombol Ctrl + C", 
+                    "E. Menekan tombol Ctrl + V"
+                ], 
+                a: 0, 
+                p: "Ctrl + Z digunakan untuk membatalkan perintah terakhir (Undo), sedangkan Ctrl + Y digunakan untuk Redo." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Tombol shortcut yang digunakan untuk mengulang kembali tindakan yang baru saja dibatalkan (Redo/Repeat) adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + Y", 
+                    "B. Menekan tombol Ctrl + Z", 
+                    "C. Menekan tombol Ctrl + R", 
+                    "D. Menekan tombol Ctrl + Shift + Z", 
+                    "E. Menekan tombol Ctrl + W"
+                ], 
+                a: 0, 
+                p: "Ctrl + Y berfungsi melakukan Redo atau mengulang kembali perintah terakhir yang dibatalkan oleh Undo." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Kombinasi tombol yang digunakan untuk memilih dan menandai seluruh isi teks dokumen secara instan adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + A", 
+                    "B. Menekan tombol Ctrl + S", 
+                    "C. Menekan tombol Ctrl + F", 
+                    "D. Menekan tombol Ctrl + Shift + A", 
+                    "E. Menekan tombol Alt + A"
+                ], 
+                a: 0, 
+                p: "Ctrl + A (Select All) menandai seluruh isi teks dan objek di lembar kerja dokumen." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Untuk menggandakan teks yang disorot ke memori clipboard tanpa menghapus teks aslinya, digunakan shortcut...", 
+                o: [
+                    "A. Menekan tombol Ctrl + C", 
+                    "B. Menekan tombol Ctrl + X", 
+                    "C. Menekan tombol Ctrl + V", 
+                    "D. Menekan tombol Ctrl + P", 
+                    "E. Menekan tombol Ctrl + D"
+                ], 
+                a: 0, 
+                p: "Ctrl + C (Copy) menyalin teks terpilih ke memori sementara (clipboard)." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Shortcut yang berfungsi untuk memotong/memindahkan teks terpilih (Cut) dari posisi semula adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + X", 
+                    "B. Menekan tombol Ctrl + C", 
+                    "C. Menekan tombol Ctrl + V", 
+                    "D. Menekan tombol Ctrl + Shift + C", 
+                    "E. Menekan tombol Alt + X"
+                ], 
+                a: 0, 
+                p: "Ctrl + X (Cut) menghapus teks terpilih dari posisi awal dan menyimpannya di clipboard untuk ditempelkan." 
+            },
+            { 
+                kategori: "Shortcut MS Word", 
+                q: "Tombol pintas yang digunakan untuk menempelkan (Paste) hasil salinan teks dari clipboard ke dokumen adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + V", 
+                    "B. Menekan tombol Ctrl + C", 
+                    "C. Menekan tombol Ctrl + X", 
+                    "D. Menekan tombol Ctrl + P", 
+                    "E. Menekan tombol Ctrl + Insert"
+                ], 
+                a: 0, 
+                p: "Ctrl + V (Paste) menempelkan konten yang tersimpan di dalam clipboard ke posisi kursor." 
+            },
+            { 
+                kategori: "Format Teks", 
+                q: "Fitur pencetakan huruf yang membuat angka atau teks terpilih berada kecil di atas garis teks utama (seperti x²) dinamakan...", 
+                o: [
+                    "A. Opsi efek Superscript", 
+                    "B. Opsi efek Subscript", 
+                    "C. Efek penulisan Strikethrough", 
+                    "D. Format huruf Small Caps", 
+                    "E. Format huruf All Caps"
+                ], 
+                a: 0, 
+                p: "Superscript (Ctrl + Shift + +) mencetak karakter lebih kecil di sebelah atas garis posisi teks normal." 
+            },
+            { 
+                kategori: "Format Teks", 
+                q: "Fitur yang digunakan untuk membuat teks atau angka kecil di bawah garis dasar teks utama (seperti rumus kimia H₂O) adalah...", 
+                o: [
+                    "A. Opsi efek Subscript", 
+                    "B. Opsi efek Superscript", 
+                    "C. Efek penulisan Strikethrough", 
+                    "D. Efek Double Strikethrough", 
+                    "E. Format teks Lowercase"
+                ], 
+                a: 0, 
+                p: "Subscript (Ctrl + =) mencetak karakter lebih kecil di sebelah bawah garis posisi teks normal." 
+            },
+            { 
+                kategori: "Format Teks", 
+                q: "Fitur 'Change Case' pada pilihan perintah 'UPPERCASE' berfungsi untuk...", 
+                o: [
+                    "A. Mengubah semua huruf menjadi kapital", 
+                    "B. Mengubah semua huruf menjadi kecil", 
+                    "C. Mengubah huruf awal kata jadi kapital", 
+                    "D. Mengubah huruf pertama kalimat saja", 
+                    "E. Membalikkan variasi kapital dan kecil"
+                ], 
+                a: 0, 
+                p: "UPPERCASE mengubah seluruh karakter huruf terpilih menjadi kapital/besar." 
+            },
+            { 
+                kategori: "Format Paragraf", 
+                q: "Kombinasi shortcut untuk mengatur jarak spasi baris ganda (2.0 spasi) pada paragraf terpilih secara cepat adalah...", 
+                o: [
+                    "A. Menekan tombol Ctrl + 2", 
+                    "B. Menekan tombol Ctrl + 1", 
+                    "C. Menekan tombol Ctrl + 5", 
+                    "D. Menekan tombol Ctrl + Shift + D", 
+                    "E. Menekan tombol Alt + 2"
+                ], 
+                a: 0, 
+                p: "Ctrl + 1 untuk spasi 1.0, Ctrl + 2 untuk spasi 2.0 (ganda), dan Ctrl + 5 untuk spasi 1.5." 
+            },
+            { 
+                kategori: "Format Paragraf", 
+                q: "Ikon perintah 'Bullets' pada grup Paragraph di menu Home berfungsi untuk...", 
+                o: [
+                    "A. Membuat daftar urutan berbasis simbol", 
+                    "B. Membuat daftar urutan berupa nomor/huruf", 
+                    "C. Mengurutkan data paragraf sesuai abjad", 
+                    "D. Memberikan bingkai di sekeliling paragraf", 
+                    "E. Mewarnai latar belakang blok paragraf"
+                ], 
+                a: 0, 
+                p: "Bullets digunakan untuk membuat penomoran daftar berpoin simbol seperti titik, lingkaran, atau tanda centang." 
+            },
+            { 
+                kategori: "Format Paragraf", 
+                q: "Fitur yang berfungsi menyalin gaya format teks dari suatu bagian lalu menerapkannya langsung ke teks lain adalah...", 
+                o: [
+                    "A. Ikon perintah Format Painter", 
+                    "B. Perintah kombinasi Copy-Paste", 
+                    "C. Galeri pilihan Styles", 
+                    "D. Tombol Clear Formatting", 
+                    "E. Ikon warna Text Highlight"
+                ], 
+                a: 0, 
+                p: "Format Painter (berbentuk kuas) mengambil seluruh atribut format teks dan menyalinnya ke tempat baru." 
+            },
+            { 
+                kategori: "Sisipan Tabel & Objek", 
+                q: "Untuk menggabungkan beberapa sel tabel menjadi satu sel utuh yang lebih besar digunakan perintah...", 
+                o: [
+                    "A. Pilihan Merge Cells", 
+                    "B. Perintah Split Cells", 
+                    "C. Fitur AutoFit Window", 
+                    "D. Perintah Distribute Rows", 
+                    "E. Opsi Insert Above"
+                ], 
+                a: 0, 
+                p: "Merge Cells menyatukan dua atau lebih sel dalam tabel yang sedang disorot." 
+            },
+            { 
+                kategori: "Sisipan Tabel & Objek", 
+                q: "Perintah yang digunakan untuk membagi satu sel tabel menjadi beberapa baris atau kolom baru adalah...", 
+                o: [
+                    "A. Perintah Split Cells", 
+                    "B. Perintah Merge Cells", 
+                    "C. Perintah Split Table", 
+                    "D. Fitur Insert Columns", 
+                    "E. Pengaturan Cell Margins"
+                ], 
+                a: 0, 
+                p: "Split Cells membagi sel tabel tunggal menjadi beberapa bagian sel vertikal/horisontal." 
+            },
+            { 
+                kategori: "Sisipan Tabel & Objek", 
+                q: "Pengaturan 'Text Wrapping' pada gambar dengan opsi 'In Front of Text' mengakibatkan...", 
+                o: [
+                    "A. Gambar melayang di atas penulisan teks", 
+                    "B. Teks mengalir mengikuti batas gambar", 
+                    "C. Gambar berada di belakang teks latar", 
+                    "D. Teks terpisah di atas dan bawah gambar", 
+                    "E. Gambar berada sebaris di dalam teks"
+                ], 
+                a: 0, 
+                p: "'In Front of Text' menempatkan gambar pada lapisan atas sehingga dapat menutupi teks dokumen." 
+            },
+            { 
+                kategori: "Sisipan Tabel & Objek", 
+                q: "Fitur untuk menyisipkan diagram visual terstruktur seperti struktur organisasi atau aliran proses adalah...", 
+                o: [
+                    "A. Pilihan elemen SmartArt", 
+                    "B. Pilihan diagram Chart", 
+                    "C. Fitur teks artistik WordArt", 
+                    "D. Sisipan bentuk Shapes", 
+                    "E. Galeri gambar ClipArt"
+                ], 
+                a: 0, 
+                p: "SmartArt menyediakan diagram grafis seperti hirarki organisasi, proses, dan siklus." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Fitur untuk menambahkan tulisan latar atau gambar transparan samar di halaman (seperti 'DRAFT' atau logo) dinamakan...", 
+                o: [
+                    "A. Fitur gambar Watermark", 
+                    "B. Bingkai halaman Page Border", 
+                    "C. Warna latar Page Color", 
+                    "D. Catatan atas Header", 
+                    "E. Catatan bawah Footer"
+                ], 
+                a: 0, 
+                p: "Watermark menambahkan teks atau gambar transparan di belakang teks utama halaman dokumen." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Langkah yang tepat untuk menambahkan penomoran halaman otomatis di bagian bawah lembar dokumen adalah...", 
+                o: [
+                    "A. Klik Insert > Page Number > Bottom of Page", 
+                    "B. Klik Insert > Header > Top of Page", 
+                    "C. Klik References > Insert Footnote", 
+                    "D. Klik Layout > Breaks > Page", 
+                    "E. Klik View > Page Layout > Number"
+                ], 
+                a: 0, 
+                p: "Penomoran halaman di bagian bawah diatur lewat menu Insert > Page Number > Bottom of Page." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Perintah yang digunakan untuk memaksa pemutusan halaman agar kursor langsung pindah ke halaman baru adalah...", 
+                o: [
+                    "A. Page Break (Ctrl + Enter)", 
+                    "B. Section Break Next Page", 
+                    "C. Line Break (Shift + Enter)", 
+                    "D. Fitur Column Break", 
+                    "E. Text Wrapping Break"
+                ], 
+                a: 0, 
+                p: "Page Break (Ctrl + Enter) memindahkan posisi awal penulisan ke halaman berikutnya secara instan." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Perbedaan posisi dasar antara Header dan Footer pada lembar dokumen Microsoft Word terletak pada...", 
+                o: [
+                    "A. Header di margin atas, Footer di margin bawah", 
+                    "B. Header di margin kiri, Footer di margin kanan", 
+                    "C. Header hanya untuk angka, Footer hanya teks", 
+                    "D. Header untuk halaman ganjil, Footer genap", 
+                    "E. Header bersifat otomatis, Footer manual"
+                ], 
+                a: 0, 
+                p: "Header dicetak berulang di area margin atas, sedangkan Footer dicetak di area margin bawah halaman." 
+            },
+            { 
+                kategori: "Referensi & Citasi", 
+                q: "Catatan kaki atau keterangan sumber yang dicetak di bagian dasar/bawah pada halaman yang sama dinamakan...", 
+                o: [
+                    "A. Catatan kaki Footnote", 
+                    "B. Catatan akhir Endnote", 
+                    "C. Kutipan teks Citation", 
+                    "D. Judul objek Caption", 
+                    "E. Daftar pustaka Bibliography"
+                ], 
+                a: 0, 
+                p: "Footnote muncul di bawah halaman tempat kutipan ditulis, sedangkan Endnote terletak di akhir dokumen." 
+            },
+            { 
+                kategori: "Surat Menyurat (Mail Merge)", 
+                q: "Fitur yang digunakan untuk membuat satu master surat atau sertifikat yang ditujukan ke banyak penerima secara otomatis adalah...", 
+                o: [
+                    "A. Fitur pembuatan Mail Merge", 
+                    "B. Pelacak revisi Track Changes", 
+                    "C. Fitur Envelopes and Labels", 
+                    "D. Otomatisasi perintah Macro", 
+                    "E. Penggabungan Combine Documents"
+                ], 
+                a: 0, 
+                p: "Mail Merge menggabungkan dokumen utama dengan sumber data penerima untuk mencetak surat masal." 
+            },
+            { 
+                kategori: "Surat Menyurat (Mail Merge)", 
+                q: "Dua berkas utama yang wajib disiapkan sebelum menjalankan proses Mail Merge adalah...", 
+                o: [
+                    "A. Main Document dan Data Source", 
+                    "B. Header dan lembaran Footer", 
+                    "C. Heading 1 dan Table of Contents", 
+                    "D. Master Slide dan Lembar Kerja", 
+                    "E. File Template dan Berkas PDF"
+                ], 
+                a: 0, 
+                p: "Mail Merge membutuhkan 'Main Document' (naskah master) dan 'Data Source' (tabel daftar nama/alamat penerima)." 
+            },
+            { 
+                kategori: "Fitur Lanjutan", 
+                q: "Fitur yang berfungsi mencari teks tertentu dan menggantinya dengan kata baru secara sekaligus di seluruh dokumen adalah...", 
+                o: [
+                    "A. Find and Replace (Ctrl + H)", 
+                    "B. Navigation Pane (Ctrl + F)", 
+                    "C. Perintah Go To (Ctrl + G)", 
+                    "D. Spelling and Grammar (F7)", 
+                    "E. Kamus kata Thesaurus"
+                ], 
+                a: 0, 
+                p: "Find and Replace (Ctrl + H) mempermudah penggantian kata/frasa secara otomatis di seluruh isi berkas." 
+            },
+            { 
+                kategori: "Fitur Lanjutan", 
+                q: "Fitur pada tab Review yang berfungsi mencatat dan menandai seluruh riwayat penyuntingan/revisi dokumen dinamakan...", 
+                o: [
+                    "A. Penanda revisi Track Changes", 
+                    "B. Perbandingan Compare Documents", 
+                    "C. Fitur Restrict Editing", 
+                    "D. Perbaikan teks AutoCorrect", 
+                    "E. Penghitung kata Word Count"
+                ], 
+                a: 0, 
+                p: "Track Changes menandai setiap penambahan, penghapusan, atau perubahan format yang dilakukan penyunting." 
+            },
+            { 
+                kategori: "Fitur Lanjutan", 
+                q: "Tombol fungsi pada keyboard (Function Key) yang digunakan untuk menjalankan pemeriksaan ejaan dan tata bahasa adalah...", 
+                o: [
+                    "A. Menekan tombol F7", 
+                    "B. Menekan tombol F1", 
+                    "C. Menekan tombol F5", 
+                    "D. Menekan tombol F12", 
+                    "E. Menekan tombol Alt + F8"
+                ], 
+                a: 0, 
+                p: "Tombol F7 berfungsi membuka jendela Spelling & Grammar untuk memeriksa kesalahan penulisan kata." 
+            },
+            { 
+                kategori: "Fitur Lanjutan", 
+                q: "Tombol pintas fungsi pada keyboard yang berguna untuk membuka jendela dialog 'Save As' secara langsung adalah...", 
+                o: [
+                    "A. Menekan tombol F12", 
+                    "B. Menekan tombol F2", 
+                    "C. Menekan tombol Ctrl + S", 
+                    "D. Menekan tombol Shift + F12", 
+                    "E. Menekan tombol Alt + F12"
+                ], 
+                a: 0, 
+                p: "Tombol F12 langsung memunculkan perintah Save As untuk menyimpan dokumen dengan nama atau direktori baru." 
+            },
+            { 
+                kategori: "Tata Letak Halaman", 
+                q: "Fitur 'Columns' pada tab Layout digunakan untuk membagi susunan paragraf teks menjadi bentuk koran atau...", 
+                o: [
+                    "A. Tampilan majalah / buletin berkolom", 
+                    "B. Tampilan buku saku berbentuk persegi", 
+                    "C. Format resmi kedinasan pemerintah", 
+                    "D. Tabel perhitungan kuantitatif", 
+                    "E. Format cetak label undangan"
+                ], 
+                a: 0, 
+                p: "Columns membagi naskah menjadi beberapa kolom vertikal sejajar seperti pada surat kabar atau majalah." 
+            },
+            { 
+                kategori: "Format Teks", 
+                q: "Kombinasi tombol pintas Shift + F3 pada Microsoft Word memiliki fungsi untuk...", 
+                o: [
+                    "A. Mengubah variasi kapitalisasi (Change Case)", 
+                    "B. Membuka panel pencarian kata", 
+                    "C. Mengulangi pengetikan huruf terakhir", 
+                    "D. Menghapus kata di sebelah kanan kursor", 
+                    "E. Membuka direktori penyimpanan file"
+                ], 
+                a: 0, 
+                p: "Shift + F3 secara bergantian mengubah teks terpilih ke UPPERCASE, lowercase, atau Title Case." 
+            },
+            { 
+                kategori: "Fitur Lanjutan", 
+                q: "Cara tercepat untuk menyimpan dokumen Microsoft Word (.docx) menjadi berkas berformat PDF tanpa software tambahan adalah...", 
+                o: [
+                    "A. Pilih menu File > Save As / Export > PDF", 
+                    "B. Pilih menu File > Print ke mesin fisik", 
+                    "C. Salin teks lalu tempelkan ke web browser", 
+                    "D. Mengubah ekstensi file secara manual", 
+                    "E. Klik tab References > Convert PDF"
+                ], 
+                a: 0, 
+                p: "Microsoft Word menyediakan fitur bawaan Export/Save As ke format PDF secara instan." 
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "APPK";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

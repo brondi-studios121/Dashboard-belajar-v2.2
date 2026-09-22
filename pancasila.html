@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Hubungkan berkas CSS Modular -->
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -35,20 +35,20 @@
             
             <!-- SECTION 1: SETUP KELOLA SOAL -->
             <div id="setup-section">
-                <h2 class="setup-title">Simulasi Kuis: Pendidikan Pancasila (Bab 1)</h2>
-                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan di bawah ini berdasarkan materi Bab 1: Menjiwai Pancasila.</p>
+                <h2 class="setup-title">Simulasi Kuis: Pendidikan Pancasila</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan berdasarkan indikator kisi-kisi terbaru.</p>
                 
                 <div class="input-soal-wrapper">
                     <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
                     <div class="input-soal-flex">
-                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="50" min="1" max="50">
                         <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
                     </div>
                     <div class="info-materi-list">
-                        <div>✓ A. Keterkaitan Antarsila Pancasila</div>
-                        <div>✓ B. Makna Sila-Sila dalam Pancasila</div>
-                        <div>✓ C. Pancasila dalam Tindakan</div>
-                        <div>✓ D. Pancasila sebagai Ideologi Negara</div>
+                        <div>✓ A. Kedudukan, Nilai, & Ideologi Terbuka</div>
+                        <div>✓ B. Penerapan Sila Pancasila di Sekolah</div>
+                        <div>✓ C. Demokrasi, Musyawarah, & Keadilan</div>
+                        <div>✓ D. Pancasila di Era Digital & Globalisasi</div>
                     </div>
                 </div>
                 <div class="button-group" style="border:none; padding-top:0;">
@@ -61,7 +61,7 @@
             <div id="quiz-section" style="display: none;">
                 <div class="progress-container">
                     <span id="currentSubjectTag">Mata Pelajaran: Pendidikan Pancasila</span>
-                    <span id="progressText">Soal 1 dari 15</span>
+                    <span id="progressText">Soal 1 dari 50</span>
                 </div>
                 <div class="progress-bar-outer">
                     <div class="progress-bar-inner" id="progressBar"></div>
@@ -83,7 +83,7 @@
             <div id="result-section" class="result-container" style="display: none;">
                 <div class="trophy-icon">🏆</div>
                 <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
-                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi Pendidikan Pancasila (Bab 1).</p>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Pendidikan Pancasila (Kisi-Kisi Revisi).</p>
                 <div class="score-num" id="scoreValue">0</div>
                 <div class="stats-grid">
                     <div class="stat-box">
@@ -114,66 +114,666 @@
         <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
     </footer>
 
-    <!-- BANK DATA PENDIDIKAN PANCASILA - BAB 1 (50 SOAL SEIMBANG & PENJELASAN RINGKAS) -->
+    <!-- BANK DATA PENDIDIKAN PANCASILA - REVISI 50 SOAL LENGKAP -->
     <script>
         const bankSoal = [
-            // ==================== A. KETERKAITAN ANTARSILA (13 SOAL) ====================
-            { kategori: "A. Keterkaitan Antarsila", q: "Susunan Pancasila yang bersifat 'hierarkis piramidal' berarti...", o: ["A. Sila pertama menjiwai dan mendasari seluruh sila lainnya", "B. Setiap sila berdiri sendiri tanpa hubungan", "C. Sila kelima adalah sila terpenting dibanding yang lain", "D. Urutan sila bisa diubah sesuai kebutuhan", "E. Hanya sila ke-2 dan ke-3 yang saling terkait"], a: 0, p: "Sila 1 mendasari dan menjiwai sila 2, 3, 4, dan 5." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Sila Ketuhanan Yang Maha Esa menjiwai sila Persatuan Indonesia. Artinya...", o: ["A. Persatuan dibangun atas dasar landasan moral ketuhanan", "B. Agama hanya urusan pribadi tanpa kaitan nasionalisme", "C. Negara mewajibkan satu agama resmi saja", "D. Persatuan mengabaikan keberagaman kepercayaan", "E. Kegiatan ibadah harus diatur oleh negara"], a: 0, p: "Persatuan bangsa dilandasi nilai-nilai ketuhanan." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Mengapa pelaksanaan sila ke-4 (musyawarah) harus dijiwai oleh sila ke-2?", o: ["A. Agar musyawarah menghargai harkat dan martabat manusia", "B. Supaya musyawarah selalu dimenangkan mayoritas", "C. Untuk membatasi orang menyampaikan pendapat", "D. Agar tidak perlu ada voting sama sekali", "E. Karena musyawarah hanya untuk kelompok tertentu"], a: 0, p: "Musyawarah harus menjunjung nilai kemanusiaan dan adab." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Sila Keadilan Sosial bagi Seluruh Rakyat Indonesia merupakan...", o: ["A. Tujuan akhir dari pengamalan seluruh sila sebelumnya", "B. Sila yang terpisah dari nilai ketuhanan", "C. Landasan utama pembentukan undang-undang dasar saja", "D. Sila yang hanya berlaku di bidang ekonomi", "E. Syarat utama sebelum berdirinya negara"], a: 0, p: "Sila ke-5 adalah tujuan bersama seluruh sila Pancasila." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Pancasila merupakan satu kesatuan yang 'organis', yang artinya...", o: ["A. Sila-sila Pancasila saling melengkapi dan tidak dapat dipisahkan", "B. Sila-sila Pancasila dibuat oleh organisasi internasional", "C. Setiap sila bisa diganti secara berkala", "D. Hanya berlaku untuk organisasi pemerintahan", "E. Setiap sila memiliki tujuan yang bertentangan"], a: 0, p: "Organis berarti merupakan satu kesatuan utuh tak terpisahkan." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Jika sila ke-3 (Persatuan) dilaksanakan tanpa dijiwai sila ke-2 (Kemanusiaan), maka berisiko menimbulkan...", o: ["A. Chauvinisme atau nasionalisme sempit", "B. Sikap apatis terhadap negara", "C. Terjadinya anarkisme global", "D. Sifat individualisme yang tinggi", "E. Hilangnya rasa cinta tanah air"], a: 0, p: "Persatuan tanpa kemanusiaan berisiko menjadi nasionalisme sempit." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Keterkaitan antara sila ke-1 dan sila ke-2 tercermin dalam tindakan...", o: ["A. Mengakui bahwa manusia adalah makhluk ciptaan Tuhan yang bermartabat", "B. Mengutamakan kepentingan kelompok di atas kepentingan pribadi", "C. Mengembangkan sikap hemat dan tidak boros", "D. Melakukan musyawarah untuk mufakat", "E. Menjaga kelestarian lingkungan demi ekonomi"], a: 0, p: "Menghormati manusia sebagai ciptaan Tuhan." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Sila yang menjadi muara atau tujuan dari pengamalan empat sila lainnya adalah sila...", o: ["A. Kelima", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Keempat"], a: 0, p: "Keadilan sosial (Sila 5) adalah muara pengamalan Pancasila." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Pernyataan yang benar mengenai kesatuan sila-sila Pancasila adalah...", o: ["A. Menjiwai dan dijiwai oleh sila lainnya", "B. Bebas berdiri sendiri sesuai situasi", "C. Dapat diurutkan dari sila kelima ke pertama", "D. Sila pertama terpisah dari sila kemanusiaan", "E. Hanya sila ke-4 dan ke-5 yang memiliki keterkaitan"], a: 0, p: "Setiap sila saling menjiwai dan dijiwai." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Sila ke-4 dipimpin oleh hikmat kebijaksanaan dijiwai oleh...", o: ["A. Sila 1, 2, dan 3", "B. Sila 5 saja", "C. Sila 1 dan 5 saja", "D. Sila 2 dan 5 saja", "E. Tidak dijiwai sila manapun"], a: 0, p: "Sila ke-4 dijiwai sila 1, 2, dan 3 serta melandasi sila 5." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Konsep susunan kesatuan Pancasila bersifat majemuk tunggal, artinya...", o: ["A. Terdiri atas lima sila tetapi tetap merupakan satu kesatuan utuh", "B. Terdiri atas banyak suku tetapi satu bahasa", "C. Memiliki banyak ideologi dalam satu negara", "D. Memiliki lima undang-undang dasar yang berbeda", "E. Terdiri dari lima negara bagian yang bersatu"], a: 0, p: "Majemuk tunggal = 5 sila dalam 1 kesatuan utuh." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Sila 'Kemanusiaan yang Adil dan Beradab' mendasari sila...", o: ["A. Persatuan Indonesia", "B. Ketuhanan Yang Maha Esa", "C. Sila pertama saja", "D. Tidak mendasari sila manapun", "E. Hanya mendasari peraturan daerah"], a: 0, p: "Sila 2 mendasari sila 3, 4, dan 5." },
-            { kategori: "A. Keterkaitan Antarsila", q: "Prinsip bahwa keadilan sosial (sila 5) harus dicapai melalui cara musyawarah (sila 4) membuktikan adanya...", o: ["A. Keterkaitan logis antarsila Pancasila", "B. Pertentangan antar sila", "C. Kebebasan memilih sila mana yang disukai", "D. Ketidakpastian dalam Pancasila", "E. Perubahan nilai Pancasila"], a: 0, p: "Membuktikan hubungan keterkaitan antarsila." },
+            // ==================== A. KEDUDUKAN, NILAI, & IDEOLOGI TERBUKA ====================
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Makna utama dari menjiwai Pancasila dalam kehidupan sehari-hari adalah...", 
+                o: [
+                    "A. Menjadikan Pancasila sebagai pedoman berpikir dan bertindak", 
+                    "B. Menghafal seluruh urutan sila dan pasal UUD NRI 1945", 
+                    "C. Menganggap Pancasila hanya sebagai dokumen sejarah bangsa", 
+                    "D. Mengamalkan Pancasila khusus saat upacara bendera saja", 
+                    "E. Mempelajari teori Pancasila sebatas untuk lulus ujian"
+                ], 
+                a: 0, 
+                p: "Menjiwai Pancasila berarti menginternalisasi nilai-nilainya ke dalam tindakan nyata sehari-hari." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Kedudukan Pancasila sebagai Dasar Negara mengandung arti bahwa Pancasila...", 
+                o: [
+                    "A. Menjadi landasan utama penyelenggaraan pemerintah negara", 
+                    "B. Merupakan pedoman khusus hubungan diplomasi antarnegara", 
+                    "C. Berfungsi sebagai pedoman ibadah pribadi warga negara", 
+                    "D. Menjadi dokumen resmi perserikatan bangsa-bangsa", 
+                    "E. Merupakan aturan tertulis yang bisa diganti tiap periode"
+                ], 
+                a: 0, 
+                p: "Kedudukan dasar negara menjadikan Pancasila sebagai norma dasar dan sumber hukum utama." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Pengertian dan contoh dari Nilai Dasar Pancasila adalah...", 
+                o: [
+                    "A. Nilai abstrak dan tetap; seperti Ketuhanan dan Kemanusiaan", 
+                    "B. Peraturan hukum tertulis; seperti Undang-Undang dan Perda", 
+                    "C. Kegiatan sosial warga; seperti gotong royong di desa", 
+                    "D. Aturan sekolah; seperti tata tertib dan jadwal piket", 
+                    "E. Kebiasaan masyarakat; seperti acara adat dan tradisi"
+                ], 
+                a: 0, 
+                p: "Nilai Dasar adalah nilai mendasar yang terkandung dalam Pancasila yang bersifat tetap." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Perwujudan Nilai Instrumental Pancasila dapat ditemukan dalam bentuk...", 
+                o: [
+                    "A. UUD 1945, Undang-Undang, serta Peraturan Daerah", 
+                    "B. Sikap tolong-menolong antar sesama warga masyarakat", 
+                    "C. Cita-cita luhur yang terkandung dalam Pancasila", 
+                    "D. Keberagaman budaya dan suku bangsa Indonesia", 
+                    "E. Kebiasaan warga dalam menyelenggarakan musyawarah"
+                ], 
+                a: 0, 
+                p: "Nilai Instrumental adalah penjabaran nilai dasar ke dalam peraturan perundang-undangan." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Penerapan Nilai Praksis Pancasila diwujudkan dalam bentuk...", 
+                o: [
+                    "A. Sikap dan tindakan nyata warga dalam kehidupan sehari-hari", 
+                    "B. Naskah Pembukaan UUD NRI 1945 alinea ke-4", 
+                    "C. Ketetapan MPR dan Peraturan Pemerintah terbaru", 
+                    "D. Teori ilmu politik yang dipelajari di bangku sekolah", 
+                    "E. Lambang Garuda Pancasila dan pita Bhinneka Tunggal Ika"
+                ], 
+                a: 0, 
+                p: "Nilai Praksis adalah realisasi nyata nilai dasar dan instrumental dalam tindakan sehari-hari." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Pancasila disebut sebagai Ideologi Terbuka karena memiliki sifat...", 
+                o: [
+                    "A. Relevan dengan zaman tanpa mengubah nilai dasarnya", 
+                    "B. Menerima seluruh budaya asing tanpa penyaringan", 
+                    "C. Bebas diubah susunan silanya sesuai selera warga", 
+                    "D. Tidak memiliki batasan hukum dan aturan mengikat", 
+                    "E. Mengikuti ajaran ideologi asing seperti liberalisme"
+                ], 
+                a: 0, 
+                p: "Ideologi terbuka bersifat dinamis dan mampu merespons perkembangan zaman." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Dimensi idealis dalam Pancasila sebagai ideologi terbuka mengandung makna bahwa Pancasila...", 
+                o: [
+                    "A. Memiliki nilai-nilai dasar yang rasional, sistematis, dan bernilai luhur", 
+                    "B. Mampu memaksakan kehendak hukum kepada seluruh warga negara", 
+                    "C. Meniru struktur ideologi negara-negara maju di dunia", 
+                    "D. Dapat diganti jika sudah tidak sesuai dengan perkembangan zaman", 
+                    "E. Hanya berlaku bagi kelompok masyarakat tertentu dalam negara"
+                ], 
+                a: 0, 
+                p: "Dimensi idealistis memberikan harapan, cita-cita, dan masa depan yang lebih baik bagi bangsa." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Pancasila sebagai Pandangan Hidup Bangsa berfungsi untuk...", 
+                o: [
+                    "A. Petunjuk arah dalam memecahkan masalah kehidupan bermasyarakat", 
+                    "B. Syarat mutlak pembentukan organisasi kemasyarakatan baru", 
+                    "C. Pedoman menyusun perjanjian dagang internasional", 
+                    "D. Alat untuk menghapus seluruh perbedaan suku dan budaya", 
+                    "E. Hukum tertulis tertinggi dalam sistem tata hukum nasional"
+                ], 
+                a: 0, 
+                p: "Pandangan hidup berfungsi sebagai petunjuk dan pedoman kehidupan sehari-hari." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Dimensi realitas dalam Pancasila sebagai ideologi terbuka menegaskan bahwa...", 
+                o: [
+                    "A. Nilai-nilai Pancasila bersumber dan hidup di masyarakat", 
+                    "B. Pancasila hanya ada dalam teori naskah kenegaraan", 
+                    "C. Seluruh aturan hukum berasal dari kesepakatan internasional", 
+                    "D. Cita-cita bangsa tidak perlu diwujudkan dalam aksi nyata", 
+                    "E. Ideologi disusun berdasarkan pemikiran tokoh luar negeri"
+                ], 
+                a: 0, 
+                p: "Dimensi realitas mencerminkan kenyataan hidup dan berkembang dalam masyarakat." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Fungsi Pancasila sebagai Sumber dari Segala Sumber Hukum Negara berarti...", 
+                o: [
+                    "A. Semua peraturan perundang-undangan tidak boleh bertentangan dengan Pancasila", 
+                    "B. Pancasila merupakan satu-satunya hukum tertulis di Indonesia", 
+                    "C. Presiden berhak mengubah isi Pancasila sesuai kebutuhan hukum", 
+                    "D. Setiap undang-undang harus disahkan oleh lembaga internasional", 
+                    "E. Hukum adat dapat menggantikan kedudukan nilai Pancasila"
+                ], 
+                a: 0, 
+                p: "Seluruh hukum positif di Indonesia harus bersumber dan berlandaskan pada Pancasila." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Dimensi fleksibilitas pada ideologi Pancasila memungkinkan bangsa Indonesia untuk...", 
+                o: [
+                    "A. Mengembangkan pemikiran baru tanpa mengubah nilai dasarnya", 
+                    "B. Mengadopsi ideologi kapitalisme secara menyeluruh", 
+                    "C. Mengubah Pembukaan UUD NRI 1945 secara bebas", 
+                    "D. Menghapus sila keadilan sosial jika kondisi ekonomi sulit", 
+                    "E. Menolak semua jenis teknologi dari luar negeri"
+                ], 
+                a: 0, 
+                p: "Dimensi fleksibilitas memberikan ruang untuk pembaruan pemikiran yang relevan." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Pancasila sebagai Kepribadian Bangsa Indonesia menunjukkan bahwa...", 
+                o: [
+                    "A. Bangsa Indonesia memiliki ciri khas nilai yang membedakan dari bangsa lain", 
+                    "B. Seluruh rakyat Indonesia harus mengenakan pakaian adat sehari-hari", 
+                    "C. Indonesia tidak memerlukan kerja sama dengan negara asing", 
+                    "D. Setiap warga negara wajib menguasai bahasa daerah yang sama", 
+                    "E. Budaya Indonesia bersumber penuh dari kebudayaan luar"
+                ], 
+                a: 0, 
+                p: "Pancasila memberi corak khas dan kepribadian yang membedakan bangsa Indonesia dari bangsa lain." 
+            },
 
-            // ==================== B. MAKNA SILA-SILA PANCASILA (12 SOAL) ====================
-            { kategori: "B. Makna Sila-Sila", q: "Makna utama dari Sila Ketuhanan Yang Maha Esa adalah...", o: ["A. Pengakuan atas keberadaan Tuhan dan jaminan kebebasan beragama", "B. Kewajiban memilih satu agama yang disetujui pemerintah saja", "C. Larangan berhubungan dengan warga berbeda kepercayaan", "D. Pencampuran ajaran seluruh agama menjadi satu", "E. Penolakan terhadap kepercayaan lokal"], a: 0, p: "Menjamin keberadaan Tuhan dan kebebasan beragama." },
-            { kategori: "B. Makna Sila-Sila", q: "Simbol Bintang Emas pada sila pertama Pancasila melambangkan...", o: ["A. Cahaya kerohanian dari Tuhan bagi seluruh manusia", "B. Kekayaan alam Indonesia yang melimpah", "C. Kekuatan militer dalam mempertahankan negara", "D. Kejayaan bangsa Indonesia di mata dunia", "E. Tempat berlindung rakyat Indonesia"], a: 0, p: "Bintang emas melambangkan cahaya kerohanian." },
-            { kategori: "B. Makna Sila-Sila", q: "Sila Kemanusiaan yang Adil dan Beradab mengandung makna bahwa...", o: ["A. Setiap warga negara memiliki harkat dan martabat yang setara", "B. Manusia bebas melakukan apa saja tanpa batasan hukum", "C. Kemanusiaan hanya berlaku untuk warga Indonesia", "D. Hak asasi manusia berada di bawah kepentingan negara", "E. Penegakan hukum hanya berlaku untuk rakyat biasa"], a: 0, p: "Menekankan kesetaraan harkat dan martabat manusia." },
-            { kategori: "B. Makna Sila-Sila", q: "Simbol Rantai Emas pada sila kedua terdiri atas gelang persegi dan lingkaran yang bermakna...", o: ["A. Hubungan timbal balik antarmanusia tanpa membedakan gender", "B. Persatuan suku bangsa di seluruh pulau Indonesia", "C. Kekuatan struktur hukum yang tidak bisa dipatahkan", "D. Keberagaman mata pencaharian rakyat Indonesia", "E. Batasan wilayah darat dan laut Indonesia"], a: 0, p: "Rantai melambangkan hubungan manusia yang saling membutuhkan." },
-            { kategori: "B. Makna Sila-Sila", q: "Pohon Beringin sebagai simbol sila ketiga Pancasila memiliki makna...", o: ["A. Tempat berteduh dan berlindung bagi seluruh rakyat Indonesia", "B. Hasil kekayaan hutan Indonesia yang melimpah", "C. Keagungan dan keturunan raja-raja Nusantara", "D. Kekuatan ekonomi Indonesia yang besar", "E. Batas wilayah kedaulatan NKRI"], a: 0, p: "Pohon beringin bermakna tempat berteduh/berlindung." },
-            { kategori: "B. Makna Sila-Sila", q: "Kepala Banteng dijadikan simbol sila keempat karena banteng merupakan...", o: ["A. Hewan sosial yang suka berkumpul untuk bermusyawarah", "B. Hewan terkuat di wilayah kepulauan Indonesia", "C. Lambang keberanian melanggar aturan", "D. Makanan pokok masyarakat Indonesia", "E. Hewan langka yang dilindungi undang-undang"], a: 0, p: "Banteng melambangkan hewan sosial yang suka berkumpul." },
-            { kategori: "B. Makna Sila-Sila", q: "Padi dan Kapas pada sila kelima melambangkan...", o: ["A. Kebutuhan dasar manusia berupa pangan dan sandang", "B. Kemakmuran para petani di pedesaan", "C. Keragaman flora yang ada di Nusantara", "D. Keindahan alam tanah air Indonesia", "E. Bahan baku utama industri nasional"], a: 0, p: "Padi dan kapas adalah simbol pangan dan sandang." },
-            { kategori: "B. Makna Sila-Sila", q: "Sila Persatuan Indonesia mengandung nilai bahwa...", o: ["A. Mengutamakan kepentingan bangsa di atas kepentingan pribadi/golongan", "B. Menghapus semua perbedaan budaya lokal", "C. Menolak masuknya kebudayaan asing yang positif", "D. Memaksa seluruh suku menggunakan satu adat istiadat", "E. Mengisolasi bangsa Indonesia dari hubungan luar negeri"], a: 0, p: "Menempatkan persatuan bangsa di atas golongan." },
-            { kategori: "B. Makna Sila-Sila", q: "Makna kata 'Beradab' dalam sila kedua Pancasila menekankan pada...", o: ["A. Sikap dan perilaku yang sesuai dengan nilai moral dan norma", "B. Tingkat pendidikan formal yang tinggi", "C. Kemampuan menguasai teknologi modern", "D. Kepatuhan mutlak tanpa kritik pada pimpinan", "E. Kekayaan materi yang dimiliki seseorang"], a: 0, p: "Beradab bermakna sesuai nilai moral dan kesopanan." },
-            { kategori: "B. Makna Sila-Sila", q: "Sila 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan' menegaskan bahwa...", o: ["A. Kekuasaan tertinggi ada di tangan rakyat melalui musyawarah", "B. Segala keputusan diambil berdasarkan suara terbanyak saja", "C. Pemimpin berhak menentukan aturan tanpa persetujuan rakyat", "D. Rakyat tidak perlu terlibat dalam urusan pemerintahan", "E. Keputusan diambil hanya oleh pejabat senior"], a: 0, p: "Kedaulatan rakyat dijalankan melalui musyawarah." },
-            { kategori: "B. Makna Sila-Sila", q: "Hakekat keadilan dalam sila kelima Pancasila adalah keadilan yang bersifat...", o: ["A. Komutatif, distributif, dan legal bagi seluruh rakyat", "B. Khusus bagi kelompok yang membayar pajak besar", "C. Berlaku hanya saat kondisi darurat perang", "D. Ditentukan sepenuhnya oleh pemerintah pusat", "E. Hanya berlaku bagi warga negara dewasa"], a: 0, p: "Keadilan menyeluruh bagi seluruh rakyat Indonesia." },
-            { kategori: "B. Makna Sila-Sila", q: "Nilai luhur yang terkandung dalam sila 'Persatuan Indonesia' adalah...", o: ["A. Cinta tanah air dan rela berkorban", "B. Menghimpun kekayaan pribadi sebanyaknya", "C. Mengutamakan kebebasan individu", "D. Mengkritik tanpa memberikan solusi", "E. Menolak kerjasama Internasional"], a: 0, p: "Cinta tanah air dan rela berkorban demi bangsa." },
+            // ==================== B. PENERAPAN SILA PANCASILA DI SEKOLAH ====================
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Wujud penerapan Sila Pertama di lingkungan sekolah tercermin dari...", 
+                o: [
+                    "A. Menghormati teman yang sedang menjalankan ibadah", 
+                    "B. Membagi tugas piket kelas secara adil dan merata", 
+                    "C. Bekerja sama dalam kelompok tanpa membedakan suku", 
+                    "D. Mengikuti kegiatan rapat OSIS secara disiplin", 
+                    "E. Melerai teman yang sedang terlibat perselisihan"
+                ], 
+                a: 0, 
+                p: "Sila 1 berkaitan dengan sikap toleransi dan penghormatan terhadap kegiatan keagamaan." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Sikap yang sesuai dengan Nilai Kemanusiaan (Sila Ke-2) di sekolah adalah...", 
+                o: [
+                    "A. Menolak segala bentuk aksi perundungan atau bullying", 
+                    "B. Enggan bekerja sama dengan teman dari luar daerah", 
+                    "C. Memaksa teman sekelas menyetujui pendapat pribadi", 
+                    "D. Mengabaikan teman yang kesulitan memahami materi", 
+                    "E. Mengutamakan kelompok sendiri di atas kepentingan kelas"
+                ], 
+                a: 0, 
+                p: "Nilai Kemanusiaan menekankan persamaan harkat dan perlindungan dari aksi perundungan." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Tindakan yang mencerminkan Sila Ketiga (Persatuan) di sekolah adalah...", 
+                o: [
+                    "A. Bekerja sama kelompok tanpa membedakan latar belakang", 
+                    "B. Berdoa bersama sebelum kegiatan pembelajaran dimulai", 
+                    "C. Mengadakan pemungutan suara pemilihan ketua kelas", 
+                    "D. Memberikan bantuan sosial bagi masyarakat sekitar", 
+                    "E. Menuntut kesamaan pembagian nilai tugas kelompok"
+                ], 
+                a: 0, 
+                p: "Sila ke-3 tercermin dari sikap menjaga kerukunan tanpa membeda-bedakan latar belakang." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Keterkaitan semboyan Bhinneka Tunggal Ika dengan Sila Ketiga adalah...", 
+                o: [
+                    "A. Menjadi perekat keberagaman demi terciptanya persatuan", 
+                    "B. Mewajibkan penghapusan seluruh kebudayaan daerah", 
+                    "C. Menjadikan satu budaya lokal sebagai budaya tunggal", 
+                    "D. Membatasi interaksi antar suku bangsa di Indonesia", 
+                    "E. Menyeragamkan sistem kepercayaan seluruh rakyat"
+                ], 
+                a: 0, 
+                p: "Bhinneka Tunggal Ika mengikat keberagaman agar tetap bersatu dalam Persatuan Indonesia." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Menjaga kebersihan dan ketertiban lingkungan sekolah bersama teman merupakan bentuk pengamalan...", 
+                o: [
+                    "A. Sila Ketiga dan Sila Kelima Pancasila", 
+                    "B. Sila Pertama Pancasila secara penuh", 
+                    "C. Sila Kedua Pancasila secara murni", 
+                    "D. Sila Keempat Pancasila secara langsung", 
+                    "E. Aturan keagamaan sekolah saja"
+                ], 
+                a: 0, 
+                p: "Gotong royong mewujudkan persatuan dan keadilan lingkungan sekolah yang bersih untuk semua." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Mengakui persamaan hak dan kewajiban sesama siswa di sekolah sesuai dengan nilai...", 
+                o: [
+                    "A. Sila Kedua Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Ketiga Pancasila", 
+                    "D. Sila Keempat Pancasila", 
+                    "E. Sila Kelima Pancasila"
+                ], 
+                a: 0, 
+                p: "Persamaan derajat, hak, dan kewajiban adalah inti dari Sila Kemanusiaan yang Adil dan Beradab." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Siswa yang tidak membedakan pertemanan berdasarkan status ekonomi orang tua mengamalkan nilai...", 
+                o: [
+                    "A. Sila Kedua Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Keempat Pancasila", 
+                    "D. Aturan khusus sekolah", 
+                    "E. Tata tertib pramuka"
+                ], 
+                a: 0, 
+                p: "Menghargai sesama tanpa membedakan kedudukan sosial adalah pengamalan Sila Ke-2." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Mengikuti upacara bendera setiap hari Senin dengan tertib dan khidmat merupakan wujud...", 
+                o: [
+                    "A. Cinta tanah air dan rasa nasionalisme sesuai Sila Ketiga", 
+                    "B. Kewajiban formal tanpa memiliki makna kebangsaan", 
+                    "C. Pelaksanaan ibadah bersama di lingkungan sekolah", 
+                    "D. Pengamalan sila pertama dan sila keempat sekaligus", 
+                    "E. Kegiatan olahraga pagi untuk menjaga kesehatan"
+                ], 
+                a: 0, 
+                p: "Upacara bendera menanamkan rasa cinta tanah air dan persatuan nasional." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Memberikan kesempatan kepada teman untuk beribadah saat belajar kelompok adalah bentuk...", 
+                o: [
+                    "A. Toleransi antarumat beragama sesuai Sila Pertama", 
+                    "B. Pelanggaran disiplin waktu dalam belajar kelompok", 
+                    "C. Bentuk paksaan dalam menjalankan perintah agama", 
+                    "D. Pengamalan sila kelima tentang pembagian waktu", 
+                    "E. Sikap apatis terhadap aturan pembelajaran kelas"
+                ], 
+                a: 0, 
+                p: "Memberi kesempatan beribadah mencerminkan penghormatan atas kebebasan beragama." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Menghormati guru dan menghargai petugas kebersihan di sekolah merupakan contoh penerapan...", 
+                o: [
+                    "A. Sila Kedua Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Keempat Pancasila", 
+                    "D. Sila Kelima Pancasila saja", 
+                    "E. Peraturan tata tertib ujian"
+                ], 
+                a: 0, 
+                p: "Saling menghargai harkat dan martabat manusia adalah cerminan Sila Ke-2." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Bangga menggunakan batik atau produk buatan dalam negeri saat acara sekolah mencerminkan...", 
+                o: [
+                    "A. Sikap cinta produk dalam negeri sesuai Sila Ketiga", 
+                    "B. Kewajiban berbusana tanpa makna nasionalisme", 
+                    "C. Pengamalan nilai keadilan sosial bagi pengusaha", 
+                    "D. Penerapan nilai ketuhanan dalam berbusana", 
+                    "E. Bentuk persaingan gaya hidup di sekolah"
+                ], 
+                a: 0, 
+                p: "Mencintai dan menggunakan produk dalam negeri adalah bukti rasa cinta tanah air." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Menolong teman yang jatuh saat bermain di lapangan sekolah tanpa memandang latar belakang adalah wujud...", 
+                o: [
+                    "A. Sila Kedua Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Keempat Pancasila", 
+                    "D. Sila Kelima Pancasila", 
+                    "E. Aturan kelompok bermain"
+                ], 
+                a: 0, 
+                p: "Sikap gemar melakukan kegiatan kemanusiaan merupakan penjiwaan Sila Ke-2." 
+            },
+            { 
+                kategori: "B. Penerapan di Sekolah", 
+                q: "Menjaga kerukunan di kelas saat ada perbedaan pendapat mengenai tugas kelompok merupakan pengamalan...", 
+                o: [
+                    "A. Sila Ketiga Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Kelima Pancasila saja", 
+                    "D. Doktrin organisasi eksternal", 
+                    "E. Prinsip persaingan individual"
+                ], 
+                a: 0, 
+                p: "Menjaga kerukunan dan keutuhan kelompok adalah pengamalan Sila Ke-3." 
+            },
 
-            // ==================== C. PANCASILA DALAM TINDAKAN (12 SOAL) ====================
-            { kategori: "C. Pancasila dalam Tindakan", q: "Berikut ini yang merupakan contoh penerapan sila pertama di lingkungan sekolah adalah...", o: ["A. Menghormati teman yang sedang menjalankan ibadah puasa", "B. Membagi tugas piket kelas secara adil", "C. Mengikuti upacara bendera dengan tertib", "D. Melakukan musyawarah pemilihan ketua OSIS", "E. Menjenguk teman kelas yang sedang sakit"], a: 0, p: "Sila 1 berkaitan dengan toleransi beribadah." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Sikap membela kebenaran dan keadilan tanpa membeda-bedakan latar belakang merupakan tindakan...", o: ["A. Pengamalan sila kedua", "B. Pengamalan sila pertama", "C. Pengamalan sila ketiga", "D. Pengamalan sila keempat", "E. Pengamalan sila kelima"], a: 0, p: "Sila 2 menekankan tenggang rasa dan kemanusiaan." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Bangga menggunakan produk-produk buatan dalam negeri merupakan wujud nyata pengamalan sila...", o: ["A. Ketiga", "B. Pertama", "C. Kedua", "D. Keempat", "E. Kelima"], a: 0, p: "Cinta produk dalam negeri adalah wujud sila 3." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Apabila terjadi perbedaan pendapat saat diskusi kelompok, tindakan yang sesuai dengan sila keempat adalah...", o: ["A. Musyawarah untuk mencapai mufakat dengan kepala dingin", "B. Memaksa anggota lain mengikuti pendapat pribadi", "C. Meninggalkan ruang diskusi karena marah", "D. Menolak mendengarkan usulan orang lain", "E. Memutus hasil diskusi secara sepihak"], a: 0, p: "Sila 4 mengutamakan musyawarah mufakat." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Tidak bersikap boros dan suka menghargai hasil karya orang lain merupakan contoh tindakan sila...", o: ["A. Kelima", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Keempat"], a: 0, p: "Hemat dan menghargai karya adalah nilai sila 5." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Tindakan gotong royong membersihkan saluran air desa merupakan pengamalan sila...", o: ["A. Ketiga dan Kelima", "B. Pertama saja", "C. Kedua saja", "D. Keempat saja", "E. Tidak sesuai Pancasila"], a: 0, p: "Gotong royong mewujudkan persatuan dan keadilan." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Menghindari perundungan (bullying) kepada sesama siswa di sekolah adalah bentuk nyata penerapan sila...", o: ["A. Kedua", "B. Pertama", "C. Ketiga", "D. Keempat", "E. Kelima"], a: 0, p: "Menghormati hak asasi sesama adalah sila 2." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Menerima dan melaksanakan hasil keputusan musyawarah dengan rasa tanggung jawab merupakan pengamalan sila...", o: ["A. Keempat", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Kelima"], a: 0, p: "Menjalankan hasil musyawarah adalah wujud sila 4." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Memberikan kesempatan yang sama kepada setiap anggota kelompok untuk berpendapat sesuai dengan sila...", o: ["A. Keempat", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Kelima"], a: 0, p: "Menghargai pendapat adalah prinsip sila 4." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Sikap tidak pilih kasih dalam berteman di lingkungan sekolah merupakan pengamalan sila...", o: ["A. Keadilan sosial dan kemanusiaan", "B. Ketuhanan Yang Maha Esa", "C. Persatuan saja", "D. Kebebasan berpendapat", "E. Hak asasi pemilu"], a: 0, p: "Sikap adil tidak membeda-bedakan teman." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Menjaga keseimbangan antara hak dan kewajiban merupakan sikap yang mencerminkan sila...", o: ["A. Kelima", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Keempat"], a: 0, p: "Keseimbangan hak & kewajiban adalah sila 5." },
-            { kategori: "C. Pancasila dalam Tindakan", q: "Menjenguk teman yang sedang dirawat di rumah sakit merupakan contoh pengamalan sila ke-2 karena...", o: ["A. Menunjukkan empati dan kepedulian terhadap sesama manusia", "B. Merupakan kewajiban undang-undang sekolah", "C. Diharuskan oleh ajaran agama tertentu saja", "D. Dapat meningkatkan nilai akademik di sekolah", "E. Merupakan wujud kebebasan berpendapat"], a: 0, p: "Menunjukkan rasa kepedulian kemanusiaan." },
+            // ==================== C. DEMOKRASI, MUSYAWARAH, & KEADILAN ====================
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Kesempatan menyampaikan pendapat saat diskusi kelas merupakan perwujudan...", 
+                o: [
+                    "A. Pengamalan nilai Sila Keempat Pancasila", 
+                    "B. Pengamalan nilai Sila Pertama Pancasila", 
+                    "C. Pengamalan nilai Sila Kedua Pancasila", 
+                    "D. Pengamalan nilai Sila Ketiga Pancasila", 
+                    "E. Pengamalan nilai Sila Kelima Pancasila"
+                ], 
+                a: 0, 
+                p: "Sila Ke-4 menaungi kebebasan berpendapat secara bertanggung jawab melalui musyawarah." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Contoh penerapan Sila Keempat dalam organisasi sekolah adalah...", 
+                o: [
+                    "A. Mengambil keputusan program kerja melalui musyawarah", 
+                    "B. Menetapkan aturan organisasi secara sepihak oleh ketua", 
+                    "C. Membagi anggaran kegiatan tanpa perencanaan matang", 
+                    "D. Mewajibkan anggota menganut satu agama tertentu", 
+                    "E. Membatasi keanggotaan hanya untuk kelas tertentu"
+                ], 
+                a: 0, 
+                p: "Sila Ke-4 menekankan musyawarah untuk mencapai mufakat dalam pengambilan keputusan." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Prinsip utama yang wajib dipegang dalam pelaksanaan musyawarah adalah...", 
+                o: [
+                    "A. Mengutamakan kepentingan umum di atas kepentingan pribadi", 
+                    "B. Memaksa anggota lain untuk menerima usulan pribadi", 
+                    "C. Mengabaikan masukan dari kelompok anggota minoritas", 
+                    "D. Mengambil keputusan sebelum seluruh peserta bicara", 
+                    "E. Menggunakan tekanan agar usulan cepat disetujui"
+                ], 
+                a: 0, 
+                p: "Musyawarah dilandasi akal sehat dan mengutamakan kepentingan bersama." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Sikap yang benar setelah keputusan musyawarah ditetapkan adalah...", 
+                o: [
+                    "A. Menerima dan melaksanakan hasil keputusan dengan baik", 
+                    "B. Menolak keputusan karena usulan pribadi tidak dipilih", 
+                    "C. Menerima hasil rapat namun enggan melaksanakannya", 
+                    "D. Menyalahkan pemimpin atas keputusan yang dibuat", 
+                    "E. Mengadakan musyawarah baru tanpa izin pengurus"
+                ], 
+                a: 0, 
+                p: "Hasil mufakat wajib dijunjung tinggi dan dilaksanakan dengan rasa tanggung jawab." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Apabila terjadi perbedaan pendapat saat diskusi, sikap kita adalah...", 
+                o: [
+                    "A. Menghargai dan mendengarkan pendapat orang lain", 
+                    "B. Menyela pembicaraan teman yang berbeda pendapat", 
+                    "C. Keluar dari ruang diskusi karena tidak sependapat", 
+                    "D. Membentak peserta lain agar pendapat kita diterima", 
+                    "E. Menjauhi teman yang memiliki pandangan berbeda"
+                ], 
+                a: 0, 
+                p: "Saling menghargai perbedaan pendapat adalah bentuk kedewasaan berdemokrasi." 
+            },
+            { 
+                kategori: "C. Keadilan Sosial", 
+                q: "Bentuk keadilan sosial (Sila Ke-5) di lingkungan sekolah adalah...", 
+                o: [
+                    "A. Guru memberi nilai objektif dan piket dibagi seimbang", 
+                    "B. Memberikan keistimewaan bagi siswa yang mampu", 
+                    "C. Menyediakan fasilitas berbeda berdasarkan prestasi", 
+                    "D. Memberi sanksi hanya kepada siswa kelas tertentu", 
+                    "E. Membiarkan siswa tertentu tidak mengerjakan tugas"
+                ], 
+                a: 0, 
+                p: "Keadilan di sekolah diwujudkan lewat kesetaraan hak dan keseimbangan kewajiban." 
+            },
+            { 
+                kategori: "C. Keadilan Sosial", 
+                q: "Perilaku adil dalam pembagian tugas kelompok ditunjukkan dengan...", 
+                o: [
+                    "A. Membagi beban kerja secara seimbang antaranggota", 
+                    "B. Membebankan seluruh tugas kepada ketua kelompok", 
+                    "C. Memberi tugas tersulit pada teman yang dibenci", 
+                    "D. Membiarkan anggota tertentu tidak usah bekerja", 
+                    "E. Membagi tugas berdasarkan tingkat pertemanan"
+                ], 
+                a: 0, 
+                p: "Sikap adil berarti membagi porsi beban kerja secara seimbang dan proporsional." 
+            },
+            { 
+                kategori: "C. Keadilan Sosial", 
+                q: "Hubungan Sila Kelima dengan kehidupan bermasyarakat adalah...", 
+                o: [
+                    "A. Terwujudnya keadilan dan keseimbangan hak kewajiban", 
+                    "B. Pemberian prioritas fasilitas bagi kelompok penguasa", 
+                    "C. Penguasaan seluruh fasilitas umum oleh pihak swasta", 
+                    "D. Pembagian pendapatan yang seragam tanpa kerja keras", 
+                    "E. Pembebasan kewajiban sosial bagi sebagian warga"
+                ], 
+                a: 0, 
+                p: "Sila ke-5 bertujuan menciptakan kesejahteraan sosial yang merata bagi seluruh warga." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Ciri utama Demokrasi Pancasila dalam mengambil keputusan adalah...", 
+                o: [
+                    "A. Mengutamakan mufakat lewat musyawarah kekeluargaan", 
+                    "B. Selalu ditentukan oleh suara terbanyak tanpa diskusi", 
+                    "C. Keputusan penuh ada di tangan pimpinan tertinggi", 
+                    "D. Mengharuskan voting dalam setiap pembahasan kecil", 
+                    "E. Mengabaikan pandangan dari pihak yang berseberangan"
+                ], 
+                a: 0, 
+                p: "Demokrasi Pancasila mengedepankan musyawarah mufakat atas dasar semangat kekeluargaan." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Jika dalam musyawarah tidak tercapai mufakat setelah diskusi mendalam, langkah selanjutnya adalah...", 
+                o: [
+                    "A. Pemungutan suara atau voting secara jujur", 
+                    "B. Membatalkan seluruh rencana kegiatan organisasi", 
+                    "C. Ketua mengambil keputusan sendiri tanpa persetujuan", 
+                    "D. Mengeluarkan anggota yang berbeda pendapat", 
+                    "E. Menunda keputusan tanpa batas waktu yang jelas"
+                ], 
+                a: 0, 
+                p: "Pemungutan suara (voting) dilakukan sebagai opsi terakhir jika musyawarah mufakat tidak tercapai." 
+            },
+            { 
+                kategori: "C. Keadilan Sosial", 
+                q: "Menjaga keseimbangan antara hak dan kewajiban merupakan perwujudan dari...", 
+                o: [
+                    "A. Sila Kelima Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Kedua Pancasila", 
+                    "D. Sila Ketiga Pancasila", 
+                    "E. Sila Keempat Pancasila"
+                ], 
+                a: 0, 
+                p: "Sila Kelima menuntut warga negara untuk menyeimbangkan pelaksanaan hak dan kewajiban." 
+            },
+            { 
+                kategori: "C. Keadilan Sosial", 
+                q: "Sikap suka menghargai hasil karya orang lain merupakan nilai yang terkandung dalam...", 
+                o: [
+                    "A. Sila Kelima Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Kedua Pancasila", 
+                    "D. Sila Ketiga Pancasila", 
+                    "E. Sila Keempat Pancasila"
+                ], 
+                a: 0, 
+                p: "Menghargai hasil karya orang lain yang bermanfaat bagi kemajuan bersama adalah butir Sila Ke-5." 
+            },
+            { 
+                kategori: "C. Keadilan Sosial", 
+                q: "Tidak bersikap boros dan tidak bergaya hidup mewah di sekolah mencerminkan pengamalan...", 
+                o: [
+                    "A. Sila Kelima Pancasila", 
+                    "B. Sila Pertama Pancasila", 
+                    "C. Sila Kedua Pancasila", 
+                    "D. Sila Ketiga Pancasila", 
+                    "E. Sila Keempat Pancasila"
+                ], 
+                a: 0, 
+                p: "Hemat dan tidak bergaya hidup mewah adalah bentuk keadilan sosial dalam kehidupan sehari-hari." 
+            },
 
-            // ==================== D. PANCASILA SEBAGAI IDEOLOGI NEGARA (13 SOAL) ====================
-            { kategori: "D. Ideologi Negara", q: "Pancasila kedudukannya ditetapkan sebagai ideologi negara Indonesia, yang berarti...", o: ["A. Landasan dan pedoman hidup dalam berbangsa dan bernegara", "B. Aturan hukum sementara sebelum ada undang-undang baru", "C. Hiasan dokumen kenegaraan semata", "D. Dokumen sejarah yang tidak berlaku lagi", "E. Pandangan pribadi para pendiri bangsa saja"], a: 0, p: "Ideologi negara menjadi pedoman kehidupan berbangsa." },
-            { kategori: "D. Ideologi Negara", q: "Ciri utama Pancasila sebagai ideologi terbuka adalah...", o: ["A. Nilai-nilainya mampu menyesuaikan diri dengan perkembangan zaman", "B. Menerima seluruh budaya asing tanpa dipilah", "C. Nilai dasarnya dapat diubah setiap pergantian presiden", "D. Dibuat berdasarkan kesepakatan negara luar", "E. Tidak memiliki batasan hukum yang jelas"], a: 0, p: "Ideologi terbuka dapat merespons perkembangan zaman." },
-            { kategori: "D. Ideologi Negara", q: "Dimensi Realitas dalam ideologi Pancasila bermakna...", o: ["A. Nilai dasar Pancasila bersumber dan hidup dalam masyarakat", "B. Pancasila berisi khayalan masa depan bangsa", "C. Pancasila hanya ada dalam teori buku pelajaran", "D. Pancasila meniru ideologi negara maju", "E. Pancasila tidak bisa diterapkan di dunia nyata"], a: 0, p: "Dimensi realitas = bersumber dari nyata masyarakat." },
-            { kategori: "D. Ideologi Negara", q: "Dimensi Idealitas dalam Pancasila sebagai ideologi negara mengandung arti...", o: ["A. Mengandung cita-cita yang ingin dicapai dalam berbagai bidang kehidupan", "B. Nilainya sudah sempurna sehingga tidak perlu bekerja keras", "C. Hanya bisa terwujud jika bantuan asing masuk", "D. Berisi aturan teknis pemerintahan sehari-hari", "E. Tidak memiliki target masa depan"], a: 0, p: "Dimensi idealitas memuat cita-cita masa depan." },
-            { kategori: "D. Ideologi Negara", q: "Dimensi Fleksibilitas Pancasila menunjukkan bahwa Pancasila...", o: ["A. Memiliki keluwesan untuk merespons dinamika perkembangan zaman", "B. Bebas ditafsirkan tanpa aturan hukum", "C. Dapat diganti dengan ideologi lain jika mendesak", "D. Mengikuti seluruh kehendak ideologi liberal", "E. Tidak memiliki pendirian yang tetap"], a: 0, p: "Fleksibilitas = luwes merespons zaman." },
-            { kategori: "D. Ideologi Negara", q: "Kedudukan Pancasila sebagai 'Sumber dari Segala Sumber Hukum Negara' berarti...", o: ["A. Seluruh peraturan perundang-undangan tidak boleh bertentangan dengan Pancasila", "B. Pancasila adalah satu-satunya hukum yang berlaku", "C. Hakim boleh mengabaikan undang-undang dan hanya memakai Pancasila", "D. Pancasila dibuat oleh lembaga hukum internasional", "E. Hukum adat tidak lagi diakui di Indonesia"], a: 0, p: "Semua hukum harus bersumber dari nilai Pancasila." },
-            { kategori: "D. Ideologi Negara", q: "Nilai Dasar dalam Pancasila adalah nilai yang bersifat...", o: ["A. Tetap, abstrak, dan tidak berubah sepanjang masa", "B. Berubah-ubah sesuai kondisi ekonomi", "C. Berbeda di tiap provinsi Indonesia", "D. Hanya berlaku untuk pejabat negara", "E. Diatur oleh peraturan pemerintah"], a: 0, p: "Nilai dasar bersifat tetap dan hakiki." },
-            { kategori: "D. Ideologi Negara", q: "Penjabaran nilai-nilai Pancasila dalam UUD 1945 dan Peraturan Perundang-undangan dinamakan nilai...", o: ["A. Instrumental", "B. Dasar", "C. Praksis", "D. Vital", "E. Material"], a: 0, p: "Nilai instrumental berupa norma hukum/undang-undang." },
-            { kategori: "D. Ideologi Negara", q: "Realisasi nilai-nilai Pancasila dalam tindakan nyata kehidupan sehari-hari disebut nilai...", o: ["A. Praksis", "B. Dasar", "C. Instrumental", "D. Teoretis", "E. Doktrinal"], a: 0, p: "Nilai praksis adalah realisasi nyata sehari-hari." },
-            { kategori: "D. Ideologi Negara", q: "Perbedaan mendasar antara ideologi Pancasila dengan ideologi Liberalisme adalah...", o: ["A. Pancasila menyeimbangkan kepentingan individu dan masyarakat", "B. Liberalisme mengutamakan kepentingan keagamaan", "C. Pancasila melarang kepemilikan harta pribadi", "D. Liberalisme menolak kebebasan berpendapat", "E. Pancasila menganut sistem otoriter"], a: 0, p: "Pancasila seimbang antara individu dan sosial." },
-            { kategori: "D. Ideologi Negara", q: "Perbedaan utama Pancasila dengan ideologi Komunisme adalah Pancasila...", o: ["A. Mengakui keberadaan Tuhan dan menolak paham atheisme", "B. Menolak gotong royong dalam masyarakat", "C. Tidak mengakui adanya hak asasi manusia", "D. Menghendaki pertentangan antar kelas sosial", "E. Melarang kegiatan perekonomian warga"], a: 0, p: "Pancasila berlandaskan Ketuhanan, Komunisme atheis." },
-            { kategori: "D. Ideologi Negara", q: "Salah satu fungsi utama Pancasila sebagai ideologi negara adalah...", o: ["A. Mempersatukan bangsa dan memberi arah mencapai tujuan nasional", "B. Membatasi perdagangan antar daerah", "C. Menentukan harga kebutuhan pokok di pasar", "D. Mengganti kebudayaan daerah dengan budaya nasional", "E. Membuka wilayah tanpa batas negara"], a: 0, p: "Fungsi ideologi = pemersatu dan pemberi arah bangsa." },
-            { kategori: "D. Ideologi Negara", q: "Batas-batas terbuka ideologi Pancasila adalah sebagai berikut, KECUALI...", o: ["A. Membuka diri terhadap paham paham atheisme dan komunisme", "B. Mencegah paham paham radikal berkembang", "C. Konsistensi terhadap nilai dasar Pancasila", "D. Larangan terhadap ideologi Marxisme", "E. Menciptakan norma baru melalui konsensus"], a: 0, p: "Ideologi Pancasila menolak paham atheisme/komunisme." }
+            // ==================== D. ERA DIGITAL & GLOBALISASI ====================
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Bentuk penerapan nilai Pancasila dalam bermedia sosial adalah...", 
+                o: [
+                    "A. Berbahasa santun, tidak menyebar hoaks dan bullying", 
+                    "B. Membagikan berita viral tanpa memeriksa kebenaran", 
+                    "C. Menghina karya orang lain secara bebas di komentar", 
+                    "D. Membuat konten provokatif demi meraih popularitas", 
+                    "E. Menggunakan akun palsu untuk menyerang akun lain"
+                ], 
+                a: 0, 
+                p: "Penerapan Pancasila di dunia digital menuntut etika, kesantunan, dan kecermatan informasi." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Tindakan yang paling tepat sebelum membagikan informasi di medsos adalah...", 
+                o: [
+                    "A. Memeriksa kebenaran dan kejelasan sumber informasi", 
+                    "B. Membagikan langsung ke grup agar menjadi yang pertama", 
+                    "C. Mengubah judul berita agar terkesan lebih menarik", 
+                    "D. Menambahkan prasangka pribadi pada postingan", 
+                    "E. Meneruskan berita tanpa membaca isinya secara utuh"
+                ], 
+                a: 0, 
+                p: "Prinsip saring sebelum sharing wajib diterapkan untuk mencegah penyebaran berita hoaks." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Berikut yang merupakan contoh tindakan sesuai nilai Pancasila adalah...", 
+                o: [
+                    "A. Bergotong royong membantu korban bencana alam", 
+                    "B. Melakukan perundungan secara daring kepada teman", 
+                    "C. Menyebarkan ajaran yang memicu konflik antarwarga", 
+                    "D. Membeda-bedakan perlakuan berdasarkan status sosial", 
+                    "E. Mementingkan diri sendiri dan merusak fasilitas umum"
+                ], 
+                a: 0, 
+                p: "Gotong royong membantu sesama merupakan cerminan nilai luhur Pancasila." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Salah satu tantangan penerapan Pancasila di era globalisasi adalah...", 
+                o: [
+                    "A. Maraknya sikap individualisme dan penyebaran hoaks", 
+                    "B. Meningkatnya kerja sama antarnegara di bidang sains", 
+                    "C. Kemudahan mendapatkan sumber belajar secara daring", 
+                    "D. Banyaknya pemuda yang menguasai bahasa asing", 
+                    "E. Perkembangan sarana transportasi modern di daerah"
+                ], 
+                a: 0, 
+                p: "Globalisasi membawa tantangan berupa pergeseran moral, sikap individualistis, dan disinformasi." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Sikap selektif terhadap masuknya budaya asing diwujudkan dengan...", 
+                o: [
+                    "A. Menyaring budaya asing yang sesuai dengan Pancasila", 
+                    "B. Menolak seluruh kemajuan teknologi dari luar negeri", 
+                    "C. Meniru semua gaya hidup asing agar tampak modern", 
+                    "D. Mengganti budaya lokal dengan budaya asing populer", 
+                    "E. Menutup diri dari pergaulan dan hubungan internasional"
+                ], 
+                a: 0, 
+                p: "Sikap selektif berarti menyaring kebudayaan luar yang membawa manfaat positif." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Fungsi Pancasila dalam menghadapi pengaruh globalisasi adalah...", 
+                o: [
+                    "A. Sebagai penyaring budaya asing agar jati diri terjaga", 
+                    "B. Sebagai penghambat masuknya kemajuan teknologi", 
+                    "C. Sebagai alasan mengisolasi diri dari negara tetangga", 
+                    "D. Sebagai penolak investasi asing dalam pembangunan", 
+                    "E. Sebagai pendorong adopsi gaya hidup bebas tanpa norma"
+                ], 
+                a: 0, 
+                p: "Pancasila berperan sebagai benteng dan filter budaya agar kepribadian bangsa tetap terjaga." 
+            },
+            { 
+                kategori: "A. Kedudukan & Nilai", 
+                q: "Sikap yang menjiwai sila Ketuhanan dan Kemanusiaan sekaligus adalah...", 
+                o: [
+                    "A. Membantu sesama sebagai wujud rasa syukur pada Tuhan", 
+                    "B. Mengabaikan orang lain yang tertimpa musibah", 
+                    "C. Menuntut hak tanpa mau menjalankan kewajiban", 
+                    "D. Rajin beribadah tetapi bersikap kasar pada tetangga", 
+                    "E. Mengutamakan keuntungan kelompok dibanding hukum"
+                ], 
+                a: 0, 
+                p: "Sila 1 dan Sila 2 saling berkaitan dalam mengasihi sesama ciptaan Tuhan." 
+            },
+            { 
+                kategori: "C. Demokrasi & Musyawarah", 
+                q: "Jika hasil musyawarah tidak sesuai harapan pribadi, kita harus...", 
+                o: [
+                    "A. Menghormati dan melaksanakannya dengan lapang dada", 
+                    "B. Mengkritik panitia secara kasar di media sosial", 
+                    "C. Menolak ikut serta dalam seluruh kegiatan sekolah", 
+                    "D. Memaksa pengurus melakukan pemungutan suara ulang", 
+                    "E. Memprovokasi teman untuk menolak hasil rapat"
+                ], 
+                a: 0, 
+                p: "Sikap lapang dada menerima keputusan bersama adalah bentuk kedewasaan Pancasilais." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Penggunaan internet yang sesuai dengan Sila Ketiga adalah...", 
+                o: [
+                    "A. Memanfaatkan medsos untuk mempererat persatuan", 
+                    "B. Menyebarkan ujaran kebencian antar suku di komentar", 
+                    "C. Mengunggah konten yang memecah belah masyarakat", 
+                    "D. Melakukan plagiarisme terhadap karya orang lain", 
+                    "E. Menggunakan internet hanya untuk bermain gim seharian"
+                ], 
+                a: 0, 
+                p: "Teknologi dimanfaatkan untuk mempererat persatuan dan kesatuan bangsa." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Menolak ujaran kebencian (hate speech) di ruang digital merupakan cerminan pengamalan Pancasila, khususnya...", 
+                o: [
+                    "A. Sila Kedua dan Sila Ketiga Pancasila", 
+                    "B. Sila Pertama Pancasila saja", 
+                    "C. Peraturan internal platform digital", 
+                    "D. Kebiasaan pengguna internet asing", 
+                    "E. Sila Kelima Pancasila saja"
+                ], 
+                a: 0, 
+                p: "Menolak ujaran kebencian menjaga kemanusiaan yang beradab dan merawat persatuan." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Pengadaan galang dana daring (crowdfunding) untuk korban bencana nasional mengamalkan nilai...", 
+                o: [
+                    "A. Sila Kedua dan Sila Kelima Pancasila", 
+                    "B. Sila Pertama Pancasila secara penuh", 
+                    "C. Sila Keempat Pancasila saja", 
+                    "D. Aturan transaksi perbankan", 
+                    "E. Kebijakan media sosial"
+                ], 
+                a: 0, 
+                p: "Aksi solidaritas kemanusiaan berbasis teknologi mencerminkan nilai kepedulian dan keadilan sosial." 
+            },
+            { 
+                kategori: "D. Era Digital & Global", 
+                q: "Sikap bijak pelajar Indonesia di era digital dalam menjaga keutuhan NKRI adalah...", 
+                o: [
+                    "A. Memanfaatkan teknologi untuk inovasi dan persatuan bangsa", 
+                    "B. Mengikuti tren konten negatif agar tetap populer", 
+                    "C. Menyebarkan rumor yang belum pasti kebenarannya", 
+                    "D. Mengisolasi diri dari perkembangan teknologi terkini", 
+                    "E. Mengutamakan kepentingan pribadi di atas kepentingan bersama"
+                ], 
+                a: 0, 
+                p: "Pelajar Pancasila menggunakan kemajuan teknologi untuk memperkuat keutuhan dan kemajuan bangsa." 
+            }
         ];
 
         let quizQuestions = [];
@@ -252,7 +852,7 @@
             const shuffledSoal = shuffleArray([...bankSoal]);
             const selectedSoal = shuffledSoal.slice(0, maxCount);
             
-            // 2. Acak urutan opsi jawaban A-E untuk tiap soal secara dinamis
+            // 2. Acak urutan opsi jawaban A-E secara dinamis
             quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
             
             currentIdx = 0;

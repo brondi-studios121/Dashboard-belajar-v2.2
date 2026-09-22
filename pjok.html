@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis PJOK - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: PJOK</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan berdasarkan kisi-kisi Sepak Bola, Bola Voli, Bola Basket, Atletik, & Kebugaran Jasmani.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="25" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ A. Sepak Bola: Teknik Dasar, Taktik & Aturan Laga</div>
+                        <div>✓ B. Bola Voli: Teknik, Posisi, Rotasi & Strategi</div>
+                        <div>✓ C. Bola Basket: Teknik Dasar, Aturan & Pertahanan</div>
+                        <div>✓ D. Atletik & Kebugaran Jasmani: Sprint, Lompat & Senam</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: PJOK XI PALAPA</span>
+                    <span id="progressText">Soal 1 dari 25</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi PJOK XI PALAPA.</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA PJOK (50 SOAL LENGKAP & BERVARIASI) -->
+    <script>
+        const bankSoal = [
+            // ==================== SEPAK BOLA (Q1 - Q15) ====================
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Fungsi utama dari teknik passing menggunakan kaki bagian dalam pada sepak bola adalah...", 
+                o: [
+                    "A. Mengoper bola jarak pendek secara akurat", 
+                    "B. Menendang bola sekuat tenaga ke gawang", 
+                    "C. Menghentikan laju bola yang melambung", 
+                    "D. Menggiring bola secara cepat ke depan", 
+                    "E. Melakukan lemparan bola dari luar garis"
+                ], 
+                a: 0, 
+                p: "Kaki bagian dalam memiliki luas permukaan paling ideal untuk melakukan operan akurat jarak pendek." 
+            },
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Sikap badan yang benar saat melakukan dribbling menggunakan kaki bagian dalam adalah...", 
+                o: [
+                    "A. Agak condong ke depan dan badan rileks", 
+                    "B. Tegak lurus tanpa ada tekukan sedikitpun", 
+                    "C. Condong ke belakang dan mata terpejam", 
+                    "D. Membelakangi arah pergerakan bola lawan", 
+                    "E. Miring ke kanan atau kiri secara kaku"
+                ], 
+                a: 0, 
+                p: "Badan agak condong ke depan menjaga keseimbangan dan mempermudah penguasaan kontrol bola." 
+            },
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Teknik menendang bola yang paling tepat untuk memberikan umpan jarak jauh (long pass) adalah...", 
+                o: [
+                    "A. Menggunakan kaki bagian punggung", 
+                    "B. Menggunakan bagian tumit belakang", 
+                    "C. Menggunakan bagian telapak kaki", 
+                    "D. Menggunakan bagian ujung jari kaki", 
+                    "E. Menggunakan bagian dalam paha kaki"
+                ], 
+                a: 0, 
+                p: "Punggung kaki dapat menghasilkan dorongan tenaga yang kuat dan jangkauan tempuh jauh." 
+            },
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Tujuan utama dari penerapan teknik control (menghentikan bola) dalam sepak bola adalah...", 
+                o: [
+                    "A. Menguasai bola agar mudah diarahkan", 
+                    "B. Membuang sisa waktu pertandingan laga", 
+                    "C. Memprovokasi lawan membuat kesalahan", 
+                    "D. Menghindari kejaran dari bek bertahan", 
+                    "E. Mencetak gol langsung dari jarak jauh"
+                ], 
+                a: 0, 
+                p: "Teknik kontrol bertujuan menghentikan dinamika bola agar berada dalam jangkauan penguasaan." 
+            },
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Anggota tubuh yang diperbolehkan untuk mengontrol bola melambung, KECUALI...", 
+                o: [
+                    "A. Lengan tangan dari bahu hingga jari", 
+                    "B. Dada bagian depan maupun samping", 
+                    "C. Paha kaki bagian depan atau dalam", 
+                    "D. Telapak kaki serta punggung kaki", 
+                    "E. Kepala bagian dahi atau depan"
+                ], 
+                a: 0, 
+                p: "Pemain non-kiper dilarang keras menyentuh bola menggunakan tangan atau lengan." 
+            },
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Perkenaan bola pada kepala yang paling benar saat melakukan teknik heading adalah...", 
+                o: [
+                    "A. Dahi atau jidat bagian depan", 
+                    "B. Ubun-ubun atau bagian atas", 
+                    "C. Samping kepala dekat telinga", 
+                    "D. Belakang kepala atau tengkuk", 
+                    "E. Area dagu dan wajah bawah"
+                ], 
+                a: 0, 
+                p: "Dahi merupakan area terkuat dan terbaik untuk mengontrol arah dan kekuatan sundulan." 
+            },
+            { 
+                kategori: "Sepak Bola - Teknik Dasar", 
+                q: "Teknik menendang bola yang paling efektif untuk mencetak gol dari depan gawang adalah...", 
+                o: [
+                    "A. Tendangan punggung kaki yang keras", 
+                    "B. Operan halus menggunakan tumit", 
+                    "C. Sundulan kepala dari arah bawah", 
+                    "D. Dorongan pelan pakai telapak kaki", 
+                    "E. Lemparan tangan dari luar kotak"
+                ], 
+                a: 0, 
+                p: "Punggung kaki menghasilkan laju bola tercepat dan keras sehingga sulit dihalau kiper." 
+            },
+            { 
+                kategori: "Sepak Bola - Taktik & Aturan", 
+                q: "Tujuan utama dari pelaksanaan teknik tackling dalam permainan sepak bola adalah...", 
+                o: [
+                    "A. Merebut bola dari penguasaan lawan", 
+                    "B. Mencederai pemain lawan yang handal", 
+                    "C. Mengulur waktu jalannya pertandingan", 
+                    "D. Menghentikan laga saat skor imbang", 
+                    "E. Meminta perhatian wasit di lapangan"
+                ], 
+                a: 0, 
+                p: "Tackling digunakan untuk menyapu atau merebut bola dari lawan secara bersih." 
+            },
+            { 
+                kategori: "Sepak Bola - Taktik & Aturan", 
+                q: "Apabila bola keluar melewati garis samping lapangan sepak bola, keputusannya adalah...", 
+                o: [
+                    "A. Lemparan kedalam oleh tim lawan", 
+                    "B. Tendangan sudut dari pojok area", 
+                    "C. Tendangan gawang oleh tim pertahanan", 
+                    "D. Tendangan bebas langsung di tengah", 
+                    "E. Penghentian total jalannya laga"
+                ], 
+                a: 0, 
+                p: "Bola keluar garis samping mengakibatkan lemparan ke dalam (throw-in) untuk pihak lawan." 
+            },
+            { 
+                kategori: "Sepak Bola - Taktik & Aturan", 
+                q: "Sanksi yang diberikan wasit jika seorang pemain terjebak dalam posisi offside adalah...", 
+                o: [
+                    "A. Tendangan bebas tidak langsung lawan", 
+                    "B. Tendangan penalti langsung ke gawang", 
+                    "C. Peringatan kartu kuning bagi pemain", 
+                    "D. Lemparan ke dalam untuk tim penyerang", 
+                    "E. Kick-off ulang dari titik tengah"
+                ], 
+                a: 0, 
+                p: "Offside diganjar hukuman tendangan bebas tidak langsung di titik terjadinya pelanggaran." 
+            },
+            { 
+                kategori: "Sepak Bola - Taktik & Aturan", 
+                q: "Fungsi utama dari penerapan formasi dalam strategi permainan sepak bola adalah...", 
+                o: [
+                    "A. Membagi peran dan pembagian wilayah", 
+                    "B. Memenuhi syarat administratif laga", 
+                    "C. Menghitung jumlah pemain di lapangan", 
+                    "D. Membingungkan wasit yang memimpin", 
+                    "E. Menentukan durasi lamanya tanding"
+                ], 
+                a: 0, 
+                p: "Formasi membagi peran, posisi, dan tanggung jawab zona kerja setiap pemain." 
+            },
+            { 
+                kategori: "Sepak Bola - Taktik & Aturan", 
+                q: "Prinsip dasar dalam organisasi pertahanan (defending) sepak bola adalah...", 
+                o: [
+                    "A. Menutup ruang dan menjaga area", 
+                    "B. Membiarkan lawan membawa bola", 
+                    "C. Menumpuk semua pemain di depan", 
+                    "D. Melakukan pelanggaran secara terus", 
+                    "E. Mengabaikan posisi pemain penyerang"
+                ], 
+                a: 0, 
+                p: "Defending mengutamakan penyempitan ruang tembak/umpan lawan serta penjagaan zona." 
+            },
+            { 
+                kategori: "Sepak Bola - Taktik & Aturan", 
+                q: "Tindakan cepat yang harus dilakukan tim saat terjadi transisi menyerang ke bertahan adalah...", 
+                o: [
+                    "A. Segera kembali menutup ruang pertahanan", 
+                    "B. Diam di tempat menunggu bola kembali", 
+                    "C. Protes kepada wasit keputusan lapangan", 
+                    "D. Melakukan serangan balik tanpa koordinasi", 
+                    "E. Meminta pergantian pemain secepatnya"
+                ], 
+                a: 0, 
+                p: "Transisi negatif mewajibkan seluruh pemain segera merapat dan menyusun susunan bertahan." 
+            },
+            { 
+                kategori: "Sepak Bola - Aturan Laga", 
+                q: "Syarat pelaksanaan lemparan ke dalam (throw-in) yang dinyatakan sah adalah...", 
+                o: [
+                    "A. Menggunakan dua tangan dari belakang melewati atas kepala dan kedua kaki menempel tanah", 
+                    "B. Menggunakan satu tangan terkuat dengan melompat setinggi-tingginya", 
+                    "C. Melempar bola sambil berlari kencang melewati garis lapangan", 
+                    "D. Menggulirkan bola di tanah menggunakan satu tangan dari samping", 
+                    "E. Mengoper bola menggunakan kaki dari luar garis lapangan"
+                ], 
+                a: 0, 
+                p: "Throw-in wajib menggunakan kedua tangan ditarik dari belakang kepala dan kedua kaki tetap menyentuh tanah di luar/atas garis." 
+            },
+            { 
+                kategori: "Sepak Bola - Aturan Laga", 
+                q: "Tendangan sudut (corner kick) dihadiahkan oleh wasit apabila...", 
+                o: [
+                    "A. Bola terakhir disentuh oleh tim bertahan dan keluar melewati garis gawang", 
+                    "B. Bola terakhir disentuh oleh tim penyerang dan keluar melewati garis gawang", 
+                    "C. Pemain bertahan melakukan pelanggaran di luar kotak penalti", 
+                    "D. Pemain penyerang terperangkap posisi offside di area gawang", 
+                    "E. Bola keluar melewati garis samping lapangan permainan"
+                ], 
+                a: 0, 
+                p: "Tendangan sudut diberikan jika bola menyentuh pemain bertahan sebelum melewati garis belakang/gawang." 
+            },
+
+            // ==================== BOLA VOLI (Q16 - Q30) ====================
+            { 
+                kategori: "Bola Voli - Teknik Dasar", 
+                q: "Teknik passing bawah dalam bola voli paling tepat digunakan pada saat...", 
+                o: [
+                    "A. Menerima servis atau smash keras", 
+                    "B. Mengumpan bola smash di atas net", 
+                    "C. Melakukan serangan pertama ke lawan", 
+                    "D. Membendung pukulan bola dari lawan", 
+                    "E. Mengambil bola mati di luar arena"
+                ], 
+                a: 0, 
+                p: "Passing bawah sangat kokoh dalam meredam dan menerima bola-bola cepat lawan." 
+            },
+            { 
+                kategori: "Bola Voli - Teknik Dasar", 
+                q: "Sikap dan posisi kedua lengan yang benar saat melakukan passing bawah adalah...", 
+                o: [
+                    "A. Lurus dirapatkan dan dikunci rapat", 
+                    "B. Tekuk di siku dengan tangan terbuka", 
+                    "C. Silangkan kedua tangan di atas dada", 
+                    "D. Angkat tinggi kedua tangan di atas", 
+                    "E. Kebelakang tubuh untuk dorongan"
+                ], 
+                a: 0, 
+                p: "Lengan lurus dan dirapatkan memicu pantulan bola yang stabil dan mudah dikontrol." 
+            },
+            { 
+                kategori: "Bola Voli - Teknik Dasar", 
+                q: "Fungsi utama dari teknik passing atas dalam permainan bola voli adalah...", 
+                o: [
+                    "A. Memberikan umpan matang bagi spiker", 
+                    "B. Menahan smash keras dari tim lawan", 
+                    "C. Melakukan pukulan tajam menukik", 
+                    "D. Mengawali awal mula reli pertandingan", 
+                    "E. Mengulur waktu permainan lapangan"
+                ], 
+                a: 0, 
+                p: "Passing atas dengan ujung jari sangat presisi untuk menyajikan umpan smash." 
+            },
+            { 
+                kategori: "Bola Voli - Posisi & Peran", 
+                q: "Pemain bola voli yang bertugas sebagai penata serangan atau pengumpan dinamakan...", 
+                o: [
+                    "A. Setter atau tosser di lapangan", 
+                    "B. Spiker atau smasher handal", 
+                    "C. Libero atau pemain bertahan", 
+                    "D. Blocker atau pembendung bola", 
+                    "E. Server atau pemukul pertama"
+                ], 
+                a: 0, 
+                p: "Setter/tosser bertindak sebagai pengatur ritme serangan dan pemberi umpan bola." 
+            },
+            { 
+                kategori: "Bola Voli - Teknik Dasar", 
+                q: "Fungsi utama tolakan kedua kaki saat akan melakukan pukulan smash adalah...", 
+                o: [
+                    "A. Mendapatkan daya lompat maksimal", 
+                    "B. Menjaga keseimbangan berdiri tegak", 
+                    "C. Menggeser posisi berdiri di lapangan", 
+                    "D. Meredam tumpuan saat mendarat", 
+                    "E. Menyerap benturan keras dari tanah"
+                ], 
+                a: 0, 
+                p: "Tolakan eksplosif dua kaki mendorong badan ke titik lompatan tertinggi di atas net." 
+            },
+            { 
+                kategori: "Bola Voli - Teknik Dasar", 
+                q: "Tujuan utama dari pelaksanaan serangan melalui teknik smash adalah...", 
+                o: [
+                    "A. Mematikan bola di lapangan lawan", 
+                    "B. Mengoper bola secara lambat ke lawan", 
+                    "C. Mengulur waktu pertandingan berjalan", 
+                    "D. Melatih kelentukan otot punggung", 
+                    "E. Menghindari pelanggaran jaring net"
+                ], 
+                a: 0, 
+                p: "Smash adalah pukulan tajam kencang menukik demi meraih poin secara langsung." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Tujuan utama teknik blocking (membendung bola) di dekat net adalah...", 
+                o: [
+                    "A. Menahan serangan smash dari lawan", 
+                    "B. Mengumpan bola kepada spiker tim", 
+                    "C. Mencetak poin lewat servis pertama", 
+                    "D. Mengganti posisi rotasi pemain", 
+                    "E. Mengambil bola pantulan dari lantai"
+                ], 
+                a: 0, 
+                p: "Blocking berguna menghalau jalan bola smash lawan tepat di atas jaring." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Fungsi dan peran teknik servis dalam jalannya permainan bola voli adalah...", 
+                o: [
+                    "A. Memulai permainan sekaligus serangan", 
+                    "B. Membendung pukulan smash lawan", 
+                    "C. Mengumpan bola tinggi ke spiker", 
+                    "D. Menggantikan peran pemain libero", 
+                    "E. Mengakhiri set babak pertandingan"
+                ], 
+                a: 0, 
+                p: "Servis kini berfungsi ganda sebagai awal mula rally dan serangan awal penekan lawan." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Arah rotasi perpindahan posisi pemain bola voli setelah merebut hak servis adalah...", 
+                o: [
+                    "A. Searah dengan putaran jarum jam", 
+                    "B. Berlawanan arah putaran jarum jam", 
+                    "C. Bebas sesuai keinginan dari pemain", 
+                    "D. Berpindah acak menurut petunjuk", 
+                    "E. Menyilang dari posisi satu ke tiga"
+                ], 
+                a: 0, 
+                p: "Rotasi antar-posisi pemain berpindah 1 langkah searah perputaran jarum jam." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Batas maksimal jumlah sentuhan bola bagi satu tim dalam alur serangan adalah...", 
+                o: [
+                    "A. Tiga kali sentuhan bola sah", 
+                    "B. Satu kali sentuhan bola sah", 
+                    "C. Dua kali sentuhan bola sah", 
+                    "D. Empat kali sentuhan bola sah", 
+                    "E. Lima kali sentuhan bola sah"
+                ], 
+                a: 0, 
+                p: "Setiap tim diberi kesempatan mengolah bola maksimal 3 kali sebelum dikembalikan." 
+            },
+            { 
+                kategori: "Bola Voli - Posisi & Peran", 
+                q: "Tugas utama pemain berpakaian khusus (Libero) dalam tim bola voli adalah...", 
+                o: [
+                    "A. Khusus bertahan dan passing bawah", 
+                    "B. Melakukan pukulan smash dari belakang", 
+                    "C. Melakukan servis pertama ke lawan", 
+                    "D. Melakukan blocking di depan net", 
+                    "E. Memimpin rapat strategi permainan"
+                ], 
+                a: 0, 
+                p: "Libero fokus pada sektor pertahanan belakang dan dilarang servis, smash, maupun block." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Indikator utama berjalannya pola serangan bola voli yang efektif adalah...", 
+                o: [
+                    "A. Kerjasama akurat antara setter-spiker", 
+                    "B. Seluruh pemain melakukan lompatan", 
+                    "C. Menggunakan pukulan servis bawah terus", 
+                    "D. Menempatkan lima pemain di depan net", 
+                    "E. Mengandalkan kekuatan fisik individu"
+                ], 
+                a: 0, 
+                p: "Paduan harmonis antara umpan setter dan eksekusi spiker menciptakan serangan efektif." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Kegunaan utama servis sebagai tanda dimulainya reli pertandingan adalah...", 
+                o: [
+                    "A. Menandai mulainya perebutan poin", 
+                    "B. Mengukur tinggi jaring net voli", 
+                    "C. Menguji ketahanan bola lapangan", 
+                    "D. Menentukan pemenang babak akhir", 
+                    "E. Melatih kekuatan lengan pemain"
+                ], 
+                a: 0, 
+                p: "Pukulan servis menjadi penanda dimulainya perebutan angka secara resmi." 
+            },
+            { 
+                kategori: "Bola Voli - Taktik & Aturan", 
+                q: "Ketentuan rotasi pemain bola voli wajib dilakukan ketika...", 
+                o: [
+                    "A. Berhasil merebut hak servis lawan", 
+                    "B. Bola keluar dari garis belakang", 
+                    "C. Tim lawan melakukan kesalahan servis", 
+                    "D. Pelatih meminta jeda waktu istirahat", 
+                    "E. Babak set pertandingan telah usai"
+                ], 
+                a: 0, 
+                p: "Rotasi bergeser saat tim berhasil memindahkan hak servis (side out) dari lawan." 
+            },
+            { 
+                kategori: "Bola Voli - Posisi & Peran", 
+                q: "Keahlian utama yang wajib dimiliki oleh seorang pemain Libero adalah...", 
+                o: [
+                    "A. Refleks cepat dan penguasaan passing", 
+                    "B. Lompatan tinggi untuk melakukan smash", 
+                    "C. Pukulan servis keras menukik tajam", 
+                    "D. Postur tinggi untuk pembendung net", 
+                    "E. Kecepatan lari menembus pertahanan"
+                ], 
+                a: 0, 
+                p: "Seorang Libero mengandalkan fleksibilitas, kelincahan, serta akurasi passing luar biasa." 
+            },
+
+            // ==================== BOLA BASKET (Q31 - Q40) ====================
+            { 
+                kategori: "Bola Basket - Teknik Dasar", 
+                q: "Operan setinggi dada yang dilakukan menggunakan dua tangan pada permainan bola basket dinamakan...", 
+                o: [
+                    "A. Chest Pass", 
+                    "B. Bounce Pass", 
+                    "C. Overhead Pass", 
+                    "D. Baseball Pass", 
+                    "E. Behind the Back Pass"
+                ], 
+                a: 0, 
+                p: "Chest pass adalah teknik operan mendatar setinggi dada untuk jarak pendek dan cepat." 
+            },
+            { 
+                kategori: "Bola Basket - Teknik Dasar", 
+                q: "Teknik operan dengan memantulkan bola ke lantai terlebih dahulu bertujuan untuk...", 
+                o: [
+                    "A. Menghindari jangkauan lawan yang berpostur tinggi", 
+                    "B. Menghabiskan waktu permainan basket", 
+                    "C. Mencetak angka tiga poin secara langsung", 
+                    "D. Mengelabuhi wasit pertandingan basket", 
+                    "E. Memperlambat jalannya tempo serangan"
+                ], 
+                a: 0, 
+                p: "Bounce pass (operan pantul) sangat efektif menerobos penjagaan ketat pemain bertahan lawan." 
+            },
+            { 
+                kategori: "Bola Basket - Teknik Dasar", 
+                q: "Tembakan melayang mendekati ring yang diawali dengan gerakan melangkah dua kali disebut...", 
+                o: [
+                    "A. Lay-up Shot", 
+                    "B. Jump Shot", 
+                    "C. Hook Shot", 
+                    "D. Free Throw", 
+                    "E. Slam Dunk"
+                ], 
+                a: 0, 
+                p: "Lay-up shot memanfaatkan momentum melangkah 2 kali sebelum memasukkan bola ke ring dari jarak dekat." 
+            },
+            { 
+                kategori: "Bola Basket - Teknik Dasar", 
+                q: "Gerakan memutar badan dengan salah satu kaki bertindak sebagai poros dinamakan...", 
+                o: [
+                    "A. Pivot", 
+                    "B. Dribbling", 
+                    "C. Screening", 
+                    "D. Rebound", 
+                    "E. Steal"
+                ], 
+                a: 0, 
+                p: "Pivot dilakukan untuk melindungi bola dari terkaman lawan tanpa melakukan pelanggaran melangkah." 
+            },
+            { 
+                kategori: "Bola Basket - Teknik Dasar", 
+                q: "Usaha merebut bola pantul hasil tembakan lawan maupun kawan yang tidak masuk ke ring dinamakan...", 
+                o: [
+                    "A. Rebound", 
+                    "B. Blocking", 
+                    "C. Intercept", 
+                    "D. Fast Break", 
+                    "E. Assist"
+                ], 
+                a: 0, 
+                p: "Rebound adalah upaya menguasai pantulan bola yang gagal masuk ke dalam keranjang." 
+            },
+            { 
+                kategori: "Bola Basket - Taktik Pertahanan", 
+                q: "Sistem pertahanan di mana setiap pemain menjaga daerah tertentu di lapangan dinamakan...", 
+                o: [
+                    "A. Zone Defense", 
+                    "B. Man-to-man Defense", 
+                    "C. Pressing Defense", 
+                    "D. Combined Defense", 
+                    "E. Double Team"
+                ], 
+                a: 0, 
+                p: "Zone defense menugaskan tiap pemain menjaga area atau zona tertentu dari serbuan musuh." 
+            },
+            { 
+                kategori: "Bola Basket - Taktik Pertahanan", 
+                q: "Pola pertahanan satu lawan satu yang mengawal ketat satu pemain lawan ke mana pun bergerak disebut...", 
+                o: [
+                    "A. Man-to-man Defense", 
+                    "B. Zone Defense", 
+                    "C. Full Court Press", 
+                    "D. Transition Defense", 
+                    "E. Box and One"
+                ], 
+                a: 0, 
+                p: "Man-to-man defense mewajibkan satu pemain bertahan mengawal khusus satu pemain penyerang." 
+            },
+            { 
+                kategori: "Bola Basket - Aturan Laga", 
+                q: "Pelanggaran 'Three Seconds Violation' dalam bola basket terjadi apabila...", 
+                o: [
+                    "A. Pemain penyerang berada lebih dari 3 detik di area bersyarat (key area) lawan", 
+                    "B. Pemain memegang bola tanpa mendrible selama 3 detik penuh", 
+                    "C. Tim penyerang gagal menembak dalam kurun waktu 3 detik", 
+                    "D. Pemain bertahan berdiri dekat ring selama lebih dari 3 detik", 
+                    "E. Wasit menghentikan laga karena benturan fisik selama 3 detik"
+                ], 
+                a: 0, 
+                p: "Pemain penyerang dilarang berdiam diri di area bersyarat lawan melebihi batas waktu 3 detik." 
+            },
+            { 
+                kategori: "Bola Basket - Teknik Dasar", 
+                q: "Tujuan menggiring bola (dribbling) tinggi pada permainan bola basket adalah...", 
+                o: [
+                    "A. Mempercepat laju serangan saat area kosong (fast break)", 
+                    "B. Menerobos pertahanan ketat yang rapat di area lawan", 
+                    "C. Melindungi bola dari kejaran dan jangkauan lawan", 
+                    "D. Mempersiapkan tembakan tiga angka jarak jauh", 
+                    "E. Mengulur sisa waktu pertandingan babak kuarter"
+                ], 
+                a: 0, 
+                p: "Dribble tinggi digunakan untuk membawa bola dengan cepat saat tidak ada hambatan/penjagaan rapat." 
+            },
+            { 
+                kategori: "Bola Basket - Aturan Laga", 
+                q: "Tembakan yang dihasilkan dari luar garis busur (three-point line) bernilai...", 
+                o: [
+                    "A. 3 Poin", 
+                    "B. 1 Poin", 
+                    "C. 2 Poin", 
+                    "D. 4 Poin", 
+                    "E. 5 Poin"
+                ], 
+                a: 0, 
+                p: "Setiap tembakan yang masuk dari luar garis batas busur diganjar skor sebesar 3 poin." 
+            },
+
+            // ==================== ATLETIK & KEBUGARAN (Q41 - Q50) ====================
+            { 
+                kategori: "Atletik - Lari Jarak Pendek", 
+                q: "Start yang digunakan oleh pelari pada perlombaan lari jarak pendek (sprint) adalah...", 
+                o: [
+                    "A. Start Jongkok (Crouching Start)", 
+                    "B. Start Berdiri (Standing Start)", 
+                    "C. Start Melayang (Flying Start)", 
+                    "D. Start Duduk (Sitting Start)", 
+                    "E. Start Kombinasi (Mixed Start)"
+                ], 
+                a: 0, 
+                p: "Start jongkok wajib digunakan pada lari jarak pendek (100m, 200m, 400m) untuk daya dorong awal." 
+            },
+            { 
+                kategori: "Atletik - Lari Jarak Pendek", 
+                q: "Posisi tubuh yang benar pada saat mendengar aba-aba 'SIAP' dalam start jongkok adalah...", 
+                o: [
+                    "A. Pinggul diangkat lebih tinggi dari bahu dan tumpuan berat badan berada di tangan", 
+                    "B. Lutut diluruskan penuh dan badan berdiri tegak lurus ke depan", 
+                    "C. Duduk santai bertumpu pada kedua tumit kaki belakang", 
+                    "D. Kepala mendongak tinggi melihat lintasan garis finish", 
+                    "E. Badan direbah meluncur mendekati garis batas start"
+                ], 
+                a: 0, 
+                p: "Pada aba-aba SIAP, pinggul diangkat sedikit lebih tinggi dari bahu untuk mempersiapkan tolakan." 
+            },
+            { 
+                kategori: "Atletik - Lompat Jauh", 
+                q: "Ciri khas utama gerakan melayang pada lompat jauh gaya menggantung (hang style) adalah...", 
+                o: [
+                    "A. Dada membusung ke depan dan kedua tangan diangkat ke atas", 
+                    "B. Badan membungkuk seperti orang duduk di kursi", 
+                    "C. Kaki berjalan cepat seperti melangkah di udara", 
+                    "D. Kepala ditundukkan rapat menempel pada dada", 
+                    "E. Badan dimiringkan menyerupai gerakan baling-baling"
+                ], 
+                a: 0, 
+                p: "Gaya menggantung ditandai posisi dada dibusungkan ke depan dan tangan diluruskan ke atas saat melayang." 
+            },
+            { 
+                kategori: "Atletik - Tolak Peluru", 
+                q: "Awalan tolakan pada teknik tolak peluru gaya O'Brien (membelakangi) dilakukan dengan posisi...", 
+                o: [
+                    "A. Membelakangi sektor atau arah tolakan peluru", 
+                    "B. Menghadap lurus ke depan area tolakan", 
+                    "C. Menyampingi area tolakan di sebelah kiri/kanan", 
+                    "D. Berlari kencang dari jarak sepuluh meter", 
+                    "E. Berdiri santai menghadap juri pertandingan"
+                ], 
+                a: 0, 
+                p: "Gaya O'Brien diawali dengan posisi badan membelakangi arah lemparan/tolakan peluru." 
+            },
+            { 
+                kategori: "Kebugaran Jasmani - Unsur Fisik", 
+                q: "Kemampuan tubuh untuk mengubah arah posisi dengan cepat tanpa kehilangan keseimbangan disebut...", 
+                o: [
+                    "A. Kelincahan (Agility)", 
+                    "B. Kelentukan (Flexibility)", 
+                    "C. Kekuatan (Strength)", 
+                    "D. Daya Tahan (Endurance)", 
+                    "E. Kecepatan (Speed)"
+                ], 
+                a: 0, 
+                p: "Kelincahan (Agility) adalah kemampuan mengubah arah pergerakan dengan cepat dan seimbang." 
+            },
+            { 
+                kategori: "Kebugaran Jasmani - Tes Tes", 
+                q: "Bleep Test (Multistage Fitness Test) dilaksanakan dengan tujuan mengukur...", 
+                o: [
+                    "A. Daya tahan jantung dan paru-paru (VO2 Max)", 
+                    "B. Kelentukan persendian tulang belakang", 
+                    "C. Kekuatan maksimal otot lengan tangan", 
+                    "D. Kecepatan reaksi pendengaran atlet", 
+                    "E. Keseimbangan dinamis tubuh atlet"
+                ], 
+                a: 0, 
+                p: "Bleep test menguji kapasitas aerobik serta daya tahan kardiorespiratori (jantung dan paru-paru)." 
+            },
+            { 
+                kategori: "Kebugaran Jasmani - Latihan", 
+                q: "Bentuk latihan kekuatan otot yang sangat efektif untuk melatih otot dada, bahu, dan trisep adalah...", 
+                o: [
+                    "A. Push-Up", 
+                    "B. Sit-Up", 
+                    "C. Back-Up", 
+                    "D. Squat-Jump", 
+                    "E. Pull-Up"
+                ], 
+                a: 0, 
+                p: "Push-up melatih daya tahan dan kekuatan otot dada (pectoralis), bahu (deltoid), dan lengan (triceps)." 
+            },
+            { 
+                kategori: "Kebugaran Jasmani - Latihan", 
+                q: "Bentuk gerakan latihan yang bertujuan utama meningkatkan kekuatan dan daya tahan otot perut adalah...", 
+                o: [
+                    "A. Sit-Up", 
+                    "B. Push-Up", 
+                    "C. Back-Up", 
+                    "D. Vertical Jump", 
+                    "E. Shuttle Run"
+                ], 
+                a: 0, 
+                p: "Sit-up secara spesifik menggembleng kekuatan serta daya tahan kelompok otot perut (abdominal)." 
+            },
+            { 
+                kategori: "Senam Lantai - Guling Depan", 
+                q: "Bagian tubuh yang pertama kali menyentuh matras saat melakukan gerakan guling depan (forward roll) adalah...", 
+                o: [
+                    "A. Tengkuk (belakang leher)", 
+                    "B. Dahi atau wajah depan", 
+                    "C. Ubun-ubun kepala atas", 
+                    "D. Punggung bagian bawah", 
+                    "E. Pinggul dan tulang ekor"
+                ], 
+                a: 0, 
+                p: "Tengkuk leher harus menyentuh matras terlebih dahulu agar gulingan aman dan tidak mencederai leher/kepala." 
+            },
+            { 
+                kategori: "Senam Lantai - Sikap Lilin", 
+                q: "Sikap akhir tubuh yang benar saat memperagakan gerakan sikap lilin adalah...", 
+                o: [
+                    "A. Badan terlentang dengan kedua kaki diangkat lurus ke atas ditopang tangan di pinggang", 
+                    "B. Badan membungkuk dengan kepala menyentuh lutut kaki", 
+                    "C. Membusungkan dada dengan tumpuan pada kedua telapak tangan dan kaki", 
+                    "D. Berdiri dengan satu kaki lurus sementara satu kaki lagi diangkat horizontal", 
+                    "E. Tengkuk menempel di lantai dengan kaki ditekuk di atas dada"
+                ], 
+                a: 0, 
+                p: "Sikap lilin dilakukan dengan tidur terlentang lalu mengangkat kedua kaki lurus ke atas ditopang kedua tangan di pinggang." 
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "PJOK XI PALAPA";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
