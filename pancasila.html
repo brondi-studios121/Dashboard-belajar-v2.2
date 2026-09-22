@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Pancasila - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Pendidikan Pancasila (Bab 1)</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan di bawah ini berdasarkan materi Bab 1: Menjiwai Pancasila.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ A. Keterkaitan Antarsila Pancasila</div>
+                        <div>✓ B. Makna Sila-Sila dalam Pancasila</div>
+                        <div>✓ C. Pancasila dalam Tindakan</div>
+                        <div>✓ D. Pancasila sebagai Ideologi Negara</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: Pendidikan Pancasila</span>
+                    <span id="progressText">Soal 1 dari 15</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi Pendidikan Pancasila (Bab 1).</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA PENDIDIKAN PANCASILA - BAB 1 (50 SOAL SEIMBANG & PENJELASAN RINGKAS) -->
+    <script>
+        const bankSoal = [
+            // ==================== A. KETERKAITAN ANTARSILA (13 SOAL) ====================
+            { kategori: "A. Keterkaitan Antarsila", q: "Susunan Pancasila yang bersifat 'hierarkis piramidal' berarti...", o: ["A. Sila pertama menjiwai dan mendasari seluruh sila lainnya", "B. Setiap sila berdiri sendiri tanpa hubungan", "C. Sila kelima adalah sila terpenting dibanding yang lain", "D. Urutan sila bisa diubah sesuai kebutuhan", "E. Hanya sila ke-2 dan ke-3 yang saling terkait"], a: 0, p: "Sila 1 mendasari dan menjiwai sila 2, 3, 4, dan 5." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Sila Ketuhanan Yang Maha Esa menjiwai sila Persatuan Indonesia. Artinya...", o: ["A. Persatuan dibangun atas dasar landasan moral ketuhanan", "B. Agama hanya urusan pribadi tanpa kaitan nasionalisme", "C. Negara mewajibkan satu agama resmi saja", "D. Persatuan mengabaikan keberagaman kepercayaan", "E. Kegiatan ibadah harus diatur oleh negara"], a: 0, p: "Persatuan bangsa dilandasi nilai-nilai ketuhanan." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Mengapa pelaksanaan sila ke-4 (musyawarah) harus dijiwai oleh sila ke-2?", o: ["A. Agar musyawarah menghargai harkat dan martabat manusia", "B. Supaya musyawarah selalu dimenangkan mayoritas", "C. Untuk membatasi orang menyampaikan pendapat", "D. Agar tidak perlu ada voting sama sekali", "E. Karena musyawarah hanya untuk kelompok tertentu"], a: 0, p: "Musyawarah harus menjunjung nilai kemanusiaan dan adab." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Sila Keadilan Sosial bagi Seluruh Rakyat Indonesia merupakan...", o: ["A. Tujuan akhir dari pengamalan seluruh sila sebelumnya", "B. Sila yang terpisah dari nilai ketuhanan", "C. Landasan utama pembentukan undang-undang dasar saja", "D. Sila yang hanya berlaku di bidang ekonomi", "E. Syarat utama sebelum berdirinya negara"], a: 0, p: "Sila ke-5 adalah tujuan bersama seluruh sila Pancasila." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Pancasila merupakan satu kesatuan yang 'organis', yang artinya...", o: ["A. Sila-sila Pancasila saling melengkapi dan tidak dapat dipisahkan", "B. Sila-sila Pancasila dibuat oleh organisasi internasional", "C. Setiap sila bisa diganti secara berkala", "D. Hanya berlaku untuk organisasi pemerintahan", "E. Setiap sila memiliki tujuan yang bertentangan"], a: 0, p: "Organis berarti merupakan satu kesatuan utuh tak terpisahkan." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Jika sila ke-3 (Persatuan) dilaksanakan tanpa dijiwai sila ke-2 (Kemanusiaan), maka berisiko menimbulkan...", o: ["A. Chauvinisme atau nasionalisme sempit", "B. Sikap apatis terhadap negara", "C. Terjadinya anarkisme global", "D. Sifat individualisme yang tinggi", "E. Hilangnya rasa cinta tanah air"], a: 0, p: "Persatuan tanpa kemanusiaan berisiko menjadi nasionalisme sempit." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Keterkaitan antara sila ke-1 dan sila ke-2 tercermin dalam tindakan...", o: ["A. Mengakui bahwa manusia adalah makhluk ciptaan Tuhan yang bermartabat", "B. Mengutamakan kepentingan kelompok di atas kepentingan pribadi", "C. Mengembangkan sikap hemat dan tidak boros", "D. Melakukan musyawarah untuk mufakat", "E. Menjaga kelestarian lingkungan demi ekonomi"], a: 0, p: "Menghormati manusia sebagai ciptaan Tuhan." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Sila yang menjadi muara atau tujuan dari pengamalan empat sila lainnya adalah sila...", o: ["A. Kelima", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Keempat"], a: 0, p: "Keadilan sosial (Sila 5) adalah muara pengamalan Pancasila." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Pernyataan yang benar mengenai kesatuan sila-sila Pancasila adalah...", o: ["A. Menjiwai dan dijiwai oleh sila lainnya", "B. Bebas berdiri sendiri sesuai situasi", "C. Dapat diurutkan dari sila kelima ke pertama", "D. Sila pertama terpisah dari sila kemanusiaan", "E. Hanya sila ke-4 dan ke-5 yang memiliki keterkaitan"], a: 0, p: "Setiap sila saling menjiwai dan dijiwai." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Sila ke-4 dipimpin oleh hikmat kebijaksanaan dijiwai oleh...", o: ["A. Sila 1, 2, dan 3", "B. Sila 5 saja", "C. Sila 1 dan 5 saja", "D. Sila 2 dan 5 saja", "E. Tidak dijiwai sila manapun"], a: 0, p: "Sila ke-4 dijiwai sila 1, 2, dan 3 serta melandasi sila 5." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Konsep susunan kesatuan Pancasila bersifat majemuk tunggal, artinya...", o: ["A. Terdiri atas lima sila tetapi tetap merupakan satu kesatuan utuh", "B. Terdiri atas banyak suku tetapi satu bahasa", "C. Memiliki banyak ideologi dalam satu negara", "D. Memiliki lima undang-undang dasar yang berbeda", "E. Terdiri dari lima negara bagian yang bersatu"], a: 0, p: "Majemuk tunggal = 5 sila dalam 1 kesatuan utuh." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Sila 'Kemanusiaan yang Adil dan Beradab' mendasari sila...", o: ["A. Persatuan Indonesia", "B. Ketuhanan Yang Maha Esa", "C. Sila pertama saja", "D. Tidak mendasari sila manapun", "E. Hanya mendasari peraturan daerah"], a: 0, p: "Sila 2 mendasari sila 3, 4, dan 5." },
+            { kategori: "A. Keterkaitan Antarsila", q: "Prinsip bahwa keadilan sosial (sila 5) harus dicapai melalui cara musyawarah (sila 4) membuktikan adanya...", o: ["A. Keterkaitan logis antarsila Pancasila", "B. Pertentangan antar sila", "C. Kebebasan memilih sila mana yang disukai", "D. Ketidakpastian dalam Pancasila", "E. Perubahan nilai Pancasila"], a: 0, p: "Membuktikan hubungan keterkaitan antarsila." },
+
+            // ==================== B. MAKNA SILA-SILA PANCASILA (12 SOAL) ====================
+            { kategori: "B. Makna Sila-Sila", q: "Makna utama dari Sila Ketuhanan Yang Maha Esa adalah...", o: ["A. Pengakuan atas keberadaan Tuhan dan jaminan kebebasan beragama", "B. Kewajiban memilih satu agama yang disetujui pemerintah saja", "C. Larangan berhubungan dengan warga berbeda kepercayaan", "D. Pencampuran ajaran seluruh agama menjadi satu", "E. Penolakan terhadap kepercayaan lokal"], a: 0, p: "Menjamin keberadaan Tuhan dan kebebasan beragama." },
+            { kategori: "B. Makna Sila-Sila", q: "Simbol Bintang Emas pada sila pertama Pancasila melambangkan...", o: ["A. Cahaya kerohanian dari Tuhan bagi seluruh manusia", "B. Kekayaan alam Indonesia yang melimpah", "C. Kekuatan militer dalam mempertahankan negara", "D. Kejayaan bangsa Indonesia di mata dunia", "E. Tempat berlindung rakyat Indonesia"], a: 0, p: "Bintang emas melambangkan cahaya kerohanian." },
+            { kategori: "B. Makna Sila-Sila", q: "Sila Kemanusiaan yang Adil dan Beradab mengandung makna bahwa...", o: ["A. Setiap warga negara memiliki harkat dan martabat yang setara", "B. Manusia bebas melakukan apa saja tanpa batasan hukum", "C. Kemanusiaan hanya berlaku untuk warga Indonesia", "D. Hak asasi manusia berada di bawah kepentingan negara", "E. Penegakan hukum hanya berlaku untuk rakyat biasa"], a: 0, p: "Menekankan kesetaraan harkat dan martabat manusia." },
+            { kategori: "B. Makna Sila-Sila", q: "Simbol Rantai Emas pada sila kedua terdiri atas gelang persegi dan lingkaran yang bermakna...", o: ["A. Hubungan timbal balik antarmanusia tanpa membedakan gender", "B. Persatuan suku bangsa di seluruh pulau Indonesia", "C. Kekuatan struktur hukum yang tidak bisa dipatahkan", "D. Keberagaman mata pencaharian rakyat Indonesia", "E. Batasan wilayah darat dan laut Indonesia"], a: 0, p: "Rantai melambangkan hubungan manusia yang saling membutuhkan." },
+            { kategori: "B. Makna Sila-Sila", q: "Pohon Beringin sebagai simbol sila ketiga Pancasila memiliki makna...", o: ["A. Tempat berteduh dan berlindung bagi seluruh rakyat Indonesia", "B. Hasil kekayaan hutan Indonesia yang melimpah", "C. Keagungan dan keturunan raja-raja Nusantara", "D. Kekuatan ekonomi Indonesia yang besar", "E. Batas wilayah kedaulatan NKRI"], a: 0, p: "Pohon beringin bermakna tempat berteduh/berlindung." },
+            { kategori: "B. Makna Sila-Sila", q: "Kepala Banteng dijadikan simbol sila keempat karena banteng merupakan...", o: ["A. Hewan sosial yang suka berkumpul untuk bermusyawarah", "B. Hewan terkuat di wilayah kepulauan Indonesia", "C. Lambang keberanian melanggar aturan", "D. Makanan pokok masyarakat Indonesia", "E. Hewan langka yang dilindungi undang-undang"], a: 0, p: "Banteng melambangkan hewan sosial yang suka berkumpul." },
+            { kategori: "B. Makna Sila-Sila", q: "Padi dan Kapas pada sila kelima melambangkan...", o: ["A. Kebutuhan dasar manusia berupa pangan dan sandang", "B. Kemakmuran para petani di pedesaan", "C. Keragaman flora yang ada di Nusantara", "D. Keindahan alam tanah air Indonesia", "E. Bahan baku utama industri nasional"], a: 0, p: "Padi dan kapas adalah simbol pangan dan sandang." },
+            { kategori: "B. Makna Sila-Sila", q: "Sila Persatuan Indonesia mengandung nilai bahwa...", o: ["A. Mengutamakan kepentingan bangsa di atas kepentingan pribadi/golongan", "B. Menghapus semua perbedaan budaya lokal", "C. Menolak masuknya kebudayaan asing yang positif", "D. Memaksa seluruh suku menggunakan satu adat istiadat", "E. Mengisolasi bangsa Indonesia dari hubungan luar negeri"], a: 0, p: "Menempatkan persatuan bangsa di atas golongan." },
+            { kategori: "B. Makna Sila-Sila", q: "Makna kata 'Beradab' dalam sila kedua Pancasila menekankan pada...", o: ["A. Sikap dan perilaku yang sesuai dengan nilai moral dan norma", "B. Tingkat pendidikan formal yang tinggi", "C. Kemampuan menguasai teknologi modern", "D. Kepatuhan mutlak tanpa kritik pada pimpinan", "E. Kekayaan materi yang dimiliki seseorang"], a: 0, p: "Beradab bermakna sesuai nilai moral dan kesopanan." },
+            { kategori: "B. Makna Sila-Sila", q: "Sila 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan' menegaskan bahwa...", o: ["A. Kekuasaan tertinggi ada di tangan rakyat melalui musyawarah", "B. Segala keputusan diambil berdasarkan suara terbanyak saja", "C. Pemimpin berhak menentukan aturan tanpa persetujuan rakyat", "D. Rakyat tidak perlu terlibat dalam urusan pemerintahan", "E. Keputusan diambil hanya oleh pejabat senior"], a: 0, p: "Kedaulatan rakyat dijalankan melalui musyawarah." },
+            { kategori: "B. Makna Sila-Sila", q: "Hakekat keadilan dalam sila kelima Pancasila adalah keadilan yang bersifat...", o: ["A. Komutatif, distributif, dan legal bagi seluruh rakyat", "B. Khusus bagi kelompok yang membayar pajak besar", "C. Berlaku hanya saat kondisi darurat perang", "D. Ditentukan sepenuhnya oleh pemerintah pusat", "E. Hanya berlaku bagi warga negara dewasa"], a: 0, p: "Keadilan menyeluruh bagi seluruh rakyat Indonesia." },
+            { kategori: "B. Makna Sila-Sila", q: "Nilai luhur yang terkandung dalam sila 'Persatuan Indonesia' adalah...", o: ["A. Cinta tanah air dan rela berkorban", "B. Menghimpun kekayaan pribadi sebanyaknya", "C. Mengutamakan kebebasan individu", "D. Mengkritik tanpa memberikan solusi", "E. Menolak kerjasama Internasional"], a: 0, p: "Cinta tanah air dan rela berkorban demi bangsa." },
+
+            // ==================== C. PANCASILA DALAM TINDAKAN (12 SOAL) ====================
+            { kategori: "C. Pancasila dalam Tindakan", q: "Berikut ini yang merupakan contoh penerapan sila pertama di lingkungan sekolah adalah...", o: ["A. Menghormati teman yang sedang menjalankan ibadah puasa", "B. Membagi tugas piket kelas secara adil", "C. Mengikuti upacara bendera dengan tertib", "D. Melakukan musyawarah pemilihan ketua OSIS", "E. Menjenguk teman kelas yang sedang sakit"], a: 0, p: "Sila 1 berkaitan dengan toleransi beribadah." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Sikap membela kebenaran dan keadilan tanpa membeda-bedakan latar belakang merupakan tindakan...", o: ["A. Pengamalan sila kedua", "B. Pengamalan sila pertama", "C. Pengamalan sila ketiga", "D. Pengamalan sila keempat", "E. Pengamalan sila kelima"], a: 0, p: "Sila 2 menekankan tenggang rasa dan kemanusiaan." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Bangga menggunakan produk-produk buatan dalam negeri merupakan wujud nyata pengamalan sila...", o: ["A. Ketiga", "B. Pertama", "C. Kedua", "D. Keempat", "E. Kelima"], a: 0, p: "Cinta produk dalam negeri adalah wujud sila 3." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Apabila terjadi perbedaan pendapat saat diskusi kelompok, tindakan yang sesuai dengan sila keempat adalah...", o: ["A. Musyawarah untuk mencapai mufakat dengan kepala dingin", "B. Memaksa anggota lain mengikuti pendapat pribadi", "C. Meninggalkan ruang diskusi karena marah", "D. Menolak mendengarkan usulan orang lain", "E. Memutus hasil diskusi secara sepihak"], a: 0, p: "Sila 4 mengutamakan musyawarah mufakat." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Tidak bersikap boros dan suka menghargai hasil karya orang lain merupakan contoh tindakan sila...", o: ["A. Kelima", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Keempat"], a: 0, p: "Hemat dan menghargai karya adalah nilai sila 5." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Tindakan gotong royong membersihkan saluran air desa merupakan pengamalan sila...", o: ["A. Ketiga dan Kelima", "B. Pertama saja", "C. Kedua saja", "D. Keempat saja", "E. Tidak sesuai Pancasila"], a: 0, p: "Gotong royong mewujudkan persatuan dan keadilan." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Menghindari perundungan (bullying) kepada sesama siswa di sekolah adalah bentuk nyata penerapan sila...", o: ["A. Kedua", "B. Pertama", "C. Ketiga", "D. Keempat", "E. Kelima"], a: 0, p: "Menghormati hak asasi sesama adalah sila 2." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Menerima dan melaksanakan hasil keputusan musyawarah dengan rasa tanggung jawab merupakan pengamalan sila...", o: ["A. Keempat", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Kelima"], a: 0, p: "Menjalankan hasil musyawarah adalah wujud sila 4." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Memberikan kesempatan yang sama kepada setiap anggota kelompok untuk berpendapat sesuai dengan sila...", o: ["A. Keempat", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Kelima"], a: 0, p: "Menghargai pendapat adalah prinsip sila 4." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Sikap tidak pilih kasih dalam berteman di lingkungan sekolah merupakan pengamalan sila...", o: ["A. Keadilan sosial dan kemanusiaan", "B. Ketuhanan Yang Maha Esa", "C. Persatuan saja", "D. Kebebasan berpendapat", "E. Hak asasi pemilu"], a: 0, p: "Sikap adil tidak membeda-bedakan teman." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Menjaga keseimbangan antara hak dan kewajiban merupakan sikap yang mencerminkan sila...", o: ["A. Kelima", "B. Pertama", "C. Kedua", "D. Ketiga", "E. Keempat"], a: 0, p: "Keseimbangan hak & kewajiban adalah sila 5." },
+            { kategori: "C. Pancasila dalam Tindakan", q: "Menjenguk teman yang sedang dirawat di rumah sakit merupakan contoh pengamalan sila ke-2 karena...", o: ["A. Menunjukkan empati dan kepedulian terhadap sesama manusia", "B. Merupakan kewajiban undang-undang sekolah", "C. Diharuskan oleh ajaran agama tertentu saja", "D. Dapat meningkatkan nilai akademik di sekolah", "E. Merupakan wujud kebebasan berpendapat"], a: 0, p: "Menunjukkan rasa kepedulian kemanusiaan." },
+
+            // ==================== D. PANCASILA SEBAGAI IDEOLOGI NEGARA (13 SOAL) ====================
+            { kategori: "D. Ideologi Negara", q: "Pancasila kedudukannya ditetapkan sebagai ideologi negara Indonesia, yang berarti...", o: ["A. Landasan dan pedoman hidup dalam berbangsa dan bernegara", "B. Aturan hukum sementara sebelum ada undang-undang baru", "C. Hiasan dokumen kenegaraan semata", "D. Dokumen sejarah yang tidak berlaku lagi", "E. Pandangan pribadi para pendiri bangsa saja"], a: 0, p: "Ideologi negara menjadi pedoman kehidupan berbangsa." },
+            { kategori: "D. Ideologi Negara", q: "Ciri utama Pancasila sebagai ideologi terbuka adalah...", o: ["A. Nilai-nilainya mampu menyesuaikan diri dengan perkembangan zaman", "B. Menerima seluruh budaya asing tanpa dipilah", "C. Nilai dasarnya dapat diubah setiap pergantian presiden", "D. Dibuat berdasarkan kesepakatan negara luar", "E. Tidak memiliki batasan hukum yang jelas"], a: 0, p: "Ideologi terbuka dapat merespons perkembangan zaman." },
+            { kategori: "D. Ideologi Negara", q: "Dimensi Realitas dalam ideologi Pancasila bermakna...", o: ["A. Nilai dasar Pancasila bersumber dan hidup dalam masyarakat", "B. Pancasila berisi khayalan masa depan bangsa", "C. Pancasila hanya ada dalam teori buku pelajaran", "D. Pancasila meniru ideologi negara maju", "E. Pancasila tidak bisa diterapkan di dunia nyata"], a: 0, p: "Dimensi realitas = bersumber dari nyata masyarakat." },
+            { kategori: "D. Ideologi Negara", q: "Dimensi Idealitas dalam Pancasila sebagai ideologi negara mengandung arti...", o: ["A. Mengandung cita-cita yang ingin dicapai dalam berbagai bidang kehidupan", "B. Nilainya sudah sempurna sehingga tidak perlu bekerja keras", "C. Hanya bisa terwujud jika bantuan asing masuk", "D. Berisi aturan teknis pemerintahan sehari-hari", "E. Tidak memiliki target masa depan"], a: 0, p: "Dimensi idealitas memuat cita-cita masa depan." },
+            { kategori: "D. Ideologi Negara", q: "Dimensi Fleksibilitas Pancasila menunjukkan bahwa Pancasila...", o: ["A. Memiliki keluwesan untuk merespons dinamika perkembangan zaman", "B. Bebas ditafsirkan tanpa aturan hukum", "C. Dapat diganti dengan ideologi lain jika mendesak", "D. Mengikuti seluruh kehendak ideologi liberal", "E. Tidak memiliki pendirian yang tetap"], a: 0, p: "Fleksibilitas = luwes merespons zaman." },
+            { kategori: "D. Ideologi Negara", q: "Kedudukan Pancasila sebagai 'Sumber dari Segala Sumber Hukum Negara' berarti...", o: ["A. Seluruh peraturan perundang-undangan tidak boleh bertentangan dengan Pancasila", "B. Pancasila adalah satu-satunya hukum yang berlaku", "C. Hakim boleh mengabaikan undang-undang dan hanya memakai Pancasila", "D. Pancasila dibuat oleh lembaga hukum internasional", "E. Hukum adat tidak lagi diakui di Indonesia"], a: 0, p: "Semua hukum harus bersumber dari nilai Pancasila." },
+            { kategori: "D. Ideologi Negara", q: "Nilai Dasar dalam Pancasila adalah nilai yang bersifat...", o: ["A. Tetap, abstrak, dan tidak berubah sepanjang masa", "B. Berubah-ubah sesuai kondisi ekonomi", "C. Berbeda di tiap provinsi Indonesia", "D. Hanya berlaku untuk pejabat negara", "E. Diatur oleh peraturan pemerintah"], a: 0, p: "Nilai dasar bersifat tetap dan hakiki." },
+            { kategori: "D. Ideologi Negara", q: "Penjabaran nilai-nilai Pancasila dalam UUD 1945 dan Peraturan Perundang-undangan dinamakan nilai...", o: ["A. Instrumental", "B. Dasar", "C. Praksis", "D. Vital", "E. Material"], a: 0, p: "Nilai instrumental berupa norma hukum/undang-undang." },
+            { kategori: "D. Ideologi Negara", q: "Realisasi nilai-nilai Pancasila dalam tindakan nyata kehidupan sehari-hari disebut nilai...", o: ["A. Praksis", "B. Dasar", "C. Instrumental", "D. Teoretis", "E. Doktrinal"], a: 0, p: "Nilai praksis adalah realisasi nyata sehari-hari." },
+            { kategori: "D. Ideologi Negara", q: "Perbedaan mendasar antara ideologi Pancasila dengan ideologi Liberalisme adalah...", o: ["A. Pancasila menyeimbangkan kepentingan individu dan masyarakat", "B. Liberalisme mengutamakan kepentingan keagamaan", "C. Pancasila melarang kepemilikan harta pribadi", "D. Liberalisme menolak kebebasan berpendapat", "E. Pancasila menganut sistem otoriter"], a: 0, p: "Pancasila seimbang antara individu dan sosial." },
+            { kategori: "D. Ideologi Negara", q: "Perbedaan utama Pancasila dengan ideologi Komunisme adalah Pancasila...", o: ["A. Mengakui keberadaan Tuhan dan menolak paham atheisme", "B. Menolak gotong royong dalam masyarakat", "C. Tidak mengakui adanya hak asasi manusia", "D. Menghendaki pertentangan antar kelas sosial", "E. Melarang kegiatan perekonomian warga"], a: 0, p: "Pancasila berlandaskan Ketuhanan, Komunisme atheis." },
+            { kategori: "D. Ideologi Negara", q: "Salah satu fungsi utama Pancasila sebagai ideologi negara adalah...", o: ["A. Mempersatukan bangsa dan memberi arah mencapai tujuan nasional", "B. Membatasi perdagangan antar daerah", "C. Menentukan harga kebutuhan pokok di pasar", "D. Mengganti kebudayaan daerah dengan budaya nasional", "E. Membuka wilayah tanpa batas negara"], a: 0, p: "Fungsi ideologi = pemersatu dan pemberi arah bangsa." },
+            { kategori: "D. Ideologi Negara", q: "Batas-batas terbuka ideologi Pancasila adalah sebagai berikut, KECUALI...", o: ["A. Membuka diri terhadap paham paham atheisme dan komunisme", "B. Mencegah paham paham radikal berkembang", "C. Konsistensi terhadap nilai dasar Pancasila", "D. Larangan terhadap ideologi Marxisme", "E. Menciptakan norma baru melalui konsensus"], a: 0, p: "Ideologi Pancasila menolak paham atheisme/komunisme." }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E untuk tiap soal secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Pendidikan Pancasila";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

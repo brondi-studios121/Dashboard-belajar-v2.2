@@ -22,11 +22,11 @@ const subjects = [
         available: true 
     },
     { 
-        id: 'bing', 
+        id: 'inggris', 
         name: 'BING (Bahasa Inggris)', 
         icon: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`, 
         desc: 'English Literacy & Grammar', 
-        available: false 
+        available: true 
     },
     { 
         id: 'bjawa', 
@@ -92,11 +92,11 @@ const subjects = [
         available: false 
     },
     { 
-        id: 'ppkn', 
-        name: 'PPKN', 
+        id: 'pancasila', 
+        name: 'PANCASILA', 
         icon: `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`, 
         desc: 'Pendidikan Pancasila & Kewarganegaraan', 
-        available: false 
+        available: true
     },
     { 
         id: 'pvs', 

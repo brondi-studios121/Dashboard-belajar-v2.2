@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Bahasa Inggris - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Bahasa Inggris</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan di bawah ini berdasarkan kisi-kisi materi Bahasa Inggris.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="15" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ Synonyms (Purpose, Create, Agree)</div>
+                        <div>✓ Opposites / Antonyms (Useful, Polite)</div>
+                        <div>✓ Subject Questions (Who, What, Which)</div>
+                        <div>✓ Agreeing & Disagreeing Expressions</div>
+                        <div>✓ Asking, Giving & Stating Opinion</div>
+                        <div>✓ Caption: Definition, Function, Structure & Characteristics</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: Bahasa Inggris</span>
+                    <span id="progressText">Soal 1 dari 15</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian tingkat pemahaman materi Bahasa Inggris.</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA BAHASA INGGRIS (50 SOAL SEIMBANG & PENJELASAN RINGKAS) -->
+    <script>
+        const bankSoal = [
+            // ==================== 1. SYNONYMS (7 SOAL) ====================
+            { kategori: "Synonym", q: "What is the synonym of 'Purpose'?", o: ["A. Aim", "B. Result", "C. Cause", "D. Origin", "E. Effect"], a: 0, p: "Purpose = Aim (Tujuan)." },
+            { kategori: "Synonym", q: "The word 'Aim' in a text is synonymous with...", o: ["A. Purpose", "B. Reason", "C. Action", "D. Option", "E. Result"], a: 0, p: "Aim = Purpose (Tujuan)." },
+            { kategori: "Synonym", q: "What is the synonym of 'Create'?", o: ["A. Destroy", "B. Make", "C. Hide", "D. Remove", "E. Break"], a: 1, p: "Create = Make (Membuat)." },
+            { kategori: "Synonym", q: "In the sentence 'We need to create a caption', the word 'create' can be replaced with...", o: ["A. Make", "B. Copy", "C. Read", "D. Delete", "E. Search"], a: 0, p: "Create bersinonim dengan Make." },
+            { kategori: "Synonym", q: "What is the synonym of 'Agree'?", o: ["A. Concur", "B. Deny", "C. Refuse", "D. Oppose", "E. Reject"], a: 0, p: "Agree = Concur (Setuju)." },
+            { kategori: "Synonym", q: "Which word has a similar meaning to 'Agree'?", o: ["A. Consent", "B. Dislike", "C. Conflict", "D. Cancel", "E. Avoid"], a: 0, p: "Agree bersinonim dengan Consent/Concur." },
+            { kategori: "Synonym", q: "Select the word that means the same as 'Purpose':", o: ["A. Goal / Aim", "B. Mistake", "C. Problem", "D. Solution", "E. Process"], a: 0, p: "Purpose bermakna sama dengan Aim/Goal." },
+
+            // ==================== 2. OPPOSITES / ANTONYMS (7 SOAL) ====================
+            { kategori: "Opposite", q: "What is the opposite of 'Useful'?", o: ["A. Helpful", "B. Unuseful", "C. Important", "D. Valuable", "E. Suitable"], a: 1, p: "Useful ✕ Unuseful / Useless." },
+            { kategori: "Opposite", q: "The antonym of 'Useful' is...", o: ["A. Useless", "B. Effective", "C. Bright", "D. Clever", "E. Strong"], a: 0, p: "Useful ✕ Useless." },
+            { kategori: "Opposite", q: "What is the opposite of 'Polite'?", o: ["A. Kind", "B. Rude", "C. Gentle", "D. Honest", "E. Humble"], a: 1, p: "Polite (Sopan) ✕ Rude (Kasar)." },
+            { kategori: "Opposite", q: "The word 'Rude' is the opposite of...", o: ["A. Polite", "B. Mean", "C. Angry", "D. Loud", "E. Lazy"], a: 0, p: "Rude ✕ Polite." },
+            { kategori: "Opposite", q: "A good caption should not be 'rude'. 'Rude' is the opposite of...", o: ["A. Polite", "B. Bad", "C. Dark", "D. Hard", "E. Slow"], a: 0, p: "Rude ✕ Polite." },
+            { kategori: "Opposite", q: "If a tool is not 'useful', it is...", o: ["A. Unuseful", "B. Useful", "C. Active", "D. Ready", "E. Fast"], a: 0, p: "Lawan Useful adalah Unuseful." },
+            { kategori: "Opposite", q: "Choose the correct antonym pair:", o: ["A. Polite - Rude", "B. Purpose - Aim", "C. Create - Make", "D. Agree - Concur", "E. Fast - Quick"], a: 0, p: "Polite & Rude merupakan pasangan lawan kata." },
+
+            // ==================== 3. SUBJECT QUESTIONS (8 SOAL) ====================
+            { kategori: "Subject Question", q: "Which sentence is a Subject Question?", o: ["A. Who wants to see the movie?", "B. Where did you see the movie?", "C. When will the movie start?", "D. Why do you like the movie?", "E. How was the movie?"], a: 0, p: "Menanyakan subjek pelaku secara langsung." },
+            { kategori: "Subject Question", q: "Identify the Subject Question below:", o: ["A. What caused the trouble?", "B. What did you do about the trouble?", "C. Why was there trouble?", "D. Where did the trouble happen?", "E. How did you fix the trouble?"], a: 0, p: "Menanyakan subjek penyebab masalah." },
+            { kategori: "Subject Question", q: "Which of these is a Subject Question asking about books?", o: ["A. Which books inspire you?", "B. Which books did you buy?", "C. Where are the books?", "D. Why do you read books?", "E. How many books do you have?"], a: 0, p: "Menanyakan subjek buku yang menginspirasi." },
+            { kategori: "Subject Question", q: "In 'Who wants to see the movie?', what is the question asking for?", o: ["A. The Subject", "B. The Location", "C. The Time", "D. The Reason", "E. The Method"], a: 0, p: "Menanyakan subjek/pelaku aksi." },
+            { kategori: "Subject Question", q: "Which question asks directly for the subject that caused an event?", o: ["A. What caused the trouble?", "B. Did you cause the trouble?", "C. Who did you blame?", "D. When did it happen?", "E. How did it end?"], a: 0, p: "Menanyakan subjek utama (What caused)." },
+            { kategori: "Subject Question", q: "Complete the Subject Question: '_______ wants to see the movie?'", o: ["A. Who", "B. Whom", "C. Whose", "D. Where", "E. Why"], a: 0, p: "Who digunakan untuk menanyakan subjek orang." },
+            { kategori: "Subject Question", q: "Subject questions do NOT require...", o: ["A. Auxiliary verb before the subject", "B. A main verb", "C. A question mark", "D. A question word", "E. Proper punctuation"], a: 0, p: "Subject question langsung diikuti kata kerja tanpa kata bantu di depan subjek." },
+            { kategori: "Subject Question", q: "Which question is framed as a Subject Question?", o: ["A. Which books inspire you?", "B. When did you read?", "C. Why do you study?", "D. Where is the library?", "E. Who did you call?"], a: 0, p: "Which books inspire you menanyakan subjek." },
+
+            // ==================== 4. ASKING, GIVING & STATING OPINION (7 SOAL) ====================
+            { kategori: "Asking Opinion", q: "Which phrase is used to ASK for an opinion?", o: ["A. What do you think about...?", "B. In my opinion...", "C. I strongly believe...", "D. I agree with that", "E. That's wrong"], a: 0, p: "Ungkapan menanyakan pendapat." },
+            { kategori: "Asking Opinion", q: "Alex: '_______ of this caption?' / Bima: 'It is very meaningful.'", o: ["A. What do you think", "B. Where is", "C. Who made", "D. Why is", "E. How many"], a: 0, p: "What do you think = menanyakan pendapat." },
+            { kategori: "Giving Opinion", q: "Which phrase is used to GIVE an opinion?", o: ["A. In my opinion...", "B. What is your view?", "C. Do you agree?", "D. Who are you?", "E. Where are you?"], a: 0, p: "In my opinion = menyampaikan pendapat." },
+            { kategori: "Stating Opinion", q: "To STATE an opinion clearly, you can start with...", o: ["A. I believe that...", "B. Please listen", "C. Excuse me", "D. Thank you", "E. Good morning"], a: 0, p: "I believe that = menyatakan keyakinan/opini." },
+            { kategori: "Giving Opinion", q: "'From my point of view, the image is too blurry.' This sentence is...", o: ["A. Giving an opinion", "B. Asking a question", "C. Disagreeing politely", "D. Giving a command", "E. Expressing greeting"], a: 0, p: "Merupakan penyampaian opini pribadi." },
+            { kategori: "Asking Opinion", q: "How do you ask a friend's view on a photo?", o: ["A. What's your opinion on this photo?", "B. Can you take a photo?", "C. Where is the camera?", "D. Who is in the photo?", "E. When was it taken?"], a: 0, p: "Ungkapan menanyakan pandangan/opini." },
+            { kategori: "Giving Opinion", q: "Which of the following is NOT an expression of giving opinion?", o: ["A. Could you tell me the time?", "B. I feel that...", "C. In my view...", "D. Personally, I think...", "E. As far as I'm concerned..."], a: 0, p: "Bukan ungkapan memberikan opini." },
+
+            // ==================== 5. AGREEING & DISAGREEING (7 SOAL) ====================
+            { kategori: "Agreeing", q: "Which sentence expresses AGREEING?", o: ["A. I totally agree with you", "B. I don't think so", "C. I completely disagree", "D. That is incorrect", "E. I doubt it"], a: 0, p: "Ungkapan persetujuan penuh." },
+            { kategori: "Disagreeing", q: "Which sentence expresses DISAGREEING?", o: ["A. I'm afraid I disagree", "B. You are absolutely right", "C. That's so true", "D. Exactly!", "E. I feel the same"], a: 0, p: "Ungkapan ketidaksetujuan secara sopan." },
+            { kategori: "Agreeing", q: "A: 'This caption is very clear.' / B: '_______. I understood it immediately.'", o: ["A. I couldn't agree more", "B. I disagree", "C. No way", "D. That's wrong", "E. I don't buy it"], a: 0, p: "Menyatakan sangat setuju." },
+            { kategori: "Disagreeing", q: "A: 'The picture needs more color.' / B: '_______. It looks perfect as it is.'", o: ["A. I disagree with you", "B. I agree", "C. Exactly", "D. You're right", "E. That's true"], a: 0, p: "Menyatakan ketidaksetujuan." },
+            { kategori: "Agreeing", q: "'No doubt about it' is an expression used for...", o: ["A. Agreement", "B. Disagreement", "C. Asking direction", "D. Greeting", "E. Farewell"], a: 0, p: "Digunakan untuk menyetujui tanpa ragu." },
+            { kategori: "Disagreeing", q: "'I see your point, but...' expresses...", o: ["A. Polite disagreement", "B. Full agreement", "C. Giving command", "D. Asking help", "E. Apologizing"], a: 0, p: "Sanggahan/ketidaksetujuan sopan." },
+            { kategori: "Agreeing", q: "Which phrase means you completely share the same opinion?", o: ["A. You can say that again!", "B. I'm not sure about that", "C. Nonsense", "D. I doubt it", "E. Are you kidding?"], a: 0, p: "You can say that again = Sangat setuju." },
+
+            // ==================== 6. CAPTION DEFINITION & FUNCTION (7 SOAL) ====================
+            { kategori: "Caption - Definition", q: "What is a Caption?", o: ["A. A brief text explaining an accompanying image", "B. A long narrative story", "C. A list of ingredients", "D. A song lyric", "E. A private message"], a: 0, p: "Definisi singkat teks caption." },
+            { kategori: "Caption - Definition", q: "Where do we usually find a caption?", o: ["A. Below or beside a photo/illustration", "B. At the back of a textbook cover", "C. Inside a dictionary definition only", "D. On a blank piece of paper", "E. In an audio recording"], a: 0, p: "Letak posisi caption pada gambar/foto." },
+            { kategori: "Caption - Social Function", q: "What is the primary social function of a caption?", o: ["A. To provide context and information about a picture", "B. To sell products online", "C. To entertain readers with fairy tales", "D. To give driving directions", "E. To display math formulas"], a: 0, p: "Fungsi utama memberikan penjelasan gambar." },
+            { kategori: "Caption - Social Function", q: "Why do writers include captions with photographs?", o: ["A. To help readers understand what is happening in the photo", "B. To make the page look colorful", "C. To hide the photo's meaning", "D. To fill up empty space", "E. To confuse the audience"], a: 0, p: "Membantu pembaca memahami konteks foto." },
+            { kategori: "Caption - Social Function", q: "A caption helps to answer which basic information about an image?", o: ["A. Who, What, Where, When, and Why", "B. How much, How long, How far", "C. Alphabet A to Z", "D. True or False options", "E. Chemical formulas"], a: 0, p: "Menjawab pertanyaan dasar 5W1H gambar." },
+            { kategori: "Caption - Definition", q: "Without a caption, a reader might...", o: ["A. Misinterpret the context of the picture", "B. Read the book faster", "C. Instantly know all details", "D. Understand the photographer's age", "E. Draw a new photo"], a: 0, p: "Risiko salah tafsir tanpa caption." },
+            { kategori: "Caption - Social Function", q: "What is the main function of news captions?", o: ["A. To inform factual details accurately", "B. To persuade people to vote", "C. To tell a joke", "D. To write poetry", "E. To advertise goods"], a: 0, p: "Menyampaikan informasi faktual yang akurat." },
+
+            // ==================== 7. CAPTION STRUCTURE & CHARACTERISTICS (7 SOAL) ====================
+            { kategori: "Caption - Generic Structure", q: "Which of the following is part of the Generic Structure of a caption?", o: ["A. Title, Lead, and Credit Line", "B. Orientation, Complication, Resolution", "C. Thesis, Arguments, Conclusion", "D. Goal, Materials, Steps", "E. Stanza, Rhyme, Rhythm"], a: 0, p: "Struktur standar caption." },
+            { kategori: "Caption - Generic Structure", q: "The line that identifies who took the photograph is called...", o: ["A. Credit Line", "B. Headline", "C. Subtitle", "D. Summary", "E. Footer"], a: 0, p: "Credit line mencantumkan nama fotografer/sumber." },
+            { kategori: "Caption - Characteristic", q: "Which is a key characteristic of a good caption?", o: ["A. Clear, concise, and informative", "B. Extremely long and detailed", "C. Written in slang language", "D. Contains fake news", "E. Ignores the photo content"], a: 0, p: "Ciri caption baik: Jelas, padat, informatif." },
+            { kategori: "Caption - Characteristic", q: "What should you AVOID when writing a caption?", o: ["A. Stating obvious facts that anyone can see in the photo", "B. Including names of people in the photo", "C. Mentioning the location", "D. Using correct grammar", "E. Keeping it brief"], a: 0, p: "Hindari menyebutkan hal yang terlalu kentara." },
+            { kategori: "Caption - Characteristic", q: "Which tense is most commonly used in the first sentence of a caption?", o: ["A. Simple Present Tense", "B. Past Perfect Tense", "C. Future Continuous Tense", "D. Past Future Tense", "E. Present Perfect Continuous"], a: 0, p: "Kalimat pertama biasa menggunakan Present Tense." },
+            { kategori: "Caption - Characteristic", q: "A good caption must be accurate. This means...", o: ["A. All facts, names, and spellings are correct", "B. It uses complex vocabulary", "C. It is written in foreign languages", "D. It includes opinions only", "E. It is very long"], a: 0, p: "Akurat = semua fakta dan ejaan benar." },
+            { kategori: "Caption - Generic Structure", q: "The main heading at the top of a structured caption is called...", o: ["A. Title", "B. Footnote", "C. Appendix", "D. Chapter", "E. Index"], a: 0, p: "Judul utama dinamakan Title." }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E untuk tiap soal secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Bahasa Inggris";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
