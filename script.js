@@ -57,18 +57,18 @@ const subjects = [
         available: true 
     },
     { 
-        id: 'mtk', 
+        id: 'matematika', 
         name: 'MTK (Matematika)', 
         icon: `<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>`, 
         desc: 'Logika, Aljabar & Geometri', 
-        available: false 
+        available: true
     },
     { 
         id: 'opkom', 
         name: 'OPKOM', 
         icon: `<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`, 
         desc: 'Operasi & Sistem Komputer', 
-        available: false 
+        available: true
     },
     { 
         id: 'pjok', 

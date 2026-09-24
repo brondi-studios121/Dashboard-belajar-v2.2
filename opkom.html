@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis OPDOM - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Operasi Komputer (OPKOM)</h2>
+                <p class="setup-subtitle">Atur jumlah soal yang ingin kamu kerjakan berdasarkan kisi-kisi Perangkat Keras/Lunak, Sistem Operasi, Generasi Komputer & Shortcut Keyboard.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ A. Konsep Dasar Sistem Komputer (Hardware, Software, Brainware)</div>
+                        <div>✓ B. Perangkat Input, Process, Output & Storage Device</div>
+                        <div>✓ C. Sejarah, Klasifikasi & Generasi Komputer</div>
+                        <div>✓ D. Sistem Operasi (OS), Manajemen File & Shortcut Sistem Windows</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: OPDOM</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Operasi Komputer (OPKOM).</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA OPKOM (50 SOAL SESUAI KISI-KISI) -->
+    <script>
+        const bankSoal = [
+            { 
+                kategori: "Konsep Dasar Komputer", 
+                q: "Tiga komponen utama dalam sistem komputer yang saling berhubungan satu sama lain adalah...", 
+                o: [
+                    "A. Hardware, Software, dan Brainware", 
+                    "B. Input, Process, dan Output", 
+                    "C. CPU, RAM, dan Harddisk", 
+                    "D. Windows, Linux, dan macOS", 
+                    "E. Monitor, Keyboard, dan Mouse"
+                ], 
+                a: 0, 
+                p: "Sistem komputer dibangun oleh tiga elemen dasar wajib: Hardware (perangkat keras), Software (perangkat lunak), dan Brainware (pengguna)." 
+            },
+            { 
+                kategori: "Hardware Komputer", 
+                q: "Perangkat keras komputer yang berwujud fisik dan dapat disentuh secara langsung dinamakan...", 
+                o: [
+                    "A. Hardware", 
+                    "B. Software", 
+                    "C. Brainware", 
+                    "D. Freeware", 
+                    "E. Malware"
+                ], 
+                a: 0, 
+                p: "Hardware adalah komponen fisik dari komputer yang dapat dilihat dan disentuh secara nyata." 
+            },
+            { 
+                kategori: "Brainware", 
+                q: "Pengguna atau manusia yang bertugas mengoperasikan dan mengendalikan sistem komputer disebut...", 
+                o: [
+                    "A. Brainware", 
+                    "B. Hardware", 
+                    "C. Software", 
+                    "D. Firmware", 
+                    "E. Shareware"
+                ], 
+                a: 0, 
+                p: "Brainware merujuk pada personil manusia yang mengoperasikan, mengatur, atau merancang sistem komputer." 
+            },
+            { 
+                kategori: "Perangkat Input", 
+                q: "Berikut ini yang termasuk dalam kelompok Perangkat Masukan (Input Device) adalah...", 
+                o: [
+                    "A. Keyboard, Mouse, dan Scanner", 
+                    "B. Monitor, Printer, dan Speaker", 
+                    "C. CPU, RAM, dan Motherboard", 
+                    "D. Harddisk, Flashdisk, dan SSD", 
+                    "E. Proyektor, Plotter, dan Headphones"
+                ], 
+                a: 0, 
+                p: "Keyboard, Mouse, dan Scanner bertugas memasukkan perintah atau data mentah ke dalam komputer." 
+            },
+            { 
+                kategori: "Perangkat Input", 
+                q: "Perangkat input yang digunakan untuk membaca kode batang/baris pada kemasan barang belanjaan adalah...", 
+                o: [
+                    "A. Barcode Scanner", 
+                    "B. Flatbed Scanner", 
+                    "C. Touchpad", 
+                    "D. Webcam", 
+                    "E. Optical Mark Reader"
+                ], 
+                a: 0, 
+                p: "Barcode Scanner menangkap dan memindai susunan garis kode barang untuk dikonversi menjadi data teks/angka pada sistem kasir." 
+            },
+            { 
+                kategori: "Perangkat Proses", 
+                q: "Komponen utama pemroses data yang sering disebut sebagai 'Otak' dari sebuah komputer adalah...", 
+                o: [
+                    "A. Central Processing Unit (CPU)", 
+                    "B. Random Access Memory (RAM)", 
+                    "C. Hard Disk Drive (HDD)", 
+                    "D. Power Supply Unit (PSU)", 
+                    "E. Video Graphics Array (VGA)"
+                ], 
+                a: 0, 
+                p: "CPU bertindak sebagai pusat pemrosesan logika, matematika, serta pengendalian seluruh aktivitas instruksi komputer." 
+            },
+            { 
+                kategori: "Hardware Komputer", 
+                q: "Papan sirkuit utama tempat menempelnya berbagai komponen penting seperti CPU, RAM, dan kartu grafis adalah...", 
+                o: [
+                    "A. Motherboard / Mainboard", 
+                    "B. Power Supply Unit", 
+                    "C. Casing Tower", 
+                    "D. Sound Card", 
+                    "E. Heat Sink Fan"
+                ], 
+                a: 0, 
+                p: "Motherboard merupakan papan sirkuit pusat yang menghubungkan seluruh jalur komunikasi antar komponen komputer." 
+            },
+            { 
+                kategori: "Hardware Komputer", 
+                q: "Berikut ini adalah lini merek prosesor (CPU) buatan perusahaan Intel Corporation, yaitu...", 
+                o: [
+                    "A. Core i3, Core i5, dan Core i7", 
+                    "B. Ryzen 3, Ryzen 5, dan Ryzen 7", 
+                    "C. Snapdragon 8 Gen 1 dan Dimensity", 
+                    "D. Apple M1, M2, dan M3", 
+                    "E. Athlon dan Phenom"
+                ], 
+                a: 0, 
+                p: "Seri Core i3, i5, i7, dan i9 merupakan keluarga mikroprosesor populer yang diproduksi oleh Intel." 
+            },
+            { 
+                kategori: "Penyimpanan Utama", 
+                q: "Memori utama komputer yang bersifat sementara (volatile) untuk menampung data saat aplikasi sedang berjalan adalah...", 
+                o: [
+                    "A. RAM (Random Access Memory)", 
+                    "B. ROM (Read Only Memory)", 
+                    "C. HDD (Hard Disk Drive)", 
+                    "D. SSD (Solid State Drive)", 
+                    "E. Flash Memory"
+                ], 
+                a: 0, 
+                p: "RAM bersifat acak dan sementara (volatile), artinya data di dalamnya akan hilang secara otomatis ketika daya listrik mati." 
+            },
+            { 
+                kategori: "Penyimpanan Sekunder", 
+                q: "Media penyimpanan internal berbasis piringan magnetik yang berputar dinamakan...", 
+                o: [
+                    "A. Hard Disk Drive (HDD)", 
+                    "B. Solid State Drive (SSD)", 
+                    "C. Compact Disc (CD)", 
+                    "D. Flashdisk USB", 
+                    "E. SD Card"
+                ], 
+                a: 0, 
+                p: "HDD menggunakan piringan cakram magnetik (platter) yang berputar untuk menyimpan berkas secara permanen." 
+            },
+            { 
+                kategori: "Penyimpanan Sekunder", 
+                q: "Media penyimpanan modern berbasis chip memori flash tanpa komponen bergerak yang jauh lebih cepat dibanding HDD adalah...", 
+                o: [
+                    "A. Solid State Drive (SSD)", 
+                    "B. Floppy Disk", 
+                    "C. Magnetic Tape", 
+                    "D. DVD-ROM", 
+                    "E. Hard Disk External"
+                ], 
+                a: 0, 
+                p: "SSD menggunakan memori flash berbasis semikonduktor tanpa part mekanis sehingga kecepatan baca/tulisnya jauh lebih cepat." 
+            },
+            { 
+                kategori: "Penyimpanan Portabel", 
+                q: "Media penyimpanan portabel yang kecil, fleksibel, dan langsung terhubung melalui port USB dinamakan...", 
+                o: [
+                    "A. Flashdisk / USB Drive", 
+                    "B. RAM Module", 
+                    "C. ROM Chip", 
+                    "D. Internal SSD", 
+                    "E. Motherboard"
+                ], 
+                a: 0, 
+                p: "Flashdisk memanfaatkan port USB dan teknologi flash memory untuk pemindahan berkas antar komputer secara praktis." 
+            },
+            { 
+                kategori: "Penyimpanan Portabel", 
+                q: "Media penyimpanan berukuran sangat kecil yang biasa digunakan pada Smartphone, Kamera digital, atau Drone adalah...", 
+                o: [
+                    "A. Memory Card (MicroSD)", 
+                    "B. Disket 3.5 Inci", 
+                    "C. Compact Disc", 
+                    "D. External HDD", 
+                    "E. Tape Magentik"
+                ], 
+                a: 0, 
+                p: "MicroSD / Kartu memori adalah bentuk fisik penyimpanan flash ringkas yang dirancang untuk perangkat seluler dan kamera." 
+            },
+            { 
+                kategori: "Perangkat Output", 
+                q: "Perangkat keras yang dikategorikan sebagai Output Device bertugas untuk...", 
+                o: [
+                    "A. Menampilkan atau mengeluarkan hasil pemrosesan data", 
+                    "B. Memasukkan data mentah ke dalam memori", 
+                    "C. Mengolah instruksi aritmatika dan logika", 
+                    "D. Menyimpan berkas secara permanen", 
+                    "E. Membagi arus listrik ke seluruh sistem"
+                ], 
+                a: 0, 
+                p: "Output device berfungsi menyampaikan data yang telah diolah oleh CPU ke dalam bentuk visual, suara, atau cetakan fisik." 
+            },
+            { 
+                kategori: "Perangkat Output", 
+                q: "Berikut ini yang merupakan jajaran contoh Perangkat Keluaran (Output Device) adalah...", 
+                o: [
+                    "A. Monitor, Printer, dan Speaker", 
+                    "B. Keyboard, Mouse, dan Microphone", 
+                    "C. CPU, RAM, dan Harddisk", 
+                    "D. Modem, Router, dan Switch", 
+                    "E. Scanner, Barcode, dan Webcam"
+                ], 
+                a: 0, 
+                p: "Monitor (tampilan layar), Printer (cetakan kertas), dan Speaker (keluaran suara) adalah perangkat output." 
+            },
+            { 
+                kategori: "Perangkat Output", 
+                q: "Perangkat keluaran yang berfungsi memproyeksikan tampilan layar komputer ke dinding atau layar lebar adalah...", 
+                o: [
+                    "A. Proyektor LCD / Digital", 
+                    "B. Monitor CRT", 
+                    "C. Plotter Cetak", 
+                    "D. Overhead Projector", 
+                    "E. Digitizer"
+                ], 
+                a: 0, 
+                p: "Proyektor menerima sinyal video keluaran komputer dan memancarkannya ke permukaan datar berukuran besar." 
+            },
+            { 
+                kategori: "Perangkat Jaringan", 
+                q: "Perangkat keras jaringan yang terpasang di komputer untuk menghubungkan kabel LAN dinamakan...", 
+                o: [
+                    "A. Network Interface Card (LAN Card)", 
+                    "B. VGA Card", 
+                    "C. Sound Card", 
+                    "D. TV Tuner Card", 
+                    "E. Capture Card"
+                ], 
+                a: 0, 
+                p: "LAN Card (NIC) menyediakan soket port RJ-45 tempat kabel jaringan ethernet dicolokkan." 
+            },
+            { 
+                kategori: "Perangkat Jaringan", 
+                q: "Perangkat penerima dan pemancar sinyal nirkabel (Wireless) pada komputer atau laptop dinamakan...", 
+                o: [
+                    "A. Wi-Fi Adapter", 
+                    "B. Power Supply Unit", 
+                    "C. Bluetooth Dongle", 
+                    "D. LAN Cable", 
+                    "E. Card Reader"
+                ], 
+                a: 0, 
+                p: "Wi-Fi Adapter memungkinkan komputer terhubung ke jaringan gelombang radio internet nirkabel (WLAN)." 
+            },
+            { 
+                kategori: "Perangkat Jaringan", 
+                q: "Perangkat jaringan yang bertugas mengarahkan dan membagikan lalu lintas data paket internet ke beberapa perangkat adalah...", 
+                o: [
+                    "A. Router Jaringan", 
+                    "B. Harddisk External", 
+                    "C. VGA Card", 
+                    "D. Sound Card", 
+                    "E. UPS"
+                ], 
+                a: 0, 
+                p: "Router menentukan rute lalu lintas paket data dari penyedia layanan internet (ISP) ke perangkat-perangkat klien." 
+            },
+            { 
+                kategori: "Brainware", 
+                q: "Profesi Brainware yang ahli dalam menulis kode instruksi untuk membangun aplikasi komputer dinamakan...", 
+                o: [
+                    "A. Programmer / Developer", 
+                    "B. Computer Operator", 
+                    "C. Database Administrator", 
+                    "D. Network Technician", 
+                    "E. Technical Support"
+                ], 
+                a: 0, 
+                p: "Programmer bertugas merancang dan menulis sintaks bahasa pemrograman untuk menciptakan perangkat lunak." 
+            },
+            { 
+                kategori: "Brainware", 
+                q: "Profesi Brainware yang bertugas menganalisis kebutuhan, merancang alur kerja, dan mendesain arsitektur sistem adalah...", 
+                o: [
+                    "A. System Analyst", 
+                    "B. Data Entry Clerk", 
+                    "C. End User", 
+                    "D. Graphic Designer", 
+                    "E. Web Content Creator"
+                ], 
+                a: 0, 
+                p: "System Analyst bertanggung jawab meneliti masalah dan merancang spesifikasi solusi sistem informasi secara menyeluruh." 
+            },
+            { 
+                kategori: "Generasi Komputer", 
+                q: "Komputer Generasi Pertama (1940-1956) mengandalkan komponen elektronik utama berupa...", 
+                o: [
+                    "A. Tabung Vakum (Vacuum Tube)", 
+                    "B. Transistor Silikon", 
+                    "C. Integrated Circuit (IC)", 
+                    "D. Microprocessor (VLSI)", 
+                    "E. Chip Artificial Intelligence"
+                ], 
+                a: 0, 
+                p: "Komputer generasi awal menggunakan tabung vakum sebagai sakelar elektronik berukuran besar dan cepat panas." 
+            },
+            { 
+                kategori: "Generasi Komputer", 
+                q: "Salah satu contoh komputer terkenal yang dibangun pada era Generasi Pertama adalah...", 
+                o: [
+                    "A. ENIAC dan UNIVAC I", 
+                    "B. IBM System/360", 
+                    "C. Apple II Personal Computer", 
+                    "D. IBM PC 5150", 
+                    "E. Commodore 64"
+                ], 
+                a: 0, 
+                p: "ENIAC (Electronic Numerical Integrator and Computer) adalah salah satu komputer elektronik digital serbaguna pertama di dunia." 
+            },
+            { 
+                kategori: "Generasi Komputer", 
+                q: "Ciri utama komputer Generasi Kedua (1956-1963) adalah menggantikan penggunaan tabung vakum dengan...", 
+                o: [
+                    "A. Transistor", 
+                    "B. Microchip", 
+                    "C. Kabel Serat Optik", 
+                    "D. Dioda Pemancar Cahaya", 
+                    "E. Kawat Tembaga"
+                ], 
+                a: 0, 
+                p: "Transistor ditemukan untuk menggantikan fungsi tabung vakum sehingga ukuran komputer menjadi lebih kecil dan efisien." 
+            },
+            { 
+                kategori: "Generasi Komputer", 
+                q: "Komputer Generasi Ketiga (1964-1971) mengalami peningkatan pesat berkat ditemukannya teknologi...", 
+                o: [
+                    "A. Integrated Circuit (IC)", 
+                    "B. Tabung Vakum", 
+                    "C. Piringan Magnetik raksasa", 
+                    "D. Artificial Intelligence", 
+                    "E. Quantum Processing"
+                ], 
+                a: 0, 
+                p: "Integrated Circuit (IC) menggabungkan ribuan transistor miniatur ke dalam satu chip semikonduktor tunggal." 
+            },
+            { 
+                kategori: "Generasi Komputer", 
+                q: "Komputer Generasi Keempat (1971-sekarang) lahir ditandai dengan ditemukannya komponen...", 
+                o: [
+                    "A. Microprocessor (LSI/VLSI)", 
+                    "B. Tabung Vakum", 
+                    "C. Transistor Tunggal", 
+                    "D. Kartu Plong (Punched Card)", 
+                    "E. Sakelar Mekanik"
+                ], 
+                a: 0, 
+                p: "Mikroprosesor memadukan jutaan hingga miliaran komponen elektronik ke dalam satu keping chip CPU." 
+            },
+            { 
+                kategori: "Generasi Komputer", 
+                q: "Fokus utama dari pengembangan Komputer Generasi Kelima saat ini hingga masa depan adalah penerapan...", 
+                o: [
+                    "A. Kecerdasan Buatan (Artificial Intelligence)", 
+                    "B. Penggunaan Tabung Vakum raksasa", 
+                    "C. Bahasa Mesin tingkat rendah biner", 
+                    "D. Kartu punched card fisik", 
+                    "E. Pengoperasian tanpa listrik"
+                ], 
+                a: 0, 
+                p: "Generasi kelima menekankan pada pemrosesan paralel, komputer kuantum, dan Artificial Intelligence (AI)." 
+            },
+            { 
+                kategori: "Klasifikasi Komputer", 
+                q: "Jenis komputer berukuran sangat besar dan kuat yang digunakan oleh korporasi besar untuk pemrosesan data massal dinamakan...", 
+                o: [
+                    "A. Mainframe Computer", 
+                    "B. Microcomputer / PC", 
+                    "C. Embedded System", 
+                    "D. Personal Digital Assistant", 
+                    "E. Smartwatch"
+                ], 
+                a: 0, 
+                p: "Mainframe digunakan oleh organisasi besar (seperti bank atau instansi pemerintah) untuk memproses lalu lintas data masif." 
+            },
+            { 
+                kategori: "Klasifikasi Komputer", 
+                q: "Komputer dengan kapasitas komputasi tercepat di dunia yang biasa digunakan untuk pemodelan iklim dan riset nuklir adalah...", 
+                o: [
+                    "A. Supercomputer", 
+                    "B. Minicomputer", 
+                    "C. Desktop PC", 
+                    "D. Workstation", 
+                    "E. Netbook"
+                ], 
+                a: 0, 
+                p: "Supercomputer berfokus pada kecepatan kalkulasi matematika tingkat tinggi untuk riset ilmiah kompleks." 
+            },
+            { 
+                kategori: "Penerapan Komputer", 
+                q: "Pemanfaatan sistem komputer untuk proses pembelajaran dan perkuliahan jarak jauh secara elektronik dinamakan...", 
+                o: [
+                    "A. e-Learning", 
+                    "B. e-Commerce", 
+                    "C. e-Banking", 
+                    "D. e-Government", 
+                    "E. e-Mail"
+                ], 
+                a: 0, 
+                p: "e-Learning mencakup segala bentuk media dan teknologi komputer yang digunakan dalam pengajaran dan pelatihan digital." 
+            },
+            { 
+                kategori: "Penerapan Komputer", 
+                q: "Penggunaan fasilitas komputer dan internet untuk transaksi keuangan dan transfer saldo rekening bank dinamakan...", 
+                o: [
+                    "A. e-Banking / Internet Banking", 
+                    "B. e-Learning", 
+                    "C. e-Government", 
+                    "D. e-Office", 
+                    "E. e-Commerce"
+                ], 
+                a: 0, 
+                p: "e-Banking merupakan sistem perbankan elektronik yang memudahkan nasabah bertransaksi via komputer/smartphone." 
+            },
+            { 
+                kategori: "Sistem Operasi", 
+                q: "Perangkat lunak sistem yang bertugas mengelola seluruh hardware, software aplikasi, serta antarmuka pengguna dinamakan...", 
+                o: [
+                    "A. Operating System (OS)", 
+                    "B. Application Software", 
+                    "C. Utility Program", 
+                    "D. Device Driver", 
+                    "E. Programming Language"
+                ], 
+                a: 0, 
+                p: "Sistem Operasi adalah fondasi perangkat lunak dasar yang menjembatani komunikasi pengguna dan perangkat keras." 
+            },
+            { 
+                kategori: "Sistem Operasi", 
+                q: "Berikut ini yang merupakan contoh Sistem Operasi populer untuk perangkat PC/Laptop adalah...", 
+                o: [
+                    "A. Microsoft Windows, macOS, dan Linux", 
+                    "B. Android, iOS, dan Symbian", 
+                    "C. Microsoft Word, Excel, dan PowerPoint", 
+                    "D. Google Chrome, Edge, dan Firefox", 
+                    "E. Photoshop, CorelDraw, dan Illustrator"
+                ], 
+                a: 0, 
+                p: "Windows, macOS, dan Linux merupakan sistem operasi utama yang paling banyak dipakai pada komputer desktop dan laptop." 
+            },
+            { 
+                kategori: "Sistem Operasi", 
+                q: "Sistem operasi seluler terbuka (Open Source) berbasis kernel Linux yang banyak digunakan pada Smartphone adalah...", 
+                o: [
+                    "A. Android", 
+                    "B. iOS", 
+                    "C. Windows Phone", 
+                    "D. BlackBerry OS", 
+                    "E. Symbian"
+                ], 
+                a: 0, 
+                p: "Android dikembangkan oleh Google berbasis kernel Linux untuk platform perangkat bergerak seperti HP dan Tablet." 
+            },
+            { 
+                kategori: "Program Utility", 
+                q: "Perangkat lunak yang berfungsi mendukung pemeliharaan, pembersihan berkas, dan pengamanan sistem komputer dinamakan...", 
+                o: [
+                    "A. Utility Software (seperti Antivirus / Disk Cleaner)", 
+                    "B. Operating System", 
+                    "C. Word Processor", 
+                    "D. Database Management", 
+                    "E. Web Browser"
+                ], 
+                a: 0, 
+                p: "Program Utility menyediakan alat bantu untuk mengoptimalkan, merawat, dan memelihara kinerja sistem komputer." 
+            },
+            { 
+                kategori: "Operasi Komputer", 
+                q: "Proses awal penyalaan komputer dari keadaan mati total hingga masuk ke dalam sistem operasi dinamakan...", 
+                o: [
+                    "A. Booting (Cold Boot)", 
+                    "B. Shut Down", 
+                    "C. Restart", 
+                    "D. Hibernate", 
+                    "E. Sleep Mode"
+                ], 
+                a: 0, 
+                p: "Booting adalah proses pemuatan berkas sistem operasi dari penyimpanan sekunder ke RAM saat komputer dinyalakan." 
+            },
+            { 
+                kategori: "Operasi Komputer", 
+                q: "Elemen desktop Windows yang terletak di sepanjang bagian bawah layar dan memuat Start Button serta ikon aplikasi aktif dinamakan...", 
+                o: [
+                    "A. Taskbar", 
+                    "B. Title Bar", 
+                    "C. Status Bar", 
+                    "D. Menu Bar", 
+                    "E. Ribbon"
+                ], 
+                a: 0, 
+                p: "Taskbar berada di bagian dasar layar desktop untuk berpindah antarajendela aplikasi dan mengakses Start Menu." 
+            },
+            { 
+                kategori: "Operasi Komputer", 
+                q: "Opsi daya (Power Option) yang digunakan untuk mematikan komputer secara sempurna dan menghentikan seluruh aliran listrik adalah...", 
+                o: [
+                    "A. Shut Down", 
+                    "B. Sleep", 
+                    "C. Restart", 
+                    "D. Lock", 
+                    "E. Switch User"
+                ], 
+                a: 0, 
+                p: "Shut Down akan menutup semua aplikasi, menyimpan kondisi sistem, lalu mematikan daya komputer secara aman." 
+            },
+            { 
+                kategori: "Operasi Komputer", 
+                q: "Opsi daya yang membuat komputer masuk ke mode hemat energi tanpa mematikan aplikasi yang sedang terbuka adalah...", 
+                o: [
+                    "A. Sleep Mode", 
+                    "B. Shut Down", 
+                    "C. Restart", 
+                    "D. Sign Out", 
+                    "E. Hibernate"
+                ], 
+                a: 0, 
+                p: "Sleep mode mematikan komponen yang tidak digunakan tetapi tetap menyuplai sedikit daya ke RAM agar pekerjaan tidak hilang." 
+            },
+            { 
+                kategori: "Operasi Komputer", 
+                q: "Opsi perintah daya yang digunakan untuk mematikan komputer sejenak lalu menyalakannya kembali secara otomatis adalah...", 
+                o: [
+                    "A. Restart", 
+                    "B. Sleep", 
+                    "C. Lock", 
+                    "D. Shut Down", 
+                    "E. Log Off"
+                ], 
+                a: 0, 
+                p: "Restart menutup seluruh sistem operasi dan segera memulai ulang proses booting dari awal." 
+            },
+            { 
+                kategori: "Manajemen File", 
+                q: "Program aplikasi bawaan Windows yang berfungsi untuk mengelola, menyalin, dan memindahkan file/folder adalah...", 
+                o: [
+                    "A. File Explorer", 
+                    "B. Task Manager", 
+                    "C. Control Panel", 
+                    "D. Device Manager", 
+                    "E. Disk Management"
+                ], 
+                a: 0, 
+                p: "File Explorer adalah manajer berkas resmi pada Windows untuk menjelajahi direktori folder dan drive penyimpanan." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Kombinasi tombol pintas (shortcut) untuk membuka program File Explorer di Windows secara cepat adalah...", 
+                o: [
+                    "A. Tombol Windows + E", 
+                    "B. Tombol Ctrl + E", 
+                    "C. Tombol Alt + E", 
+                    "D. Tombol Shift + E", 
+                    "E. Tombol Windows + F"
+                ], 
+                a: 0, 
+                p: "Menekan Windows Logo + E akan langsung membuka jendela File Explorer dari posisi manapun." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Tombol fungsi pada keyboard (Function Key) yang secara standar berguna untuk memanggil menu Bantuan (Help) adalah...", 
+                o: [
+                    "A. Tombol F1", 
+                    "B. Tombol F2", 
+                    "C. Tombol F5", 
+                    "D. Tombol F11", 
+                    "E. Tombol F12"
+                ], 
+                a: 0, 
+                p: "F1 adalah tombol bantuan universal di hampir seluruh aplikasi Windows." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Tombol fungsi keyboard yang biasa digunakan untuk merename (mengubah nama) berkas atau folder terpilih adalah...", 
+                o: [
+                    "A. Tombol F2", 
+                    "B. Tombol F1", 
+                    "C. Tombol F3", 
+                    "D. Tombol F5", 
+                    "E. Tombol F8"
+                ], 
+                a: 0, 
+                p: "Menekan F2 saat menandai file atau folder akan langsung mengaktifkan mode pengubahan nama (Rename)." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Tombol fungsi keyboard yang berfungsi untuk menyegarkan kembali tampilan (Refresh) ikon desktop atau browser adalah...", 
+                o: [
+                    "A. Tombol F5", 
+                    "B. Tombol F2", 
+                    "C. Tombol F7", 
+                    "D. Tombol F9", 
+                    "E. Tombol F11"
+                ], 
+                a: 0, 
+                p: "F5 bertindak sebagai pintasan perbarui/refresh pada desktop maupun jendela web browser." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Tombol fungsi pada keyboard yang berguna untuk mengubah mode tampilan jendela menjadi layar penuh (Full Screen) adalah...", 
+                o: [
+                    "A. Tombol F11", 
+                    "B. Tombol F5", 
+                    "C. Tombol F2", 
+                    "D. Tombol F12", 
+                    "E. Tombol F4"
+                ], 
+                a: 0, 
+                p: "F11 memperluas jendela browser atau aplikasi menjadi satu layar penuh tanpa bilah alat." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Tombol pada keyboard yang bertugas mengambil gambar tangkapan tampilan layar (Screenshot) adalah...", 
+                o: [
+                    "A. Print Screen (PrtScn)", 
+                    "B. Scroll Lock", 
+                    "C. Pause Break", 
+                    "D. Caps Lock", 
+                    "E. Num Lock"
+                ], 
+                a: 0, 
+                p: "PrtScn menyalin gambar tampilan layar saat itu ke dalam memori clipboard untuk ditempelkan." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Kombinasi tombol keyboard untuk menyalin (Copy) berkas atau teks terpilih ke clipboard adalah...", 
+                o: [
+                    "A. Tombol Ctrl + C", 
+                    "B. Tombol Ctrl + X", 
+                    "C. Tombol Ctrl + V", 
+                    "D. Tombol Ctrl + Z", 
+                    "E. Tombol Ctrl + A"
+                ], 
+                a: 0, 
+                p: "Ctrl + C berfungsi menyalin berkas/teks tanpa menghapus item asli dari lokasi awalnya." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Kombinasi tombol keyboard untuk menempelkan (Paste) hasil salinan berkas atau teks adalah...", 
+                o: [
+                    "A. Tombol Ctrl + V", 
+                    "B. Tombol Ctrl + C", 
+                    "C. Tombol Ctrl + X", 
+                    "D. Tombol Ctrl + P", 
+                    "E. Tombol Ctrl + S"
+                ], 
+                a: 0, 
+                p: "Ctrl + V memindahkan atau menempatkan isi memori clipboard ke dalam folder/dokumen tujuan." 
+            },
+            { 
+                kategori: "Shortcut Sistem", 
+                q: "Kombinasi tombol keyboard yang berfungsi membatalkan perintah atau tindakan penyuntingan terakhir (Undo) adalah...", 
+                o: [
+                    "A. Tombol Ctrl + Z", 
+                    "B. Tombol Ctrl + Y", 
+                    "C. Tombol Ctrl + A", 
+                    "D. Tombol Ctrl + S", 
+                    "E. Tombol Ctrl + D"
+                ], 
+                a: 0, 
+                p: "Ctrl + Z (Undo) membatalkan aksi atau kesalahan pengetikan/penghapusan yang baru saja dilakukan." 
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            // Acak urutan teks pilihan
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            
+            // Pasang ulang label A., B., C., D., E.
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            
+            // Cari lokasi index kunci jawaban baru
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi jawaban A-E secara dinamis
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "OPKOM";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

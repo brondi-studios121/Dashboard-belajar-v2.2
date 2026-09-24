@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Matematika (Matriks) - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Eksternal -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Library MathJax untuk Render Visual Matriks & Rumus Matematika -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Matriks</h2>
+                <p class="setup-subtitle">Latihan soal terfokus pada 4 sub-bab utama: Kesamaan Dua Matriks, Transpos Matriks, Perkalian Skalar, dan Perkalian Antar-Matriks.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ Bagian 1: Kesamaan Dua Matriks (Soal 1–15)</div>
+                        <div>✓ Bagian 2: Transpos Matriks (Soal 16–25)</div>
+                        <div>✓ Bagian 3: Perkalian Skalar Matriks (Soal 26–35)</div>
+                        <div>✓ Bagian 4: Perkalian Antar-Matriks (Soal 36–50)</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: Matematika (Matriks)</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Matriks.</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA MATEMATIKA: MATRIKS (50 SOAL FORMAT LATEX / MATHJAX) -->
+    <script>
+        const bankSoal = [
+            // --- BAGIAN 1: KESAMAAN DUA MATRIKS (1 - 15) ---
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Jika \\(\\begin{bmatrix} 4 & -2 \\\\ 0 & 1 \\end{bmatrix} = \\begin{bmatrix} a & -2 \\\\ b & 1 \\end{bmatrix}\\), tentukan nilai a dan b.", 
+                o: ["A. a = 4, b = 0", "B. a = 4, b = -2", "C. a = -2, b = 0", "D. a = 0, b = 4", "E. a = 1, b = 0"], 
+                a: 0, 
+                p: "Berdasarkan kesamaan posisi elemen matriks: elemen baris 1 kolom 1 memberikan a = 4, dan elemen baris 2 kolom 1 memberikan b = 0." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Diketahui \\(\\begin{bmatrix} x & 5 \\\\ -1 & y \\end{bmatrix} = \\begin{bmatrix} 3 & 5 \\\\ -1 & -7 \\end{bmatrix}\\). Tentukan nilai x + y.", 
+                o: ["A. -4", "B. -2", "C. 4", "D. 10", "E. -10"], 
+                a: 0, 
+                p: "Dari kesamaan matriks diperoleh x = 3 dan y = -7. Maka x + y = 3 + (-7) = -4." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Tentukan nilai x dari persamaan \\(\\begin{bmatrix} 2x - 4 \\\\ 6 \\end{bmatrix} = \\begin{bmatrix} 2 \\\\ 6 \\end{bmatrix}\\).", 
+                o: ["A. 3", "B. 2", "C. 4", "D. 5", "E. 1"], 
+                a: 0, 
+                p: "Dari kesamaan baris pertama: 2x - 4 = 2 → 2x = 6 → x = 3." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Tentukan nilai z jika \\(\\begin{bmatrix} z - 2 \\end{bmatrix} = \\begin{bmatrix} 3z \\end{bmatrix}\\).", 
+                o: ["A. -1", "B. 1", "C. -2", "D. 2", "E. 0"], 
+                a: 0, 
+                p: "z - 2 = 3z → -2 = 3z - z → 2z = -2 → z = -1." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Diketahui \\(\\begin{bmatrix} 6z \\\\ 8 \\end{bmatrix} = \\begin{bmatrix} 2y \\\\ 8 \\end{bmatrix}\\). Jika z = -1, tentukan nilai y.", 
+                o: ["A. -3", "B. 3", "C. -6", "D. 6", "E. -1"], 
+                a: 0, 
+                p: "6z = 2y → 6(-1) = 2y → -6 = 2y → y = -3." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Jika \\(\\begin{bmatrix} 2 & 8 & z-2 \\\\ 6z & -6 & 8 \\end{bmatrix} = \\begin{bmatrix} 2x-4 & 8 & 3z \\\\ 2y & -6 & 8 \\end{bmatrix}\\), tentukan nilai x, y, dan z.", 
+                o: ["A. x = 3, y = -3, z = -1", "B. x = 3, y = 3, z = 1", "C. x = 1, y = -1, z = -1", "D. x = 4, y = -2, z = 0", "E. x = 2, y = -3, z = -1"], 
+                a: 0, 
+                p: "1) z - 2 = 3z → 2z = -2 → z = -1. 2) 2x - 4 = 2 → 2x = 6 → x = 3. 3) 2y = 6z = 6(-1) = -6 → y = -3." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Tentukan nilai a dan b dari \\(\\begin{bmatrix} a+b & 3 \\\\ 1 & a-b \\end{bmatrix} = \\begin{bmatrix} 7 & 3 \\\\ 1 & 3 \\end{bmatrix}\\).", 
+                o: ["A. a = 5, b = 2", "B. a = 4, b = 3", "C. a = 6, b = 1", "D. a = 5, b = 3", "E. a = 3, b = 2"], 
+                a: 0, 
+                p: "Sistem persamaan: a + b = 7 dan a - b = 3. Jumlahkan kedua persamaan: 2a = 10 → a = 5. Substitusi: 5 + b = 7 → b = 2." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Diketahui \\(\\begin{bmatrix} 3x \\\\ 4y \\end{bmatrix} = \\begin{bmatrix} 12 \\\\ -16 \\end{bmatrix}\\). Tentukan nilai x · y.", 
+                o: ["A. -16", "B. 16", "C. -12", "D. 12", "E. -8"], 
+                a: 0, 
+                p: "3x = 12 → x = 4. 4y = -16 → y = -4. Nilai x · y = 4 · (-4) = -16." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Tentukan nilai k jika \\(\\begin{bmatrix} 5 & 2k-1 \\end{bmatrix} = \\begin{bmatrix} 5 & 9 \\end{bmatrix}\\).", 
+                o: ["A. 5", "B. 4", "C. 6", "D. 3", "E. 2"], 
+                a: 0, 
+                p: "2k - 1 = 9 → 2k = 10 → k = 5." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Jika \\(\\begin{bmatrix} x+y & 2 \\\\ 4 & x-y \\end{bmatrix} = \\begin{bmatrix} 8 & 2 \\\\ 4 & 2 \\end{bmatrix}\\), tentukan nilai x.", 
+                o: ["A. 5", "B. 3", "C. 4", "D. 6", "E. 2"], 
+                a: 0, 
+                p: "x + y = 8 dan x - y = 2. Dijumlahkan: 2x = 10 → x = 5." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Tentukan nilai p dari \\(\\begin{bmatrix} 3p-5 & 0 \\end{bmatrix} = \\begin{bmatrix} 10 & 0 \\end{bmatrix}\\).", 
+                o: ["A. 5", "B. 3", "C. 15", "D. -5", "E. 4"], 
+                a: 0, 
+                p: "3p - 5 = 10 → 3p = 15 → p = 5." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Diketahui \\(\\begin{bmatrix} 4 & 2a \\\\ 3b & -1 \\end{bmatrix} = \\begin{bmatrix} 4 & -8 \\\\ 15 & -1 \\end{bmatrix}\\). Tentukan nilai a + b.", 
+                o: ["A. 1", "B. -1", "C. 9", "D. -9", "E. 5"], 
+                a: 0, 
+                p: "2a = -8 → a = -4. 3b = 15 → b = 5. Nilai a + b = -4 + 5 = 1." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Jika \\(\\begin{bmatrix} x^2 & 9 \\end{bmatrix} = \\begin{bmatrix} 16 & 9 \\end{bmatrix}\\) dengan x > 0, tentukan nilai x.", 
+                o: ["A. 4", "B. -4", "C. 16", "D. 2", "E. 8"], 
+                a: 0, 
+                p: "x² = 16 → x = ±4. Karena disyaratkan x > 0, maka x = 4." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Diketahui \\(\\begin{bmatrix} 2x+1 & -3 \\\\ 5 & y-4 \\end{bmatrix} = \\begin{bmatrix} 7 & -3 \\\\ 5 & 2 \\end{bmatrix}\\). Tentukan nilai x dan y.", 
+                o: ["A. x = 3, y = 6", "B. x = 3, y = 2", "C. x = 4, y = 6", "D. x = 2, y = 6", "E. x = 3, y = -2"], 
+                a: 0, 
+                p: "2x + 1 = 7 → 2x = 6 → x = 3. y - 4 = 2 → y = 6." 
+            },
+            { 
+                kategori: "Kesamaan Dua Matriks", 
+                q: "Tentukan nilai x - y jika \\(\\begin{bmatrix} 3x & 10 \\\\ -2 & 5y \\end{bmatrix} = \\begin{bmatrix} 9 & 10 \\\\ -2 & -20 \\end{bmatrix}\\).", 
+                o: ["A. 7", "B. -1", "C. 1", "D. -7", "E. 5"], 
+                a: 0, 
+                p: "3x = 9 → x = 3. 5y = -20 → y = -4. Maka x - y = 3 - (-4) = 7." 
+            },
+
+            // --- BAGIAN 2: TRANSPOS MATRIKS (16 - 25) ---
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Tentukan transpos dari P = \\(\\begin{bmatrix} 4 & -5 \\\\ 0 & -1 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 4 & 0 \\\\ -5 & -1 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} -1 & 0 \\\\ -5 & 4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 4 & -5 \\\\ 0 & -1 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -4 & 5 \\\\ 0 & 1 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 0 & -1 \\\\ 4 & -5 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Transpos matriks mengubah baris menjadi kolom. Baris 1 [4, -5] menjadi Kolom 1, Baris 2 [0, -1] menjadi Kolom 2." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Tentukan transpos dari Q = \\(\\begin{bmatrix} 2 \\\\ -3 \\\\ 0 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 2 & -3 & 0 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 0 & -3 & 2 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} -2 & 3 & 0 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 2 \\\\ -3 \\\\ 0 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 3 & -2 & 0 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Matriks kolom berordo 3x1 diubah menjadi matriks baris berordo 1x3: [[2, -3, 0]]." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Jika R = \\(\\begin{bmatrix} 1 & 2 & 3 \\end{bmatrix}\\), tentukan Rᵀ.", 
+                o: ["A. \\(\\begin{bmatrix} 1 \\\\ 2 \\\\ 3 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 3 \\\\ 2 \\\\ 1 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 1 & 2 & 3 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -1 \\\\ -2 \\\\ -3 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 1 & 3 \\\\ 2 & 0 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Transpos dari matriks baris 1x3 adalah matriks kolom 3x1." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Diketahui A = \\(\\begin{bmatrix} 5 & 6 & 7 \\\\ 1 & 2 & 3 \\end{bmatrix}\\). Tentukan Aᵀ.", 
+                o: ["A. \\(\\begin{bmatrix} 5 & 1 \\\\ 6 & 2 \\\\ 7 & 3 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 5 & 6 \\\\ 1 & 2 \\\\ 7 & 3 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 1 & 5 \\\\ 2 & 6 \\\\ 3 & 7 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 7 & 3 \\\\ 6 & 2 \\\\ 5 & 1 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 5 & 6 & 7 \\\\ 1 & 2 & 3 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Matriks berordo 2x3 jika ditransposkan menjadi berordo 3x2 dengan mengubah baris menjadi kolom." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Tentukan (Pᵀ)ᵀ jika P = \\(\\begin{bmatrix} 4 & -5 \\\\ 0 & -1 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 4 & -5 \\\\ 0 & -1 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 4 & 0 \\\\ -5 & -1 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} -4 & 5 \\\\ 0 & 1 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -1 & -5 \\\\ 0 & 4 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 0 & -1 \\\\ 4 & -5 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Berdasarkan sifat transpos matriks: transpos dari transpos suatu matriks adalah matriks itu sendiri, (Pᵀ)ᵀ = P." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Diketahui B = \\(\\begin{bmatrix} -2 & 0 \\\\ 3 & 1 \\\\ 4 & -5 \\end{bmatrix}\\). Tentukan Bᵀ.", 
+                o: ["A. \\(\\begin{bmatrix} -2 & 3 & 4 \\\\ 0 & 1 & -5 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 0 & 1 & -5 \\\\ -2 & 3 & 4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} -2 & 0 & 3 \\\\ 1 & 4 & -5 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 4 & 3 & -2 \\\\ -5 & 1 & 0 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -2 & 0 \\\\ 3 & 1 \\\\ 4 & -5 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Baris-baris pada B menjadi kolom-kolom pada Bᵀ: baris 1 [-2, 0] → kolom 1, baris 2 [3, 1] → kolom 2, baris 3 [4, -5] → kolom 3." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Jika K = \\(\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}\\), tentukan Kᵀ.", 
+                o: ["A. \\(\\begin{bmatrix} a & c \\\\ b & d \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} d & c \\\\ b & a \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} d & b \\\\ c & a \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -a & -c \\\\ -b & -d \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Mengubah elemen baris menjadi elemen kolom: baris 1 [a, b] jadi kolom 1, baris 2 [c, d] jadi kolom 2." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Diketahui M = \\(\\begin{bmatrix} 3 & -1 \\\\ 2 & 4 \\end{bmatrix}\\). Tentukan matriks N jika N = Mᵀ.", 
+                o: ["A. \\(\\begin{bmatrix} 3 & 2 \\\\ -1 & 4 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 3 & -1 \\\\ 2 & 4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 4 & 2 \\\\ -1 & 3 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -3 & 1 \\\\ -2 & -4 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 2 & 4 \\\\ 3 & -1 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Transpos dari M mengubah baris 1 [3, -1] menjadi kolom 1 dan baris 2 [2, 4] menjadi kolom 2." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Tentukan nilai x jika \\(\\begin{bmatrix} 2x & 0 \\\\ 1 & 3 \\end{bmatrix}^T = \\begin{bmatrix} 8 & 1 \\\\ 0 & 3 \\end{bmatrix}\\).", 
+                o: ["A. 4", "B. 2", "C. 8", "D. 1", "E. 3"], 
+                a: 0, 
+                p: "Transpos ruas kiri = [[2x, 1], [0, 3]]. Berdasarkan kesamaan matriks: 2x = 8 → x = 4." 
+            },
+            { 
+                kategori: "Transpos Matriks", 
+                q: "Diketahui A = \\(\\begin{bmatrix} 3 & x \\\\ 5 & 2 \\end{bmatrix}\\) dan B = \\(\\begin{bmatrix} 3 & 5 \\\\ -1 & 2 \\end{bmatrix}\\). Jika A = Bᵀ, tentukan nilai x.", 
+                o: ["A. -1", "B. 5", "C. 1", "D. -5", "E. 3"], 
+                a: 0, 
+                p: "Bᵀ = [[3, -1], [5, 2]]. Karena A = Bᵀ, maka x = -1." 
+            },
+
+            // --- BAGIAN 3: PERKALIAN SKALAR MATRIKS (26 - 35) ---
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Hitung 3 × \\(\\begin{bmatrix} 5 & 4 \\\\ 2 & -3 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 15 & 12 \\\\ 6 & -9 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 15 & 4 \\\\ 2 & -9 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 8 & 7 \\\\ 5 & 0 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 15 & 12 \\\\ 6 & 9 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 5 & 12 \\\\ 6 & -3 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan setiap elemen matriks dengan skalar 3: [3(5)=15, 3(4)=12], [3(2)=6, 3(-3)=-9]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Diketahui R = \\(\\begin{bmatrix} 10 & -20 & 5 \\\\ -10 & 0 & -40 \\end{bmatrix}\\). Tentukan \\(\\frac{2}{5}\\) R.", 
+                o: ["A. \\(\\begin{bmatrix} 4 & -8 & 2 \\\\ -4 & 0 & -16 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 4 & -8 & 5 \\\\ -4 & 0 & -40 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 2 & -4 & 1 \\\\ -2 & 0 & -8 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 10 & -20 & 2 \\\\ -10 & 0 & -16 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 5 & -10 & 2 \\\\ -5 & 0 & -20 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan tiap elemen dengan 2/5: [10(2/5)=4, -20(2/5)=-8, 5(2/5)=2], [-10(2/5)=-4, 0, -40(2/5)=-16]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Hitung -2 × \\(\\begin{bmatrix} -3 & 1 \\\\ 4 & -5 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 6 & -2 \\\\ -8 & 10 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 6 & 2 \\\\ 8 & 10 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} -6 & -2 \\\\ -8 & -10 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 6 & -2 \\\\ 8 & -10 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 3 & -1 \\\\ -4 & 5 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan setiap elemen dengan -2: [-2(-3)=6, -2(1)=-2], [-2(4)=-8, -2(-5)=10]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Tentukan \\(\\frac{1}{3}\\) × \\(\\begin{bmatrix} 9 & -6 \\\\ 12 & 15 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 3 & -2 \\\\ 4 & 5 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 3 & 2 \\\\ 4 & 5 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 9 & -2 \\\\ 4 & 15 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 3 & -6 \\\\ 12 & 5 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 1 & -2 \\\\ 4 & 3 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Bagi seluruh elemen dengan 3: [9/3=3, -6/3=-2], [12/3=4, 15/3=5]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Jika A = \\(\\begin{bmatrix} 2 & -4 \\\\ 6 & 8 \\end{bmatrix}\\), tentukan \\(\\frac{1}{2}\\) A.", 
+                o: ["A. \\(\\begin{bmatrix} 1 & -2 \\\\ 3 & 4 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 2 & -2 \\\\ 3 & 8 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 4 & -8 \\\\ 12 & 16 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -1 & 2 \\\\ -3 & -4 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan setiap elemen dengan 1/2: [2/2=1, -4/2=-2], [6/2=3, 8/2=4]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Hitung 5 × \\(\\begin{bmatrix} 0 & -1 \\\\ 2 & 3 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 0 & -5 \\\\ 10 & 15 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 5 & -5 \\\\ 10 & 15 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 0 & -1 \\\\ 10 & 15 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 0 & -5 \\\\ 2 & 3 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 0 & 5 \\\\ -10 & -15 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan setiap elemen dengan 5: [5(0)=0, 5(-1)=-5], [5(2)=10, 5(3)=15]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Diketahui B = \\(\\begin{bmatrix} 15 & -30 \\\\ 45 & 60 \\end{bmatrix}\\). Tentukan \\(\\frac{1}{15}\\) B.", 
+                o: ["A. \\(\\begin{bmatrix} 1 & -2 \\\\ 3 & 4 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 15 & -2 \\\\ 3 & 60 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 1 & -30 \\\\ 45 & 4 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 0 & -2 \\\\ 3 & 4 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Bagi seluruh elemen dengan 15: [15/15=1, -30/15=-2], [45/15=3, 60/15=4]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Hitung -\\(\\frac{3}{4}\\) × \\(\\begin{bmatrix} 8 & -12 \\\\ -16 & 4 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} -6 & 9 \\\\ 12 & -3 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} -6 & -9 \\\\ 12 & 3 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 6 & -9 \\\\ -12 & 3 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -6 & 9 \\\\ -12 & 3 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 8 & -9 \\\\ 12 & 4 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan tiap elemen dengan -3/4: 8(-3/4)=-6, -12(-3/4)=9, -16(-3/4)=12, 4(-3/4)=-3." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Jika P = \\(\\begin{bmatrix} 2 & 4 \\\\ -6 & 0 \\end{bmatrix}\\), tentukan 2 Pᵀ.", 
+                o: ["A. \\(\\begin{bmatrix} 4 & -12 \\\\ 8 & 0 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 4 & 8 \\\\ -12 & 0 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 4 & 4 \\\\ -6 & 0 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 2 & -6 \\\\ 4 & 0 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -4 & 12 \\\\ -8 & 0 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Cari Pᵀ = [[2, -6], [4, 0]]. Lalu kalikan 2: [[2(2), 2(-6)], [2(4), 2(0)]] = [[4, -12], [8, 0]]." 
+            },
+            { 
+                kategori: "Perkalian Skalar Matriks", 
+                q: "Hitung 4 × \\(\\begin{bmatrix} 1 & -2 & 3 \\\\ 0 & 5 & -1 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 4 & -8 & 12 \\\\ 0 & 20 & -4 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 4 & -2 & 12 \\\\ 0 & 5 & -4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 4 & -8 & 3 \\\\ 0 & 20 & -1 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 1 & -8 & 12 \\\\ 0 & 20 & -4 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 4 & 8 & -12 \\\\ 0 & -20 & 4 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Kalikan seluruh elemen dengan 4: [4(1)=4, 4(-2)=-8, 4(3)=12], [4(0)=0, 4(5)=20, 4(-1)=-4]." 
+            },
+
+            // --- BAGIAN 4: PERKALIAN ANTA-MATRIKS (36 - 50) ---
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix} \\times \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 5 & 12 \\\\ 21 & 32 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 19 & 50 \\\\ 22 & 43 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 20 & 22 \\\\ 40 & 50 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 15 & 18 \\\\ 35 & 40 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: 1(5)+2(7) = 19. B1K2: 1(6)+2(8) = 22. B2K1: 3(5)+4(7) = 43. B2K2: 3(6)+4(8) = 50." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 2 & -4 & 7 \\\\ 5 & 6 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 8 \\\\ -1 \\\\ 10 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 90 \\\\ 64 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 64 \\\\ 90 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 70 \\\\ 50 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 90 \\\\ 54 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 80 \\\\ 64 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Elemen 1: 2(8) + (-4)(-1) + 7(10) = 16 + 4 + 70 = 90. Elemen 2: 5(8) + 6(-1) + 3(10) = 40 - 6 + 30 = 64." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Tentukan hasil dari \\(\\begin{bmatrix} 2 & 1 \\\\ 0 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 4 & 0 \\\\ 1 & 2 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 9 & 2 \\\\ 3 & 6 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 8 & 0 \\\\ 0 & 6 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 9 & 0 \\\\ 3 & 6 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 8 & 2 \\\\ 3 & 6 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 9 & 2 \\\\ 0 & 6 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: 2(4)+1(1)=9. B1K2: 2(0)+1(2)=2. B2K1: 0(4)+3(1)=3. B2K2: 0(0)+3(2)=6." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 3 & -1 \\end{bmatrix} \\times \\begin{bmatrix} 2 \\\\ 5 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 1 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 11 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 6 & -5 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 1 & 0 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -1 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Perkalian matriks (1x2) × (2x1) menghasilkan matriks 1x1: 3(2) + (-1)(5) = 6 - 5 = 1." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix} \\times \\begin{bmatrix} 7 & -3 \\\\ 2 & 5 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 7 & -3 \\\\ 2 & 5 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 7 & 0 \\\\ 0 & 5 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -7 & 3 \\\\ -2 & -5 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 14 & -6 \\\\ 4 & 10 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Matriks [[1, 0], [0, 1]] adalah matriks identitas I. Berlaku sifat I × A = A." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Tentukan hasil dari \\(\\begin{bmatrix} -1 & 2 \\\\ 4 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 0 & 1 \\\\ -2 & 5 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} -4 & 9 \\\\ -6 & 19 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 0 & 2 \\\\ -8 & 15 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} -4 & 9 \\\\ 6 & 19 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 4 & -9 \\\\ 6 & -19 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -4 & 1 \\\\ -6 & 12 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: -1(0)+2(-2) = -4. B1K2: -1(1)+2(5) = 9. B2K1: 4(0)+3(-2) = -6. B2K2: 4(1)+3(5) = 19." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 2 & 3 \\\\ 1 & 4 \\end{bmatrix} \\times \\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 8 \\\\ 9 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 5 \\\\ 6 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 8 \\\\ 8 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 2 & 6 \\\\ 1 & 8 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 9 \\\\ 8 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Baris 1: 2(1) + 3(2) = 2 + 6 = 8. Baris 2: 1(1) + 4(2) = 1 + 8 = 9." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 5 & 1 & 2 \\\\ 3 & 0 & 4 \\end{bmatrix} \\times \\begin{bmatrix} 2 \\\\ 1 \\\\ 3 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 17 \\\\ 18 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 15 \\\\ 18 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 17 \\\\ 12 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 10 \\\\ 12 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 18 \\\\ 17 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Baris 1: 5(2) + 1(1) + 2(3) = 10 + 1 + 6 = 17. Baris 2: 3(2) + 0(1) + 4(3) = 6 + 0 + 12 = 18." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Tentukan hasil dari \\(\\begin{bmatrix} 0 & -2 \\\\ 3 & 1 \\end{bmatrix} \\times \\begin{bmatrix} 4 & 5 \\\\ -1 & 0 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 2 & 0 \\\\ 11 & 15 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 0 & 0 \\\\ -3 & 0 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 2 & 10 \\\\ 11 & 15 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 2 & 0 \\\\ 12 & 15 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} -2 & 0 \\\\ -11 & -15 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: 0(4)+(-2)(-1)=2. B1K2: 0(5)+(-2)(0)=0. B2K1: 3(4)+1(-1)=11. B2K2: 3(5)+1(0)=15." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 3 & 2 \\\\ 1 & 0 \\end{bmatrix} \\times \\begin{bmatrix} 3 & 2 \\\\ 1 & 0 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 11 & 6 \\\\ 3 & 2 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 9 & 4 \\\\ 1 & 0 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 11 & 6 \\\\ 1 & 2 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 9 & 6 \\\\ 3 & 2 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 11 & 4 \\\\ 3 & 0 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: 3(3)+2(1)=11. B1K2: 3(2)+2(0)=6. B2K1: 1(3)+0(1)=3. B2K2: 1(2)+0(0)=2." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Tentukan elemen baris pertama kolom pertama dari \\(\\begin{bmatrix} 6 & -1 \\\\ 2 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 2 & 4 \\\\ 5 & 0 \\end{bmatrix}\\).", 
+                o: ["A. 7", "B. 24", "C. -1", "D. 19", "E. 12"], 
+                a: 0, 
+                p: "Elemen baris 1 kolom 1 diperoleh dari perkalian Baris 1 × Kolom 1 = 6(2) + (-1)(5) = 12 - 5 = 7." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 1 & -1 & 0 \\\\ 2 & 1 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 3 \\\\ -2 \\\\ 1 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} 5 \\\\ 7 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 5 \\\\ 4 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 1 \\\\ 7 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 3 \\\\ 8 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 5 \\\\ 5 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Baris 1: 1(3) + (-1)(-2) + 0(1) = 3 + 2 + 0 = 5. Baris 2: 2(3) + 1(-2) + 3(1) = 6 - 2 + 3 = 7." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Diketahui A = \\(\\begin{bmatrix} 2 & 0 \\\\ 1 & 3 \\end{bmatrix}\\) dan B = \\(\\begin{bmatrix} 1 & 5 \\\\ 0 & 2 \\end{bmatrix}\\). Tentukan A × B.", 
+                o: ["A. \\(\\begin{bmatrix} 2 & 10 \\\\ 1 & 11 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 2 & 0 \\\\ 0 & 6 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 2 & 10 \\\\ 1 & 6 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 3 & 5 \\\\ 1 & 5 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 2 & 5 \\\\ 1 & 11 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: 2(1)+0(0)=2. B1K2: 2(5)+0(2)=10. B2K1: 1(1)+3(0)=1. B2K2: 1(5)+3(2)=11." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Hitung \\(\\begin{bmatrix} 4 & 1 \\end{bmatrix} \\times \\begin{bmatrix} -2 & 3 \\\\ 1 & 5 \\end{bmatrix}\\).", 
+                o: ["A. \\(\\begin{bmatrix} -7 & 17 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} -8 & 5 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} -7 & 15 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} -9 & 17 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 7 & -17 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "Elemen 1: 4(-2) + 1(1) = -8 + 1 = -7. Elemen 2: 4(3) + 1(5) = 12 + 5 = 17." 
+            },
+            { 
+                kategori: "Perkalian Antar-Matriks", 
+                q: "Diketahui A = \\(\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}\\). Hitung A² (yaitu A × A).", 
+                o: ["A. \\(\\begin{bmatrix} 7 & 10 \\\\ 15 & 22 \\end{bmatrix}\\)", "B. \\(\\begin{bmatrix} 1 & 4 \\\\ 9 & 16 \\end{bmatrix}\\)", "C. \\(\\begin{bmatrix} 7 & 10 \\\\ 12 & 22 \\end{bmatrix}\\)", "D. \\(\\begin{bmatrix} 7 & 8 \\\\ 15 & 20 \\end{bmatrix}\\)", "E. \\(\\begin{bmatrix} 8 & 10 \\\\ 15 & 22 \\end{bmatrix}\\)"], 
+                a: 0, 
+                p: "B1K1: 1(1)+2(3)=7. B1K2: 1(2)+2(4)=10. B2K1: 3(1)+4(3)=15. B2K2: 3(2)+4(4)=22." 
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // MANAJEMEN TEMA (DARK / LIGHT)
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // PENGACAK OPSI JAWABAN DINAMIS (A-E)
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            // 1. Acak urutan soal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            // 2. Acak urutan opsi A-E untuk tiap soal
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Matriks";
+            document.getElementById('questionText').innerHTML = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.innerHTML = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+
+            // PEMICU MATHJAX UNTUK MERENDER ULANG RUMUS/MATRIKS PADA DOM
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
