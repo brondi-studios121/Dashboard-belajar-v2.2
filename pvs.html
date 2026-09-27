@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis PVS & KKPL 3 - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: PVS & KKPL 3</h2>
+                <p class="setup-subtitle">Atur jumlah soal tryout berdasarkan kisi-kisi: XAMPP, Projek PHP, Variabel, Database, Koneksi, Kode Secret, Form, hingga Perbedaan Array/Assoc & Select pada Tabel.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 40)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="40">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ 1. Pengoperasian XAMPP & Server Lokal</div>
+                        <div>✓ 2. Menjalankan Projek PHP di Browser</div>
+                        <div>✓ 3. Variabel & Sintaks Dasar PHP</div>
+                        <div>✓ 4. Database MySQL & SQL Dasar</div>
+                        <div>✓ 5. Koneksi Database (mysqli)</div>
+                        <div>✓ 6. Kode Secret, Sesi & Keamanan</div>
+                        <div>✓ 7. Form HTML & Pengolahan Data</div>
+                        <div>✓ 8. Perbedaan Assoc, Array & Select pada Tabel</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: PVS & KKPL 3</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi PVS & KKPL 3.</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA PVS & KKPL 3 -->
+    <script>
+        const bankSoal = [
+            // --- KISI-KISI 1: PENGOPERASIAN XAMPP ---
+            {
+                kategori: "Pengoperasian XAMPP",
+                q: "Modul utama pada XAMPP Control Panel yang wajib diaktifkan (Start) untuk menjalankan skrip bahasa PHP adalah...",
+                o: [
+                    "A. Apache",
+                    "B. MySQL",
+                    "C. FileZilla",
+                    "D. Mercury",
+                    "E. Tomcat"
+                ],
+                a: 0,
+                p: "Modul Apache bertindak sebagai web server lokal yang memproses berkas berekstensi .php."
+            },
+            {
+                kategori: "Pengoperasian XAMPP",
+                q: "Modul pada XAMPP Control Panel yang berfungsi sebagai sistem manajemen database relasional (DBMS) adalah...",
+                o: [
+                    "A. MySQL",
+                    "B. Apache",
+                    "C. FileZilla",
+                    "D. Mercury",
+                    "E. NetMail"
+                ],
+                a: 0,
+                p: "Modul MySQL digunakan untuk mengelola basis data aplikasi web."
+            },
+            {
+                kategori: "Pengoperasian XAMPP",
+                q: "Direktori folder utama di dalam instalasi XAMPP tempat kita harus menyimpan folder proyek web PHP agar terbaca oleh server adalah...",
+                o: [
+                    "A. htdocs",
+                    "B. www",
+                    "C. public_html",
+                    "D. php_data",
+                    "E. web_root"
+                ],
+                a: 0,
+                p: "Folder 'htdocs' adalah direktori root utama tempat Apache membaca dokumen web lokal."
+            },
+
+            // --- KISI-KISI 2: MENJALANKAN PROJEK PHP ---
+            {
+                kategori: "Menjalankan Projek PHP",
+                q: "URL pengetikan di browser yang benar untuk mengakses folder proyek bernama 'latihan_php' di dalam localhost adalah...",
+                o: [
+                    "A. http://localhost/latihan_php/",
+                    "B. file:///C:/xampp/htdocs/latihan_php/index.php",
+                    "C. php://localhost/latihan_php",
+                    "D. http://127.0.0.1:htdocs/latihan_php",
+                    "E. server/latihan_php"
+                ],
+                a: 0,
+                p: "Proyek PHP harus dijalankan melalui server lokal dengan awalan 'http://localhost/' atau 'http://127.0.0.1/'."
+            },
+            {
+                kategori: "Menjalankan Projek PHP",
+                q: "Mengapa berkas PHP tidak boleh dijalankan langsung secara mentah menggunakan protokol 'file:///' di browser tanpa menyalakan Apache?",
+                o: [
+                    "A. Karena kode PHP memerlukan pengolahan parser dari web server (Apache), jika tidak kode akan tampil mentah atau kosong",
+                    "B. Karena browser tidak mendukung ekstensi huruf .php",
+                    "C. Karena ukuran file PHP terlalu besar untuk dibuka langsung",
+                    "D. Karena direktori Windows mengunci file PHP",
+                    "E. Karena koneksi internet terputus"
+                ],
+                a: 0,
+                p: "PHP adalah server-side language, sehingga butuh web server seperti Apache untuk menerjemahkannya menjadi HTML sebelum dikirim ke browser."
+            },
+
+            // --- KISI-KISI 3: VARIABEL PHP ---
+            {
+                kategori: "Variabel PHP",
+                q: "Simbol khusus yang wajib diletakkan di depan nama variabel pada bahasa pemrograman PHP adalah...",
+                o: [
+                    "A. Tanda Dollar ($)",
+                    "B. Tanda At (@)",
+                    "C. Tanda Pound (#)",
+                    "D. Tanda Persen (%)",
+                    "E. Tanda Ampersand (&)"
+                ],
+                a: 0,
+                p: "Setiap penamaan variabel di PHP diawali dengan tanda dollar ($), contohnya: `$nama`."
+            },
+            {
+                kategori: "Variabel PHP",
+                q: "Perintah PHP yang digunakan untuk menampilkan nilai dari sebuah variabel ke layar browser adalah...",
+                o: [
+                    "A. echo",
+                    "B. print_r",
+                    "C. var_dump",
+                    "D. Semua jawaban benar",
+                    "E. console.log"
+                ],
+                a: 3,
+                p: "Perintah echo, print_r, maupun var_dump dapat digunakan untuk menampilkan isi variabel di PHP sesuai kebutuhan debugging atau cetak teks."
+            },
+            {
+                kategori: "Variabel PHP",
+                q: "Manakah aturan penamaan variabel di bawah ini yang BENAR di dalam PHP?",
+                o: [
+                    "A. \$nama_siswa = 'Budi';",
+                    "B. \$123siswa = 'Budi';",
+                    "C. \$nama-siswa = 'Budi';",
+                    "D. \$nama siswa = 'Budi';",
+                    "E. \var nama = 'Budi';"
+                ],
+                a: 0,
+                p: "Nama variabel PHP diawali huruf/underscore setelah tanda $, tidak boleh diawali angka, dan tidak boleh mengandung spasi atau tanda hubung minus."
+            },
+
+            // --- KISI-KISI 4: DATABASE ---
+            {
+                kategori: "Database",
+                q: "Perintah bahasa SQL yang digunakan untuk mengambil atau menampilkan data dari sebuah tabel database adalah...",
+                o: [
+                    "A. SELECT",
+                    "B. INSERT",
+                    "C. UPDATE",
+                    "D. DELETE",
+                    "E. DROP"
+                ],
+                a: 0,
+                p: "Perintah `SELECT` digunakan untuk query pengambilan data dari tabel database."
+            },
+            {
+                kategori: "Database",
+                q: "Aplikasi berbasis web bawaan XAMPP yang digunakan untuk mengelola database MySQL secara visual melalui browser dinamakan...",
+                o: [
+                    "A. phpMyAdmin",
+                    "B. MySQL Manager",
+                    "C. SQL Server Studio",
+                    "D. DB Browser",
+                    "E. AdminSQL"
+                ],
+                a: 0,
+                p: "phpMyAdmin adalah antarmuka berbasis web populer untuk administrasi MySQL/MariaDB."
+            },
+            {
+                kategori: "Database",
+                q: "Perintah SQL yang digunakan untuk menyisipkan atau memasukkan data baru ke dalam tabel database adalah...",
+                o: [
+                    "A. INSERT INTO",
+                    "B. ADD DATA",
+                    "C. UPDATE TABLE",
+                    "D. CREATE RECORD",
+                    "E. PUT INTO"
+                ],
+                a: 0,
+                p: "Format baku penambahan data di SQL adalah `INSERT INTO nama_tabel (...) VALUES (...)`."
+            },
+
+            // --- KISI-KISI 5: KONEKSI ---
+            {
+                kategori: "Koneksi",
+                q: "Fungsi bawaan PHP yang paling direkomendasikan untuk membuka sambungan koneksi ke database MySQL adalah...",
+                o: [
+                    "A. mysqli_connect()",
+                    "B. mysql_open()",
+                    "C. connect_db()",
+                    "D. db_connect()",
+                    "E. open_sql()"
+                ],
+                a: 0,
+                p: "Fungsi `mysqli_connect('host', 'user', 'pass', 'db')` digunakan untuk menghubungkan skrip PHP dengan database MySQL."
+            },
+            {
+                kategori: "Koneksi",
+                q: "Parameter apa saja yang umumnya wajib disertakan secara berurutan di dalam fungsi `mysqli_connect()`?",
+                o: [
+                    "A. Hostname, Username, Password, Nama Database",
+                    "B. Nama Database, Hostname, Password",
+                    "C. Username, Password, Port",
+                    "D. IP Server, Table Name, Key",
+                    "E. URL Website, Admin Email"
+                ],
+                a: 0,
+                p: "Urutan parameter standar mysqli_connect adalah: server/host, username database, password, dan nama database tujuan."
+            },
+            {
+                kategori: "Koneksi",
+                q: "Fungsi PHP untuk mendeteksi apakah terjadi kegagalan saat menghubungkan PHP ke database MySQL adalah...",
+                o: [
+                    "A. mysqli_connect_error()",
+                    "B. mysqli_error()",
+                    "C. check_error()",
+                    "D. db_failed()",
+                    "E. sql_error_log()"
+                ],
+                a: 0,
+                p: "`mysqli_connect_error()` mengembalikan pesan deskripsi kesalahan jika koneksi database gagal."
+            },
+
+            // --- KISI-KISI 6: KODE SECRET ---
+            {
+                kategori: "Kode Secret",
+                q: "Fungsi PHP yang wajib dipanggil di baris paling atas halaman web sebelum kita dapat menggunakan dan membaca data sesi (`$_SESSION`) adalah...",
+                o: [
+                    "A. session_start()",
+                    "B. init_session()",
+                    "C. start_cookie()",
+                    "D. session_begin()",
+                    "E. auth_open()"
+                ],
+                a: 0,
+                p: "`session_start()` harus dipanggil sebelum ada output HTML apa pun untuk menginisialisasi atau melanjutkan sesi pengguna."
+            },
+            {
+                kategori: "Kode Secret",
+                q: "Di dalam pengembangan aplikasi web, variabel superglobal apa yang lazim digunakan untuk menyimpan informasi rahasia atau status login (kode secret/autentikasi pengguna)?",
+                o: [
+                    "A. $_SESSION",
+                    "B. $_GET",
+                    "C. $_POST",
+                    "D. $_COOKIE_SECURE",
+                    "E. $_GLOBALS_SECRET"
+                ],
+                a: 0,
+                p: "`$_SESSION` aman disimpan di sisi server sehingga ideal untuk menjaga hak akses halaman rahasia/admin."
+            },
+            {
+                kategori: "Kode Secret",
+                q: "Fungsi keamanan bawaan PHP yang disarankan untuk mengenkripsi (hashing) password pengguna sebelum disimpan ke database adalah...",
+                o: [
+                    "A. password_hash()",
+                    "B. md5_encrypt()",
+                    "C. sha1_secure()",
+                    "D. crypt_pass()",
+                    "E. secret_code()"
+                ],
+                a: 0,
+                p: "`password_hash()` menghasilkan string hash yang kuat dan aman untuk penyimpanan kata sandi."
+            },
+
+            // --- KISI-KISI 7: FORM ---
+            {
+                kategori: "Form",
+                q: "Atribut pada tag `<form>` yang berfungsi untuk menentukan metode pengiriman data (seperti GET atau POST) dinamakan...",
+                o: [
+                    "A. method",
+                    "B. action",
+                    "C. target",
+                    "D. enctype",
+                    "E. type"
+                ],
+                a: 0,
+                p: "Atribut `method` menentukan mekanisme pengiriman data form (GET atau POST)."
+            },
+            {
+                kategori: "Form",
+                q: "Atribut pada elemen `<input>` form HTML yang menjadi kunci/indeks utama agar nilainya dapat dibaca di dalam array `$_POST['...']` PHP adalah...",
+                o: [
+                    "A. name",
+                    "B. id",
+                    "C. class",
+                    "D. placeholder",
+                    "E. value"
+                ],
+                a: 0,
+                p: "Atribut `name` sangat krusial karena nama inilah yang menjadi key di dalam variabel superglobal $_POST atau$_GET."
+            },
+            {
+                kategori: "Form",
+                q: "Apa perbedaan mendasar antara method `GET` dan `POST` pada pengiriman data form?",
+                o: [
+                    "A. GET menampilkan data di URL address bar, sedangkan POST menyembunyikannya di dalam body HTTP request",
+                    "B. GET lebih aman untuk password, POST untuk pencarian",
+                    "C. GET hanya bisa untuk angka, POST untuk teks",
+                    "D. Tidak ada bedanya sama sekali",
+                    "E. POST dijalankan di client-side, GET di server-side"
+                ],
+                a: 0,
+                p: "Metode GET menempelkan data di query string URL, sementara POST mengirimkan data secara tersembunyi."
+            },
+
+            // --- KISI-KISI 8: PERBEDAAN ASSOC DENGAN ARRAY DAN SELECT KETIKA MENGGUNAKAN TABLE ---
+            {
+                kategori: "Assoc, Array & Select Tabel",
+                q: "Apakah perbedaan utama antara `mysqli_fetch_array()` dan `mysqli_fetch_assoc()` ketika mengambil hasil query database?",
+                o: [
+                    "A. fetch_assoc() hanya mengembalikan array asosiatif (indeks nama kolom), sedangkan fetch_array() dapat mengembalikan indeks asosiatif sekaligus indeks angka (numeric)",
+                    "B. fetch_assoc() khusus untuk insert, fetch_array untuk select",
+                    "C. fetch_assoc() lebih lambat dibanding fetch_array()",
+                    "D. fetch_assoc() hanya untuk tabel bersarang",
+                    "E. Tidak ada perbedaan fungsi"
+                ],
+                a: 0,
+                p: "`mysqli_fetch_assoc()` menghasilkan array dengan kunci nama kolom database saja, sementara `mysqli_fetch_array()` menyediakan keduanya (nama kolom dan indeks angka)."
+            },
+            {
+                kategori: "Assoc, Array & Select Tabel",
+                q: "Ketika kita ingin menampilkan data dari database ke dalam baris tabel HTML (`<tr>` dan `<td>`), fungsi fetch manakah yang paling sering digunakan agar pemanggilan kolom lebih mudah dibaca berdasarkan nama kolomnya?",
+                o: [
+                    "A. mysqli_fetch_assoc()",
+                    "B. mysqli_fetch_row()",
+                    "C. mysqli_fetch_lengths()",
+                    "D. mysqli_num_rows()",
+                    "E. mysqli_affected_rows()"
+                ],
+                a: 0,
+                p: "`mysqli_fetch_assoc()` sangat populer dalam rendering tabel HTML karena kita bisa memanggil data dengan `$row['nama_kolom']`."
+            },
+            {
+                kategori: "Assoc, Array & Select Tabel",
+                q: "Perhatikan potongan kode berikut: `$result = mysqli_query($koneksi, \"SELECT * FROM siswa\");` Peran dari perintah SQL `SELECT` di sini sebelum ditampilkan ke tabel HTML adalah...",
+                o: [
+                    "A. Memilih dan mengambil seluruh kumpulan data baris dari tabel 'siswa' di database",
+                    "B. Menghapus tabel siswa",
+                    "C. Membuat database baru bernama siswa",
+                    "D. Mengubah struktur kolom tabel",
+                    "E. Mengamankan password login"
+                ],
+                a: 0,
+                p: "Perintah `SELECT` mengambil data dari database yang nantinya di-looping menggunakan `while` untuk dicetak ke dalam elemen `<td>` dan `<tr>` tabel HTML."
+            },
+            {
+                kategori: "Assoc, Array & Select Tabel",
+                q: "Jika kita menggunakan `mysqli_fetch_row()`, bagaimana cara mengakses kolom pertama dari hasil query tabel database?",
+                o: [
+                    "A. \$row[0]",
+                    "B. \$row['id']",
+                    "C. \$row['kolom_1']",
+                    "D. \$row.first",
+                    "E. \$row[1]"
+                ],
+                a: 0,
+                p: "`mysqli_fetch_row()` menghasilkan array numerik, sehingga kolom pertama diakses menggunakan indeks angka nol (`$row[0]`)."
+            },
+            {
+                kategori: "Assoc, Array & Select Tabel",
+                q: "Struktur perulangan (looping) manakah yang paling ideal dikombinasikan dengan `mysqli_fetch_assoc()` untuk merender banyak baris data ke dalam tabel HTML?",
+                o: [
+                    "A. while",
+                    "B. switch",
+                    "C. if-else",
+                    "D. do-until",
+                    "E. break"
+                ],
+                a: 0,
+                p: "Perulangan `while ($row = mysqli_fetch_assoc($result))` digunakan untuk melintasi setiap baris data database hingga habis dan mencetaknya ke baris tabel HTML."
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "PVS & KKPL 3";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
