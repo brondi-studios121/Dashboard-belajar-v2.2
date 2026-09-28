@@ -36,7 +36,7 @@
             <!-- SECTION 1: SETUP KELOLA SOAL -->
             <div id="setup-section">
                 <h2 class="setup-title">Simulasi Kuis: Sejarah Indonesia</h2>
-                <p class="setup-subtitle">Materi Bab 1: Masa Pendudukan Jepang di Indonesia (Masuknya Jepang, Transisi Pemerintahan, Kebijakan Pendudukan, hingga Strategi Perlawanan).</p>
+                <p class="setup-subtitle">Materi Sesuai Kisi-Kisi: Pendudukan Jepang di Indonesia (Kedatangan, Propaganda, Organisasi, Romusha, Eksploitasi, hingga Perlawanan).</p>
                 
                 <div class="input-soal-wrapper">
                     <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
@@ -45,10 +45,12 @@
                         <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
                     </div>
                     <div class="info-materi-list">
-                        <div>✓ A. Masuknya Jepang dan Jatuhnya Hindia Belanda</div>
-                        <div>✓ B. Penjajahan Jepang &amp; Transformasi Pemerintahan</div>
-                        <div>✓ C. Kebijakan Pemerintahan Pendudukan Jepang</div>
-                        <div>✓ D. Strategi Bangsa Indonesia Menghadapi Tirani Jepang</div>
+                        <div>✓ Kedatangan Jepang &amp; Perjanjian Kalijati</div>
+                        <div>✓ Gerakan 3A, PUTERA, &amp; Jawa Hokokai</div>
+                        <div>✓ Tokoh Empat Serangkai &amp; Perannya</div>
+                        <div>✓ Romusha, Bentuk Eksploitasi, &amp; Dampaknya</div>
+                        <div>✓ Seinendan, Keibodan, Fujinkai, &amp; PETA</div>
+                        <div>✓ Bentuk Perlawanan Rakyat &amp; Tokoh-Tokohnya</div>
                     </div>
                 </div>
                 <div class="button-group" style="border:none; padding-top:0;">
@@ -114,365 +116,369 @@
         <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
     </footer>
 
-    <!-- BANK DATA SEJARAH (50 SOAL FIXED) -->
+    <!-- BANK DATA SEJARAH (50 SOAL SESUAI KISI-KISI) -->
     <script>
         const bankSoal = [
-            // --- SUB-BAB A: MASUKNYA JEPANG DAN JATUHNYA HINDIA BELANDA (1-12) ---
+            // --- 1. KEDATANGAN JEPANG & KAPITULASI BELANDA (1-7) ---
             {
-                kategori: "Masuknya Jepang",
-                q: "Perjanjian penyerahan tanpa syarat wilayah Hindia Belanda kepada Jepang pada tanggal 8 Maret 1942 berlangsung di...",
-                o: ["A. Kalijati, Subang", "B. Linggarjati, Cirebon", "C. Renville, Jakarta", "D. Tarakan, Kaltara", "E. Roem-Royen, Jakarta"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Tempat penyerahan kekuasaan tanpa syarat dari pemerintah kolonial Belanda kepada Jepang terjadi di...",
+                o: ["A. Kalijati, Subang", "B. Linggarjati, Cirebon", "C. Tarakan, Kalimantan", "D. Pegangsaan Timur, Jakarta", "E. Ambarawa, Semarang"],
                 a: 0,
-                p: "Pihak Belanda menyerahkan wilayah Indonesia tanpa syarat di Kalijati, Subang."
+                p: "Penyerahan kekuasaan Belanda kepada Jepang terjadi di Kalijati, Subang."
             },
             {
-                kategori: "Masuknya Jepang",
-                q: "Kota di Indonesia yang pertama kali dikuasai oleh pasukan militer Jepang pada Januari 1942 adalah...",
-                o: ["A. Tarakan", "B. Balikpapan", "C. Surabaya", "D. Batavia", "E. Palembang"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Peristiwa yang menandai secara resmi berakhirnya masa kekuasaan kolonial Belanda di Indonesia tahun 1942 adalah...",
+                o: ["A. Perjanjian Kalijati", "B. Perjanjian Linggarjati", "C. Kapitualsi Tamiang", "D. Konferensi Meja Bundar", "E. Perjanjian Renville"],
                 a: 0,
-                p: "Jepang pertama kali mendarat dan menguasai Tarakan karena kekayaan minyak buminya."
+                p: "Perjanjian Kalijati tanggal 8 Maret 1942 mengakhiri kekuasaan Belanda."
             },
             {
-                kategori: "Masuknya Jepang",
-                q: "Gubernur Jenderal Hindia Belanda terakhir yang menandatangani kapitulasi tanpa syarat kepada Jepang adalah...",
-                o: ["A. Tjarda van Starkenborgh Stachouwer", "B. J.P. Coen", "C. Van den Bosch", "D. Daendels", "E. Van Deventer"],
-                a: 0,
-                p: "Tjarda van Starkenborgh merupakan Gubernur Jenderal Belanda terakhir saat penyerahan kekuasaan."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Jenderal Jepang yang memimpin penandatanganan Perjanjian Kalijati mewakili tentara Jepang adalah...",
-                o: ["A. Hitoshi Imamura", "B. Kuniaki Koiso", "C. Kumakichi Harada", "D. Maeda", "E. Terauchi"],
-                a: 0,
-                p: "Jenderal Hitoshi Imamura memimpin Panglima Tentara ke-16 Jepang di Jawa."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Tujuan utama Jepang menguasai wilayah Indonesia pada masa Perang Dunia II adalah...",
-                o: ["A. Memenuhi kebutuhan bahan baku industri dan logistik perang", "B. Membebaskan bangsa Asia dari kemiskinan", "C. Menyebarkan kebudayaan Bushido", "D. Membantu perjuangan kemerdekaan Indonesia", "E. Mendirikan pangkalan Angkatan Laut di Samudra Hindia"],
-                a: 0,
-                p: "Indonesia kaya akan minyak bumi dan bahan mentah pendukung perang Pasifik."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Gerakan propaganda buatan Jepang yang mengusung jargon 'Jepang Cahaya Asia, Pelindung Asia, Pemimpin Asia' adalah...",
-                o: ["A. Gerakan 3A", "B. PUTERA", "C. Jawa Hokokai", "D. Seinendan", "E. Keibodan"],
-                a: 0,
-                p: "Gerakan 3A dibentuk untuk menarik simpati rakyat Indonesia pada awal pendudukan."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Tokoh Indonesia yang ditunjuk Jepang untuk memimpin Gerakan 3A adalah...",
-                o: ["A. Mr. Shamsuddin", "B. Sukarno", "C. Mohammad Hatta", "D. Sutan Sjahrir", "E. Ki Hajar Dewantara"],
-                a: 0,
-                p: "Mr. Shamsuddin diangkat sebagai ketua propaganda Gerakan 3A."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Salah satu latar belakang Jepang terlibat dalam Perang Dunia II di kawasan Asia Pasifik adalah...",
-                o: ["A. Penyerangan pangkalan laut AS di Pearl Harbor", "B. Deklarasi perang oleh Kerajaan Belanda", "C. Pembentukan pakta pertahanan NATO", "D. Perebutan wilayah perbatasan China-India", "E. Invasi sekutu ke pulau Kyushu"],
-                a: 0,
-                p: "Serangan ke Pearl Harbor pada 7 Desember 1941 memulai Perang Pasifik."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Sikap awal sebagian besar rakyat Indonesia saat menyambut kedatangan tentara Jepang adalah...",
-                o: ["A. Antusias karena dianggap sebagai 'Saudara Tua'", "B. Langsung melakukan perlawanan gerilya", "C. Mengungsi ke pedalaman pulau", "D. Membantu pertahanan tentara Belanda", "E. Menolak berkomunikasi sama sekali"],
-                a: 0,
-                p: "Jepang disambut hangat karena mengaku sebagai Saudara Tua pemberantas kolonialisme."
-            },
-            {
-                kategori: "Masuknya Jepang",
-                q: "Peristiwa penyerahan kekuasaan Belanda kepada Jepang pada tahun 1942 ditandai oleh perundingan antara Ter Poorten dan...",
-                o: ["A. Imamura", "B. Yamashita", "C. Tojo", "D. Hirohito", "E. Nishimura"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Tokoh militer Belanda dan Jepang yang menandatangani dokumen Kapitulasi Kalijati adalah...",
+                o: ["A. Ter Poorten dan Hitoshi Imamura", "B. Van Mook dan Kumakichi Harada", "C. Tjarda dan Kuniaki Koiso", "D. Van den Bosch dan Maeda", "E. De Kock dan Yamashita"],
                 a: 0,
                 p: "Panglima KNIL Ter Poorten menyerah kepada Panglima Jepang Hitoshi Imamura."
             },
             {
-                kategori: "Masuknya Jepang",
-                q: "Salah satu faktor luar negeri yang mempercepat jatuhnya Hindia Belanda ke tangan Jepang adalah...",
-                o: ["A. Lemahnya pertahanan Sekutu (ABDACOM) di Asia Tenggara", "B. Pemberontakan PKI di Indonesia", "C. Bantuan senjata dari Uni Soviet ke Jepang", "D. Krisis ekonomi global tahun 1930", "E. Blokade laut oleh Jerman di Jawa"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Tujuan utama pemerintah Kekaisaran Jepang menguasai dan menduduki wilayah Indonesia adalah...",
+                o: ["A. Menguasai sumber daya alam dan bahan baku industri perang", "B. Mengembangkan kebudayaan dan bahasa Jepang di Asia", "C. Membantu rakyat Indonesia meraih kemerdekaan mutlak", "D. Membangun markas pertahanan bersama Sekutu", "E. Membebaskan Asia dari krisis ekonomi dunia"],
                 a: 0,
-                p: "Kekuatan pasukan gabungan Sekutu ABDACOM dengan cepat dipatahkan oleh Jepang."
+                p: "Jepang mengincar pasokan minyak bumi dan logistik pendukung perang."
             },
             {
-                kategori: "Masuknya Jepang",
-                q: "Sebelum mendarat di Jawa, pasukan Jepang terlebih dahulu menguasai wilayah penghasil minyak di Sumatra, yaitu...",
-                o: ["A. Palembang", "B. Padang", "C. Medan", "D. Lampung", "E. Bengkulu"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Wilayah Indonesia yang pertama kali diduduki oleh pasukan tentara Jepang pada Januari 1942 adalah...",
+                o: ["A. Tarakan", "B. Balikpapan", "C. Palembang", "D. Batavia", "E. Surabaya"],
                 a: 0,
-                p: "Kilang minyak Palembang berhasil dikuasai pasukan penerjun Jepang pada Februari 1942."
-            },
-
-            // --- SUB-BAB B: PENJAJAHAN JEPANG & TRANSFORMASI PEMERINTAHAN (13-25) ---
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Pemerintahan militer Jepang membagi wilayah Indonesia menjadi tiga wilayah kekuasaan. Wilayah Jawa dan Madura dikuasai oleh...",
-                o: ["A. Angkatan Darat (Tentara Ke-16)", "B. Angkatan Darat (Tentara Ke-25)", "C. Angkatan Laut (Armada Selatan Ke-2)", "D. Pasukan Khusus Kempeitai", "E. Kepolisian Militer Khusus"],
-                a: 0,
-                p: "Tentara Ke-16 (Rikugun) berpusat di Jakarta untuk menguasai Jawa dan Madura."
+                p: "Pasukan Jepang pertama kali mendarat dan merebut Tarakan."
             },
             {
-                kategori: "Transformasi Pemerintahan",
-                q: "Pusat pemerintahan militer Angkatan Laut Jepang (Kaigun) di Indonesia berkedudukan di...",
-                o: ["A. Makassar", "B. Bukittinggi", "C. Batavia", "D. Ambon", "E. Medan"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Peristiwa internasional yang menjadi latar belakang masuknya Jepang ke Indonesia dan dimulainya Perang Pasifik adalah...",
+                o: ["A. Penyerangan pangkalan militer AS di Pearl Harbor", "B. Invasi tentara Jerman ke wilayah Polandia", "C. Meletusnya Revolusi Bolshevik di Rusia", "D. Jatuhnya kota Singapura ke tangan Inggris", "E. Pembentukan pakta pertahanan SEATO"],
                 a: 0,
-                p: "Kaigun menguasai wilayah Kalimantan, Sulawesi, dan Maluku dengan pusat di Makassar."
+                p: "Serangan ke Pearl Harbor pada 7 Desember 1941 memulai Perang Pasifik."
             },
             {
-                kategori: "Transformasi Pemerintahan",
-                q: "Struktur pemerintahan militer tertinggi Jepang di tingkat kabupaten pada masa pendudukan disebut...",
-                o: ["A. Ken", "B. Shu", "C. Gun", "D. Son", "E. Ku"],
+                kategori: "Kedatangan Jepang & Kapitulasi",
+                q: "Sikap awal sebagian besar rakyat Indonesia saat menyambut kedatangan pasukan militer Jepang adalah...",
+                o: ["A. Menyambut antusias karena propaganda saudara tua", "B. Melakukan perlawanan gerilya secara massal", "C. Mengungsi ke daerah pedalaman hutan", "D. Membantu pertahanan tentara kolonial Belanda", "E. Bersikap acuh tak acuh dan menolak kerja sama"],
                 a: 0,
-                p: "Ken merupakan wilayah administratif setingkat Kabupaten pada masa Jepang."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Organisasi militer yang dibentuk Jepang untuk membantu pasukan Jepang dan beranggotakan pemuda Indonesia sebagai prajurit pembantu dinamakan...",
-                o: ["A. Heiho", "B. PETA", "C. Seinendan", "D. Keibodan", "E. Fujinkai"],
-                a: 0,
-                p: "Heiho adalah prajurit pembantu tentara Jepang yang diintegrasikan ke satuan militer."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Organisasi semi-militer yang dibentuk khusus untuk barisan pemuda berusia 14-22 tahun dinamakan...",
-                o: ["A. Seinendan", "B. Keibodan", "C. Suishintai", "D. Gakukotai", "E. Barisan Pelopor"],
-                a: 0,
-                p: "Seinendan berfungsi mendidik dan melatih pemuda agar mampu mempertahankan tanah air."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Pasukan semi-militer pembantu kepolisian yang bertugas menjaga lalu lintas dan keamanan desa adalah...",
-                o: ["A. Keibodan", "B. Heiho", "C. Fujinkai", "D. Kempeitai", "E. Kaigun"],
-                a: 0,
-                p: "Keibodan dibentuk sebagai pembantu kepolisian untuk menjaga ketertiban umum."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Tujuan utama pembentukan organisasi Tentara Pembela Tanah Air (PETA) oleh Jepang adalah...",
-                o: ["A. Mempertahankan Pulau Jawa dari ancaman invasi Sekutu", "B. Menindak pemberontakan petani lokal", "C. Menyebarkan paham fasisme Jepang", "D. Membantu pengumpulan hasil panen rakyat", "E. Mengawal rombongan pejabat militer Jepang"],
-                a: 0,
-                p: "PETA dibentuk sebagai pasukan pemuda lokal untuk mempertahankan wilayah dari Sekutu."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Salah satu dampak positif dari pendudukan Jepang di bidang kebudayaan dan kebahasaan adalah...",
-                o: ["A. Penggunaan Bahasa Indonesia sebagai bahasa resmi pengantar", "B. Wajibnya penggunaan Bahasa Belanda di sekolah", "C. Bebasnya penerbitan pers tanpa sensor", "D. Munculnya berbagai partai politik baru", "E. Dihapuskannya penggunaan kalender Masehi"],
-                a: 0,
-                p: "Bahasa Indonesia berkembang pesat karena Jepang melarang penggunaan bahasa Belanda."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Satu-satunya organisasi Islam yang tetap diizinkan berdiri pada awal masa pendudukan Jepang adalah...",
-                o: ["A. MIAI", "B. Muhammadiyah", "C. Nahdlatul Ulama", "D. Persis", "E. Sarekat Islam"],
-                a: 0,
-                p: "MIAI sempat diizinkan berdiri karena dinilai bersifat non-politik dan moderat."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Organisasi massa pengganti MIAI yang dibentuk Jepang untuk menghimpun dukungan umat Islam adalah...",
-                o: ["A. Masyumi", "B. Nahdlatul Ulama", "C. Parmusi", "D. Muhammadiyah", "E. Perti"],
-                a: 0,
-                p: "Masyumi dibentuk pada tahun 1943 untuk menggantikan MIAI yang dibubarkan."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Korps kepolisian militer rahasia Jepang yang terkenal sangat kejam dalam menindak penentang Jepang dinamakan...",
-                o: ["A. Kempeitai", "B. Tokubetsu", "C. Gunseikan", "D. Rikugun", "E. Kaigun"],
-                a: 0,
-                p: "Kempeitai adalah polisi militer rahasia yang bertugas menjaga keamanan internal."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Organisasi kewanitaan yang dibentuk Jepang untuk membantu garis belakang pertempuran adalah...",
-                o: ["A. Fujinkai", "B. Gakukotai", "C. Jibakutai", "D. Keibodan", "E. Heiho"],
-                a: 0,
-                p: "Fujinkai dibentuk untuk menghimpun tenaga wanita dalam menyokong kebutuhan perang."
-            },
-            {
-                kategori: "Transformasi Pemerintahan",
-                q: "Perubahan sistem penanggalan yang diberlakukan Jepang di Indonesia pada masa pendudukannya adalah...",
-                o: ["A. Menggunakan kalender Sumera (tahun Jawa/Jepang)", "B. Menggunakan kalender Hijriah secara mutlak", "C. Menghapuskan perhitungan bulan Masehi", "D. Mengadopsi sistem kalender Cina", "E. Menggunakan sistem kalender Saka"],
-                a: 0,
-                p: "Jepang mengganti penanggalan masehi dengan tahun Sumera (2602)."
+                p: "Jepang disambut hangat karena mengaku sebagai saudara tua pengusir Barat."
             },
 
-            // --- SUB-BAB C: KEBIJAKAN PEMERINTAHAN PENDUDUKAN JEPANG (26-38) ---
+            // --- 2. GERAKAN TIGA A (8-12) ---
             {
-                kategori: "Kebijakan Jepang",
-                q: "Sistem kerja paksa tanpa upah yang diterapkan Jepang kepada rakyat Indonesia dinamakan...",
+                kategori: "Gerakan Tiga A",
+                q: "Propaganda awal Jepang yang mengusung narasi Pemimpin Asia, Pelindung Asia, dan Cahaya Asia diwadahi dalam...",
+                o: ["A. Gerakan Tiga A", "B. PUTERA", "C. Jawa Hokokai", "D. Seinendan", "E. Keibodan"],
+                a: 0,
+                p: "Gerakan Tiga A adalah organisasi propaganda pertama bentukan Jepang."
+            },
+            {
+                kategori: "Gerakan Tiga A",
+                q: "Semboyan resmi dari organisasi propaganda Gerakan Tiga A yang disebarkan Jepang adalah...",
+                o: ["A. Nippon Cahaya Asia, Nippon Pelindung Asia, Nippon Pemimpin Asia", "B. Nippon Pelindung Indonesia, Nippon Pemimpin Asia, Nippon Pembela Islam", "C. Jepang Saudara Tua, Jepang Pembela Asia, Jepang Cahaya Dunia", "D. Asia untuk Asia, Jepang Pemimpin Dunia, Jepang Pelindung Bangsa", "E. Pelindung Rakyat, Pemimpin Asia, Cahaya Timur"],
+                a: 0,
+                p: "Semboyan Tiga A mencakup Nippon Cahaya, Pelindung, dan Pemimpin Asia."
+            },
+            {
+                kategori: "Gerakan Tiga A",
+                q: "Tokoh pergerakan nasional Indonesia yang ditunjuk oleh Jepang untuk memimpin Gerakan Tiga A adalah...",
+                o: ["A. Mr. Raden Samsuddin", "B. Ir. Soekarno", "C. Drs. Moh. Hatta", "D. Sutan Sjahrir", "E. Ki Hajar Dewantara"],
+                a: 0,
+                p: "Mr. Raden Samsuddin diangkat sebagai ketua Gerakan Tiga A."
+            },
+            {
+                kategori: "Gerakan Tiga A",
+                q: "Tujuan utama Jepang membentuk dan menyebarkan propaganda Gerakan Tiga A adalah...",
+                o: ["A. Memikat simpati dan mobilisasi dukungan rakyat Indonesia", "B. Merekrut pemuda untuk dijadikan prajurit garis depan", "C. Mempersiapkan struktur ketatanegaraan Indonesia merdeka", "D. Menggalang dana bantuan untuk korban Perang Pasifik", "E. Membantu menyebarkan ajaran agama dan budaya lokal"],
+                a: 0,
+                p: "Gerakan Tiga A bertujuan menghimpun simpati dan dukungan rakyat."
+            },
+            {
+                kategori: "Gerakan Tiga A",
+                q: "Alasan utama pembubaran Gerakan Tiga A oleh pemerintah militer Jepang pada akhir tahun 1942 adalah...",
+                o: ["A. Dianggap tidak efektif menarik simpati rakyat dan tokoh nasionalis", "B. Terjadi perpecahan internal di antara para pengurusnya", "C. Ketua organisasi melakukan pemberontakan bersenjata", "D. Dianggap terlalu radikal menuntut kemerdekaan Indonesia", "E. Kekurangan dana operasional dari pemerintah Jepang"],
+                a: 0,
+                p: "Gerakan Tiga A dibubarkan karena tidak mendapat sambutan hangat rakyat."
+            },
+
+            // --- 3. PUTERA & EMPAT SERANGKAI (13-21) ---
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Organisasi massa PUTERA (Pusat Tenaga Rakyat) dibentuk oleh pemerintah Jepang pada tahun...",
+                o: ["A. 1943", "B. 1942", "C. 1944", "D. 1945", "E. 1941"],
+                a: 0,
+                p: "PUTERA didirikan secara resmi pada 16 April 1943."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Tujuan awal pendudukan Jepang membentuk organisasi Pusat Tenaga Rakyat (PUTERA) adalah...",
+                o: ["A. Memusatkan seluruh potensi rakyat untuk mendukung perang Jepang", "B. Melatih pasukan militer khusus untuk merebut benteng Sekutu", "C. Menyusun naskah proklamasi dan UUD bagi Indonesia", "D. Menghimpun bahan pangan gratis untuk daerah bencana", "E. Mengawasi gerak-gerik tokoh penganut radikalisme"],
+                a: 0,
+                p: "Tujuan Jepang membentuk PUTERA adalah memusatkan potensi modal dan tenaga rakyat."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Susunan tokoh nasionalis yang dikenal dengan sebutan Empat Serangkai pemimpin PUTERA adalah...",
+                o: ["A. Ir. Soekarno, Drs. Moh. Hatta, Ki Hajar Dewantara, K.H. Mas Mansyur", "B. Ir. Soekarno, Moh. Hatta, Sutan Sjahrir, Amir Sjarifuddin", "C. Cipto Mangunkusumo, Douwes Dekker, Ki Hajar Dewantara, Soekarno", "D. K.H. Ahmad Dahlan, K.H. Hasyim Asy'ari, Agus Salim, Moh. Hatta", "E. Supriyadi, Sukarni, Chaerul Saleh, Wikana"],
+                a: 0,
+                p: "Empat Serangkai terdiri dari Soekarno, Hatta, Ki Hajar Dewantara, dan Mas Mansyur."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Peran strategis yang dimanfaatkan oleh tokoh Empat Serangkai selama memimpin PUTERA adalah...",
+                o: ["A. Menggunakan fasilitas Jepang untuk mempersiapkan mental kemerdekaan", "B. Mengirimkan pemuda secara sukarela ke pertempuran Pasifik", "C. Menyusun sistem perbankan baru menggantikan mata uang Jepang", "D. Membantu Jepang merekrut romusha secara paksa dari desa", "E. Melarang pergerakan organisasi keagamaan di pedesaan"],
+                a: 0,
+                p: "Tokoh nasionalis memanfaatkan PUTERA untuk memelihara semangat nasionalisme."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Sebab utama pemerintah militer Jepang memutuskan untuk membubarkan PUTERA adalah...",
+                o: ["A. Lebih dimanfaatkan tokoh nasionalis bagi kepentingan kemerdekaan", "B. Para pemimpinnya menolak menghadiri rapat pemerintah Jepang", "C. Terjadi korupsi besar-besaran dalam pengurusan keuangan", "D. Kebijakan organisasi bertentangan dengan ajaran agama", "E. Kekalahan Jepang atas tentara Sekutu di pertempuran Saipan"],
+                a: 0,
+                p: "Jepang membubarkan PUTERA karena dinilai lebih menguntungkan Indonesia."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Organisasi massa yang dibentuk oleh Jepang sebagai pengganti dari PUTERA pada tahun 1944 adalah...",
+                o: ["A. Jawa Hokokai", "B. Gerakan 3A", "C. MIAI", "D. Masyumi", "E. Suishintai"],
+                a: 0,
+                p: "Jawa Hokokai dibentuk sebagai pengganti PUTERA yang dibubarkan."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Tujuan utama dibentuknya Jawa Hokokai (Himpunan Kebaktian Jawa) oleh Jepang adalah...",
+                o: ["A. Menggalang pengorbanan dan kebaktian rakyat demi perang Jepang", "B. Memberikan pendidikan gratis bagi anak-anak di daerah pelosok", "C. Mengembangkan potensi seni dan budaya tradisional Indonesia", "D. Mempersiapkan kemerdekaan Indonesia sesuai janji Koiso", "E. Mengawasi kinerja pegawai negeri sipil era Jepang"],
+                a: 0,
+                p: "Jawa Hokokai bertujuan menggalang semangat kebaktian rakyat bagi Jepang."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Perbedaan mendasar antara struktur kepemimpinan PUTERA dan Jawa Hokokai terletak pada...",
+                o: ["A. Jawa Hokokai dipimpin langsung oleh pejabat militer Jepang", "B. PUTERA sama sekali tidak melibatkan tokoh pergerakan lokal", "C. Jawa Hokokai dibentuk tanpa pengawasan dari Kempeitai", "D. PUTERA merupakan organisasi bersenjata lengkap", "E. Jawa Hokokai khusus beranggotakan kaum perempuan"],
+                a: 0,
+                p: "Jawa Hokokai dipimpin langsung oleh pimpinan militer Jepang (Gunseikan)."
+            },
+            {
+                kategori: "PUTERA & Empat Serangkai",
+                q: "Dampak positif keberadaan organisasi PUTERA bagi perjuangan bangsa Indonesia adalah...",
+                o: ["A. Memperkuat konsolidasi dan komunikasi antartokoh nasionalis", "B. Menghentikan pengerahan romusha ke luar pulau Jawa", "C. Memaksa Jepang menyerahkan kedaulatan lebih cepat", "D. Mendapatkan bantuan persenjataan berat dari Sekutu", "E. Menghapuskan seluruh sistem pajak pertanian"],
+                a: 0,
+                p: "PUTERA menjadi sarana komunikasi dan konsolidasi tokoh-tokoh nasionalis."
+            },
+
+            // --- 4. ROMUSHA & BENTUK EKSPLOITASI (22-30) ---
+            {
+                kategori: "Romusha & Eksploitasi",
+                q: "Sistem pengerahan tenaga kerja secara paksa tanpa upah layak pada masa Jepang disebut...",
                 o: ["A. Romusha", "B. Rodi", "C. Cultuurstelsel", "D. Seikerei", "E. Tonarigumi"],
                 a: 0,
-                p: "Romusha merupakan pengerahan tenaga kerja secara paksa untuk kepentingan militer."
+                p: "Romusha adalah sebutan untuk pekerja paksa pada masa pendudukan Jepang."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Para wanita Indonesia yang ditipu dan dipaksa menjadi wanita pemuas kebutuhan tentara Jepang dinamakan...",
-                o: ["A. Jugun Ianfu", "B. Romukyo", "C. Fujinkai", "D. Geisha", "E. Heiho wanita"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Para tenaga kerja Romusha sebagian besar dikirim oleh Jepang untuk mengerjakan proyek...",
+                o: ["A. Pembangunan rel kereta, benteng, dan lapangan terbang", "B. Pendirian sekolah dasar dan sarana kesehatan masyarakat", "C. Pembangunan pabrik tekstil dan mesin pemintal modern", "D. Pembuatan bendungan irigasi pertanian rakyat desa", "E. Pembukaan tempat wisata dan museum kebudayaan"],
                 a: 0,
-                p: "Jugun Ianfu adalah sebutan bagi wanita korban perbudakan seksual tentara Jepang."
+                p: "Romusha dipekerjakan untuk sarana pertahanan dan militer perang."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Sistem pemerintahan tingkat bawah yang dibentuk Jepang dan menjadi cikal bakal Rukun Tetangga (RT) saat ini adalah...",
-                o: ["A. Tonarigumi", "B. Ku", "C. Son", "D. Gun", "E. Chokai"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Dampak sosial dan ekonomi yang amat memprihatinkan akibat pengerahan Romusha adalah...",
+                o: ["A. Kelaparan, kemiskinan ekstrim, dan penurunan populasi desa", "B. Meningkatnya taraf hidup dan kesejahteraan keluarga pekerja", "C. Terjadinya modernisasi fasilitas perdesaan secara pesat", "D. Berkurangnya pengangguran di sektor industri perotaan", "E. Meningkatnya produksi pangan nasional secara drastis"],
                 a: 0,
-                p: "Tonarigumi dibentuk untuk mempermudah pengawasan dan penyaluran logistik."
+                p: "Romusha memicu kelaparan hebat, kemiskinan, dan kematian massal."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Kebijakan ekonomi yang diterapkan Jepang di Indonesia berpusat pada sistem...",
-                o: ["A. Ekonomi perang dan autarki", "B. Ekonomi pasar bebas", "C. Ekonomi kapitalisme liberal", "D. Ekonomi etis terbuka", "E. Ekonomi merkantilisme"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Bentuk eksploitasi ekonomi berupa penyerahan wajib hasil panen padi bertujuan untuk...",
+                o: ["A. Memenuhi pasokan logistik pangan pasukan perang Jepang", "B. Membantu rakyat miskin yang terdampak bencana alam", "C. Dihimpun sebagai cadangan makanan warga perdesaan", "D. Diekspor ke negara tetangga untuk mendapat modal", "E. Dijual kembali kepada petani dengan harga terjangkau"],
                 a: 0,
-                p: "Sistem autarki mewajibkan setiap daerah memenuhi kebutuhan perangnya sendiri."
+                p: "Hasil panen padi disita untuk konsumsi dan logistik prajurit Jepang."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Tanaman yang diwajibkan oleh Jepang untuk ditanam secara massal guna kebutuhan minyak pelumas senjata adalah...",
-                o: ["A. Pohon Jarak", "B. Kopi", "C. Tembakau", "D. Tebu", "E. Teh"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Tanaman yang diwajibkan oleh Jepang untuk ditanam secara massal oleh para petani adalah...",
+                o: ["A. Pohon Jarak", "B. Kopi Robusta", "C. Tembakau", "D. Tebu", "E. Teh Hitam"],
                 a: 0,
-                p: "Minyak biji jarak dimanfaatkan Jepang sebagai pelumas mesin dan pesawat perang."
+                p: "Minyak biji jarak digunakan sebagai pelumas mesin tempur dan pesawat."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Upacara penghormatan membungkukkan badan ke arah matahari terbit (Tokyo) untuk menghormati Kaisar dinamakan...",
-                o: ["A. Seikerei", "B. Bushido", "C. Kimigayo", "D. Hinomaru", "E. Harakiri"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Akibat langsung dari kebijakan penyitaan hasil pertanian yang sangat ketat oleh Jepang adalah...",
+                o: ["A. Bencana krisis pangan berat dan busung lapar", "B. Surplus pendapatan bagi para pemilik lahan pertanian", "C. Keberhasilan swasembada beras di Pulau Jawa", "D. Penurunan harga bahan makanan secara signifikan", "E. Meningkatnya ekspor bahan pertanian ke luar negeri"],
                 a: 0,
-                p: "Seikerei adalah ritual membungkuk ke arah Istana Kaisar di Tokyo."
+                p: "Penyitaan padi menyebabkan penderitaan krisis pangan dan busung lapar."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Mengapa kebijakan Seikerei mendapat penolakan keras dari tokoh-tokoh agama Islam di Indonesia?",
-                o: ["A. Dianggap bertentangan dengan ajaran tauhid", "B. Menyebabkan rasa sakit pada pinggang", "C. Menghabiskan waktu salat", "D. Mengganggu tradisi lokal", "E. Hanya boleh dilakukan oleh tentara"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Struktur kemasyarakatan terkecil yang dibentuk Jepang untuk mempermudah kontrol dan pengawasan warga adalah...",
+                o: ["A. Tonarigumi", "B. Ku", "C. Gun", "D. Son", "E. Shu"],
                 a: 0,
-                p: "Menunduk menyembah Kaisar dinilai menyeringai tauhid dan menyembah selain Allah."
+                p: "Tonarigumi (Rukun Tetangga) dibentuk untuk mobilisasi dan pengawasan warga."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Dampak utama dari kebijakan eksploitasi beras yang berlebihan oleh militer Jepang adalah...",
-                o: ["A. Bencana kelaparan dan bahaya busung lapar di desa-desa", "B. Meningkatnya pendapatan petani local", "C. Surplus pangan di wilayah perkotaan", "D. Ekspor beras Indonesia meningkat pesat", "E. Penurunan harga pangan secara drastis"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Bentuk eksploitasi terhadap kaum perempuan Indonesia pada masa pendudukan Jepang dikenal dengan sebutan...",
+                o: ["A. Jugun Ianfu", "B. Fujinkai", "C. Keibodan", "D. Heiho", "E. Gakukotai"],
                 a: 0,
-                p: "Penyitaan hasil panen secara paksa memicu krisis pangan berat di berbagai daerah."
+                p: "Jugun Ianfu adalah istilah bagi perempuan korban perbudakan seksual tentara Jepang."
             },
             {
-                kategori: "Kebijakan Jepang",
-                q: "Organisasi propaganda Jawa Hokokai (Himpunan Kebaktian Jawa) dibentuk oleh Jepang pada tahun 1944 dengan tujuan...",
-                o: ["A. Penghimpunan setoran padi dan pengorbanan rakyat demi perang", "B. Persiapan pembentukan kabinet pemerintahan baru", "C. Pelatihan militer khusus bagi kaum terpelajar", "D. Penggalangan dana pendidikan anak yatim", "E. Mengawasi gerakan buruh tambang"],
+                kategori: "Romusha & Eksploitasi",
+                q: "Sistem ekonomi autarki yang diterapkan Jepang di Indonesia memiliki arti bahwa...",
+                o: ["A. Setiap daerah wajib memenuhi kebutuhan perangnya sendiri", "B. Pemerintah memberikan bantuan modal gratis bagi pengusaha", "C. Perdagangan internasional dibuka bebas tanpa tarif bea masuk", "D. Seluruh perusahaan Belanda diserahkan kepada pihak swasta", "E. Hasil tambang dijual bebas ke pasar luar negeri"],
                 a: 0,
-                p: "Jawa Hokokai merupakan organisasi resmi pemerintah untuk mobilisasi sumber daya."
-            },
-            {
-                kategori: "Kebijakan Jepang",
-                q: "Tindakan pengawasan ketat terhadap media massa dan pers pada masa pendudukan Jepang dilakukan oleh badan...",
-                o: ["A. Sendenbu", "B. Kempeitai", "C. Gunseikan", "D. Naimubu", "E. Shumubu"],
-                a: 0,
-                p: "Sendenbu adalah Departemen Propaganda Jepang yang mengontrol seluruh informasi pers."
-            },
-            {
-                kategori: "Kebijakan Jepang",
-                q: "Surat kabar berbahasa Indonesia yang diizinkan terbit oleh Jepang di bawah pengawasan ketat adalah...",
-                o: ["A. Asia Raya", "B. Medan Prijaji", "C. De Express", "D. Bintang Timur", "E. Indonesia Merdeka"],
-                a: 0,
-                p: "Asia Raya diterbitkan di Jakarta sebagai sarana propaganda pemerintah Jepang."
-            },
-            {
-                kategori: "Kebijakan Jepang",
-                q: "Perubahan sistem pendidikan pada masa pendudukan Jepang yang menguntungkan rakyat Indonesia adalah...",
-                o: ["A. Penghapusan sistem diskriminasi kasta sekolah kolonial Belanda", "B. Kewajiban belajar bahasa Inggris sejak sekolah dasar", "C. Bebasnya biaya kuliah di Perguruan Tinggi", "D. Pendirian universitas kedokteran di setiap kota", "E. Dihapuskannya ujian kenaikan kelas"],
-                a: 0,
-                p: "Jepang menyatukan tingkat sekolah dasar menjadi 6 tahun untuk semua kalangan."
-            },
-            {
-                kategori: "Kebijakan Jepang",
-                q: "Mata uang buatan Jepang yang beredar luas dan menyebabkan inflasi besar di akhir masa pendudukan adalah...",
-                o: ["A. Uang invasi / Rupiah Hindia Belanda buatan Jepang", "B. Yen Jepang", "C. Sen Emas", "D. Gulden", "E. ORI"],
-                a: 0,
-                p: "Pencetakan uang kertas Jepang tanpa kontrol memicu inflasi amat tinggi."
+                p: "Sistem autarki mewajibkan tiap wilayah mencukupi kebutuhan perang secara mandiri."
             },
 
-            // --- SUB-BAB D: STRATEGI BANGSA INDONESIA MENGAHADAPI TIRANI JEPANG (39-50) ---
+            // --- 5. ORGANISASI SEMI-MILITER & MILITER (31-41) ---
             {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Organisasi PUTERA (Pusat Tenaga Rakyat) yang dibentuk Jepang dipimpin oleh tokoh Empat Serangkai, yaitu...",
-                o: ["A. Sukarno, Moh. Hatta, Ki Hajar Dewantara, KH Mas Mansyur", "B. Sukarno, Hatta, Sjahrir, Amir Sjarifuddin", "C. Cipto Mangunkusumo, Douwes Dekker, Sukarno, Hatta", "D. Agus Salim, Wahid Hasyim, Sukarno, Hatta", "E. Supriyadi, Sukarni, Chaerul Saleh, Adam Malik"],
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Organisasi pemuda yang dibentuk Jepang untuk mendapatkan latihan dasar kemiliteran adalah...",
+                o: ["A. Seinendan", "B. Keibodan", "C. Heiho", "D. Barisan Pelopor", "E. Fujinkai"],
                 a: 0,
-                p: "PUTERA dipimpin oleh Empat Serangkai untuk memusatkan tenaga rakyat."
+                p: "Seinendan dibentuk sebagai wadah latihan dasar kemiliteran pemuda."
             },
             {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Mengapa para tokoh nasionalis menggunakan strategi kooperatif (bekerja sama) dengan Jepang?",
-                o: ["A. Memanfaatkan organisasi buatan Jepang untuk memupuk semangat nasionalisme", "B. Menerima sepenuhnya ideologi fasisme Jepang", "C. Karena tidak memiliki keberanian bertempur", "D. Agar diberikan jabatan tinggi dalam kerajaan Jepang", "E. Dijanjikan harta kekayaan oleh pemerintah militer"],
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Tujuan utama pemerintah militer Jepang membentuk Seinendan adalah...",
+                o: ["A. Mendidik dan melatih pemuda agar mampu mempertahankan tanah air", "B. Menyiapkan kader pegawai pemerintahan sipil yang profesional", "C. Merekrut tenaga kerja kasar untuk dikirim ke luar negeri", "D. Mengawasi distribusi bahan makanan di pasar tradisional", "E. Mengamankan fasilitas kilang minyak di Sumatra"],
                 a: 0,
-                p: "Tokoh nasionalis memanfaatkan wadah resmi untuk menyiapkan kemerdekaan."
+                p: "Seinendan bertujuan melatih pemuda menjaga keamanan pertahanan."
             },
             {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Sebab utama Jepang membubarkan organisasi PUTERA pada tahun 1944 adalah...",
-                o: ["A. Lebih menguntungkan perjuangan kemerdekaan Indonesia dibanding kepentingan Jepang", "B. Adanya korupsi dana di dalam kepengurusan", "C. Para pemimpinnya menolak membantu romusha", "D. Terjadi perselisihan antartokoh Empat Serangkai", "E. Anggotanya melakukan aksi mogok kerja massal"],
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Fungsi utama dari organisasi Keibodan yang dibentuk oleh Jepang adalah...",
+                o: ["A. Pembantu kepolisian untuk keamanan umum dan lalu lintas", "B. Pasukan khusus bertempur di garis terdepan Pasifik", "C. Korps perawat militer di rumah sakit lapangan", "D. Petugas pengumpul pajak dan panen padi desa", "E. Laskar pelajar untuk mengawasi kurikulum sekolah"],
                 a: 0,
-                p: "Jepang merasa PUTERA dimanfaatkan para tokoh untuk kepentingan nasionalisme."
+                p: "Keibodan bertugas membantu polisi menjaga keamanan dan ketertiban."
             },
             {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Perjuangan secara sembunyi-sembunyi tanpa merespons ajakan kerja sama Jepang dinamakan...",
-                o: ["A. Perjuangan bawah tanah", "B. Perjuangan kooperatif", "C. Perjuangan parlementer", "D. Gerakan diplomasi terbuka", "E. Perlawanan bersenjata resmi"],
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Organisasi barisan semi-militer khusus yang diperuntukkan bagi kaum perempuan dinamakan...",
+                o: ["A. Fujinkai", "B. Jibakutai", "C. Suishintai", "D. Gakukotai", "E. Keibodan"],
+                a: 0,
+                p: "Fujinkai adalah organisasi perempuan pembantu garis belakang perang."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Kepanjangan dari nama organisasi militer PETA yang dibentuk pada era Jepang adalah...",
+                o: ["A. Pembela Tanah Air", "B. Pasukan Tentara Asia", "C. Pemuda Tentara Amanah", "D. Pejuang Tanah Airku", "E. Persatuan Tentara Asia"],
+                a: 0,
+                p: "PETA merupakan singkatan dari Pembela Tanah Air."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Tujuan utama dibentuknya kesatuan PETA oleh pemerintah militer Jepang adalah...",
+                o: ["A. Menjadi pasukan pertahanan lokal dari ancaman invasi Sekutu", "B. Mengawal perjalanan para pejabat tinggi Kekaisaran Jepang", "C. Menindak perlawanan kaum buruh dan petani di pedesaan", "D. Membantu pengerahan Romusha ke proyek luar Jawa", "E. Membentuk angkatan udara mandiri di wilayah Indonesia"],
+                a: 0,
+                p: "PETA dibentuk untuk membantu Jepang menahan invasi Sekutu."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Dampak positif terbesar dari pembentukan PETA bagi perjuangan bangsa Indonesia adalah...",
+                o: ["A. Pemuda mendapat bekal taktik militer cikal bakal BKR dan TNI", "B. Jepang memberikan kemerdekaan secara langsung tanpa syarat", "C. Seluruh persenjataan berat Jepang diserahkan secara gratis", "D. Terhentinya seluruh aksi perlawanan bersenjata di daerah", "E. Terbentuknya pakta pertahanan militer bersama di Asia"],
+                a: 0,
+                p: "Alumni PETA menjadi inti kekuatan militer Indonesia (BKR/TNI)."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Salah satu tokoh nasional yang pernah menjabat sebagai komandan dalam kesatuan PETA adalah...",
+                o: ["A. Sudirman", "B. Sutan Sjahrir", "C. Moh. Hatta", "D. Agus Salim", "E. Chaerul Saleh"],
+                a: 0,
+                p: "Jenderal Sudirman merupakan salah satu perwira lulusan PETA."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Perbedaan utama antara kedudukan anggota Heiho dan PETA terletak pada...",
+                o: ["A. Heiho dimasukkan langsung ke dalam unit tentara Jepang", "B. PETA tidak pernah mendapatkan pelatihan persenjataan", "C. Heiho khusus beranggotakan para tokoh senior pergerakan", "D. PETA dipimpin langsung oleh jenderal berkebangsaan Jepang", "E. Heiho hanya bertugas di lingkungan istana kekaisaran"],
+                a: 0,
+                p: "Heiho diintegrasikan langsung ke dalam struktur angkatan perang Jepang."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Organisasi barisan pemuda bertema pelajar atau murid sekolah pada masa Jepang dinamakan...",
+                o: ["A. Gakukotai", "B. Heiho", "C. Seinendan", "D. Keibodan", "E. Suishintai"],
+                a: 0,
+                p: "Gakukotai merupakan laskar pelajar yang mendapat latihan militer."
+            },
+            {
+                kategori: "Organisasi Militer & Semi-Militer",
+                q: "Pangkat tertinggi bagi perwira komandan batalyon dalam struktur kesatuan PETA adalah...",
+                o: ["A. Daidanco", "B. Chudanco", "C. Shodanco", "D. Bundanco", "E. Giyuhei"],
+                a: 0,
+                p: "Daidanco adalah komandan batalyon, pangkat tertinggi bagi warga lokal di PETA."
+            },
+
+            // --- 6. BENTUK PERLAWANAN & TOKOHNYA (42-50) ---
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Pemberontakan pasukan PETA terbesar terhadap pendudukan Jepang terjadi di Blitar dipimpin oleh...",
+                o: ["A. Supriyadi", "B. Sudirman", "C. Gatot Soebroto", "D. Ahmad Yani", "E. Slamet Riyadi"],
+                a: 0,
+                p: "Shodanco Supriyadi memimpin perlawanan tentara PETA di Blitar."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Latar belakang utama yang memicu pemberontakan PETA di Blitar di bawah pimpinan Supriyadi adalah...",
+                o: ["A. Penderitaan rakyat akibat Romusha dan penderitaan fisik", "B. Penolakan atas pembubaran kesatuan PETA secara mendadak", "C. Tuntutan Kenaikan gaji bagi para perwira militer PETA", "D. Keterlambatan pengiriman pasokan senjata dari Jepang", "E. Perselisihan antarkomandan batalyon di markas militer"],
+                a: 0,
+                p: "Pemberontakan dipicu rasa iba atas kekejaman Romusha terhadap rakyat."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Perlawanan rakyat dan santri di Singaparna, Tasikmalaya menentang Jepang dipimpin oleh...",
+                o: ["A. K.H. Zaenal Mustofa", "B. Tengku Abdul Jalil", "C. K.H. Hasyim Asy'ari", "D. H. Madriyas", "E. K.H. Ahmad Dahlan"],
+                a: 0,
+                p: "KH Zaenal Mustofa memimpin perlawanan santri Singaparna."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Alasan utama perlawanan K.H. Zaenal Mustofa di Singaparna terhadap Jepang adalah penolakan terhadap...",
+                o: ["A. Kewajiban Seikerei karena bertentangan dengan ajaran tauhid", "B. Pembentukan organisasi barisan perempuan Fujinkai", "C. Penggunaan Bahasa Indonesia di pondok pesantren", "D. Perekrutan pemuda desa menjadi anggota Seinendan", "E. Penyerahan hewan ternak untuk konsumsi tentara"],
+                a: 0,
+                p: "Penolakan terjadi karena ritual Seikerei dianggap menyiagakan syirik."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Perlawanan rakyat di Cot Plieng, Aceh melawan kezaliman tentara Jepang dipimpin oleh...",
+                o: ["A. Tengku Abdul Jalil", "B. Teuku Umar", "C. Panglima Polim", "D. Cut Nyak Dien", "E. Tengku Hamid"],
+                a: 0,
+                p: "Tengku Abdul Jalil memimpin perlawanan rakyat Cot Plieng di Aceh."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Perlawanan petani di Indramayu, Jawa Barat pada masa pendudukan Jepang dipicu oleh kebijakan...",
+                o: ["A. Perekrutan romusha dan penyitaan padi yang memberatkan", "B. Penutupan rumah ibadah dan pasar tradisional", "C. Larangan bertani dan kewajiban pindah permukiman", "D. Pembatasan penggunaan bahasa Sunda dalam komunikasi", "E. Pembatalan sertifikat kepemilikan tanah rakyat"],
+                a: 0,
+                p: "Perlawanan Indramayu dipicu paksaan pengerahan romusha dan penyitaan padi."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Perlawanan rakyat di Biak, Papua dalam menghadapi tirani Jepang dikenal dengan nama Gerakan Koreri dipimpin oleh...",
+                o: ["A. L. Rumkorem", "B. Silas Papare", "C. Frans Kaisiepo", "D. Marthen Indey", "E. Johans Ariks"],
+                a: 0,
+                p: "L. Rumkorem memimpin Gerakan Koreri di Biak."
+            },
+            {
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Bentuk perjuangan rahasia tanpa kerja sama terbuka dengan Jepang dinamakan...",
+                o: ["A. Perjuangan bawah tanah", "B. Perjuangan kooperatif", "C. Perjuangan diplomasi", "D. Perjuangan parlementer", "E. Perlawanan bersenjata resmi"],
                 a: 0,
                 p: "Gerakan bawah tanah dilakukan rahasia oleh kelompok pemuda anti-fasis."
             },
             {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Tokoh pemuda yang memimpin kelompok gerakan bawah tanah dan rajin mendengarkan siaran radio Sekutu adalah...",
-                o: ["A. Sutan Sjahrir", "B. Sukarno", "C. Sayuti Melik", "D. Supriyadi", "E. K.H. Zaenal Mustofa"],
+                kategori: "Bentuk Perlawanan & Tokoh",
+                q: "Tokoh pemuda yang memimpin gerakan bawah tanah dan rajin memantau siaran radio Sekutu adalah...",
+                o: ["A. Sutan Sjahrir", "B. Ir. Soekarno", "C. Sayuti Melik", "D. K.H. Mas Mansyur", "E. Mr. Shamsuddin"],
                 a: 0,
-                p: "Sutan Sjahrir memimpin kelompok bawah tanah yang memantau perkembangan Perang Dunia II."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Perlawanan rakyat di Cot Plieng, Aceh melawan Jepang pada tahun 1942 dipimpin oleh...",
-                o: ["A. Tengku Abdul Jalil", "B. Teuku Umar", "C. Panglima Polim", "D. Cut Nyak Dien", "E. Tengku Hamid"],
-                a: 0,
-                p: "Tengku Abdul Jalil memimpin perlawanan ulama dan rakyat Cot Plieng Aceh."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Perlawanan santri dan rakyat Singaparna, Tasikmalaya menolak kewajiban Seikerei dipimpin oleh...",
-                o: ["A. K.H. Zaenal Mustofa", "B. K.H. Hasyim Asy'ari", "C. K.H. Ahmad Dahlan", "D. K.H. Mas Mansyur", "E. K.H. Ruhiyat"],
-                a: 0,
-                p: "KH Zaenal Mustofa menentang keras perintah Seikerei karena dianggap syirik."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Pemberontakan pasukan PETA terbesar terhadap pemerintah militer Jepang terjadi di Blitar di bawah pimpinan...",
-                o: ["A. Supriyadi", "B. Sudirman", "C. Gatot Soebroto", "D. Slamet Riyadi", "E. Moestopo"],
-                a: 0,
-                p: "Shodanco Supriyadi memimpin pahlawan PETA Blitar memberontak pada Februari 1945."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Latar belakang utama yang memicu pahlawan PETA di Blitar melakukan perlawanan terhadap Jepang adalah...",
-                o: ["A. Keprihatinan mendalam atas penderitaan rakyat akibat Romusha", "B. Janji kemerdekaan yang tidak kunjung ditepati", "C. Keinginan mengganti pimpinan markas Jepang", "D. Pembubaran pasukan PETA secara mendadak", "E. Penolakan atas kenaikan ganti rugi tanah"],
-                a: 0,
-                p: "Prajurit PETA tak tega melihat penderitaan rakyat akibat kekejaman Romusha."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Perlawanan rakyat di Biak, Papua dalam menghadapi tirani militer Jepang dikenal dengan nama...",
-                o: ["A. Gerakan Koreri", "B. Perang Cendrawasih", "C. Perlawanan Asmat", "D. Gerakan Korano", "E. Perang Suku Kamoro"],
-                a: 0,
-                p: "Gerakan Koreri dipimpin oleh L. Rumkorem di Biak menggunakan taktik gerilya."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Perlawanan petani di Indramayu, Jawa Barat pada masa pendudukan Jepang disebabkan oleh...",
-                o: ["A. Perekrutan romusha dan penyitaan padi yang sangat memberatkan", "B. Larangan beribadah di masjid lokal", "C. Penutupan pasar-pasar tradisional", "D. Sengketa lahan perkebunan teh", "E. Pembatasan penggunaan bahasa Sunda"],
-                a: 0,
-                p: "Petani Indramayu memberontak karena paksaan penyerahan hasil padi."
-            },
-            {
-                kategori: "Strategi Menghadapi Jepang",
-                q: "Janji kemerdekaan Indonesia di kelak kemudian hari pertama kali diucapkan oleh Perdana Menteri Jepang bernama...",
-                o: ["A. Kuniaki Koiso", "B. Hideki Tojo", "C. Fumimaro Konoe", "D. Nobuyuki Abe", "E. Kantaro Suzuki"],
-                a: 0,
-                p: "PM Koiso mengucapkan Janji Koiso pada September 1944 demi menarik dukungan Indonesia."
+                p: "Sutan Sjahrir memimpin kelompok bawah tanah yang memantau berita perang."
             }
         ];
 
