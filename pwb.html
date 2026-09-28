@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis PWB - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Pemrograman Web (PWB)</h2>
+                <p class="setup-subtitle">Atur jumlah soal tryout berdasarkan kisi-kisi: HTML & CSS, Tag & Atribut, Cara Penulisan CSS, ID vs Class, Properti Font, hingga Ukuran, Border & Posisi.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ 1. Perbedaan HTML & CSS Serta Fungsinya</div>
+                        <div>✓ 2. Kode HTML Menampilkan Teks</div>
+                        <div>✓ 3. Komponen Dasar CSS (Selector, Property, Value)</div>
+                        <div>✓ 4. Tiga Cara Penulisan CSS (Inline, Internal, External)</div>
+                        <div>✓ 5. HTML & CSS Mengatur Warna & Posisi Teks</div>
+                        <div>✓ 6. Fungsi Tag &amp;lt;h1&amp;gt;, &amp;lt;p&amp;gt;, dan &amp;lt;br&amp;gt;</div>
+                        <div>✓ 7. Fungsi Tag &amp;lt;a&amp;gt; dan Atribut href</div>
+                        <div>✓ 8. Perbedaan Penggunaan id dan class</div>
+                        <div>✓ 9. Properti Font dan Teks pada CSS</div>
+                        <div>✓ 10. Spesifikasi Ukuran, Border, dan Posisi Teks</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: Pemrograman Web (PWB)</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Pemrograman Web (PWB).</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA PWB (50 SOAL FIXED) -->
+    <script>
+        const bankSoal = [
+            // --- KISI 1: PERBEDAAN HTML DAN CSS SERTA FUNGSINYA (1-5) ---
+            {
+                kategori: "HTML dan CSS",
+                q: "HTML dan CSS memiliki peranan penting dalam pembuatan web. Pernyataan yang benar mengenai perbedaan fungsi utama keduanya adalah...",
+                o: [
+                    "A. HTML digunakan untuk membuat struktur dan konten web, sedangkan CSS digunakan untuk mengatur tampilan visual dan tata letak.",
+                    "B. HTML digunakan untuk pengolahan database, sedangkan CSS untuk tampilan antarmuka.",
+                    "C. CSS digunakan untuk membangun logika server, sedangkan HTML untuk desain visual.",
+                    "D. HTML dan CSS memiliki fungsi yang persis sama dan saling menggantikan.",
+                    "E. HTML bertugas mengamankan jaringan web, sedangkan CSS membuat animasi kompleks."
+                ],
+                a: 0,
+                p: "HTML (HyperText Markup Language) berfungsi menyusun kerangka/konten web, sedangkan CSS (Cascading Style Sheets) mengatur estetika, warna, font, dan layout."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Analogi yang paling tepat untuk menggambarkan hubungan antara HTML dan CSS dalam konteks bangunan rumah adalah...",
+                o: [
+                    "A. HTML adalah kerangka/fondasi rumah, sedangkan CSS adalah cat, dekorasi, dan desain interiornya.",
+                    "B. CSS adalah fondasi batu bata, sedangkan HTML adalah cat dinding.",
+                    "C. HTML adalah aliran listrik rumah, sedangkan CSS adalah saluran air.",
+                    "D. HTML adalah pintu rumah, sedangkan CSS adalah jendela rumah.",
+                    "E. Keduanya merupakan semen pembentuk lantai tanpa perbedaan."
+                ],
+                a: 0,
+                p: "HTML dianalogikan sebagai struktur kerangka bangunan, sementara CSS adalah elemen estetika seperti warna cat, hiasan, dan tata letak."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Bahasa markup standar yang digunakan untuk membuat dokumen dan menampilkan teks/media pada halaman web adalah...",
+                o: [
+                    "A. HTML",
+                    "B. CSS",
+                    "C. SQL",
+                    "D. C++",
+                    "E. Python"
+                ],
+                a: 0,
+                p: "HTML merupakan bahasa markup standar dasar untuk mempublikasikan halaman web."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Mengapa pemisahan kode HTML dan CSS sangat dianjurkan dalam pengembangan halaman web modern?",
+                o: [
+                    "A. Agar pemeliharaan kode (maintenance) lebih mudah, rapi, dan efisien saat mengganti tampilan.",
+                    "B. Agar situs web dapat berjalan tanpa koneksi internet.",
+                    "C. Agar ukuran berkas HTML meningkat otomatis.",
+                    "D. Karena browser tidak bisa membaca HTML jika digabung dengan CSS.",
+                    "E. Agar kode web tidak bisa dibaca oleh pengguna lain."
+                ],
+                a: 0,
+                p: "Pemisahan struktur (HTML) dan gaya (CSS) memudahkan pengelolaan dan perubahan desain secara menyeluruh."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Pasangan fungsi bahasa pemrograman web di bawah ini yang BENAR adalah...",
+                o: [
+                    "A. HTML = Struktur Konten, CSS = Desain Visual & Layout",
+                    "B. HTML = Desain Visual, CSS = Query Database",
+                    "C. HTML = Animasi Server, CSS = Struktur Utama",
+                    "D. HTML = Mengirim Email, CSS = Mengisi Form",
+                    "E. HTML = Menghitung Matematika, CSS = Menyimpan Data"
+                ],
+                a: 0,
+                p: "HTML memuat elemen kerangka konten, sedangkan CSS memberikan aturan gaya tampilan visual."
+            },
+
+            // --- KISI 2: KODE HTML UNTUK MENAMPILKAN TEKS (6-10) ---
+            {
+                kategori: "HTML",
+                q: "Tag HTML yang digunakan untuk membuat blok paragraf teks standar adalah...",
+                o: [
+                    "A. <p>",
+                    "B. <text>",
+                    "C. <paragraph>",
+                    "D. <span>",
+                    "E. <div>"
+                ],
+                a: 0,
+                p: "Tag <p> (paragraph) digunakan untuk membungkus paragraf teks di HTML."
+            },
+            {
+                kategori: "HTML",
+                q: "Penulisan kode HTML yang benar untuk menampilkan teks tercetak tebal (bold) adalah...",
+                o: [
+                    "A. <b>Teks Tebal</b> atau <strong>Teks Tebal</strong>",
+                    "B. <bold>Teks Tebal</bold>",
+                    "C. <thick>Teks Tebal</thick>",
+                    "D. <dark>Teks Tebal</dark>",
+                    "E. <bb>Teks Tebal</bb>"
+                ],
+                a: 0,
+                p: "Tag <b> atau <strong> digunakan dalam HTML untuk menebalkan teks."
+            },
+            {
+                kategori: "HTML",
+                q: "Sintaks HTML yang tepat untuk membuat sebuah teks judul berukuran paling besar adalah...",
+                o: [
+                    "A. <h1>Judul Utama</h1>",
+                    "B. <head1>Judul Utama</head1>",
+                    "C. <h6>Judul Utama</h6>",
+                    "D. <header>Judul Utama</header>",
+                    "E. <title>Judul Utama</title>"
+                ],
+                a: 0,
+                p: "<h1> merupakan level heading tertinggi (paling besar) dalam HTML."
+            },
+            {
+                kategori: "HTML",
+                q: "Tag HTML yang digunakan untuk membuat teks tercetak miring (italic) adalah...",
+                o: [
+                    "A. <i> atau <em>",
+                    "B. <italic>",
+                    "C. <slant>",
+                    "D. <oblique>",
+                    "E. <style-italic>"
+                ],
+                a: 0,
+                p: "Tag <i> (italic) atau <em> (emphasized) membuat teks miring dalam HTML."
+            },
+            {
+                kategori: "HTML",
+                q: "Karakter entitas khusus HTML yang digunakan untuk membuat spasi beruntun antar teks adalah...",
+                o: [
+                    "A. &nbsp;",
+                    "B. &space;",
+                    "C. &tab;",
+                    "D. &break;",
+                    "E. &blank;"
+                ],
+                a: 0,
+                p: "&nbsp; (Non-Breaking Space) digunakan untuk menambahkan karakter spasi tunggal di dalam HTML."
+            },
+
+            // --- KISI 3: KOMPONEN DASAR CSS (11-15) ---
+            {
+                kategori: "CSS",
+                q: "Tiga komponen utama yang membentuk satu baris aturan penulisan CSS (CSS Rule) adalah...",
+                o: [
+                    "A. Selector, Property, dan Value",
+                    "B. Tag, Class, dan ID",
+                    "C. Function, Variable, dan Return",
+                    "D. Header, Body, dan Footer",
+                    "E. Input, Process, dan Output"
+                ],
+                a: 0,
+                p: "Sintaks dasar CSS terdiri dari Selector (pilihan elemen), Property (sifat yang diubah), dan Value (nilai sifatnya)."
+            },
+            {
+                kategori: "CSS",
+                q: "Pada aturan sintaks CSS 'p { color: red; }', komponen 'p' bertindak sebagai...",
+                o: [
+                    "A. Selector",
+                    "B. Property",
+                    "C. Value",
+                    "D. Attribute",
+                    "E. Method"
+                ],
+                a: 0,
+                p: "'p' menentukan elemen HTML mana yang akan diberi gaya, sehingga disebut sebagai Selector."
+            },
+            {
+                kategori: "CSS",
+                q: "Pada aturan CSS 'h1 { font-size: 20px; }', bagian 'font-size' disebut sebagai...",
+                o: [
+                    "A. Property",
+                    "B. Selector",
+                    "C. Value",
+                    "D. Variable",
+                    "E. Class"
+                ],
+                a: 0,
+                p: "'font-size' adalah Property (sifat/karakteristik) yang hendak diatur nilai gayanya."
+            },
+            {
+                kategori: "CSS",
+                q: "Pada deklarasi CSS 'body { background-color: blue; }', kata 'blue' berkedudukan sebagai...",
+                o: [
+                    "A. Value",
+                    "B. Property",
+                    "C. Selector",
+                    "D. Tag",
+                    "E. Entity"
+                ],
+                a: 0,
+                p: "'blue' adalah Value (nilai) yang diberikan kepada property background-color."
+            },
+            {
+                kategori: "CSS",
+                q: "Simbol yang digunakan untuk mengurung pasangan property dan value di dalam CSS adalah...",
+                o: [
+                    "A. Kurung kurawal { }",
+                    "B. Kurung siku [ ]",
+                    "C. Kurung biasa ( )",
+                    "D. Tanda kurung sudut < >",
+                    "E. Tanda petik ganda \" \""
+                ],
+                a: 0,
+                p: "Kumpulan property dan value pada aturan CSS dibungkus dalam kurung kurawal {}."
+            },
+
+            // --- KISI 4: TIGA CARA PENULISAN CSS PADA HTML (16-20) ---
+            {
+                kategori: "CSS",
+                q: "Tiga metode utama dalam menerapkan gaya CSS ke dokumen HTML adalah...",
+                o: [
+                    "A. Inline CSS, Internal CSS, dan External CSS",
+                    "B. Direct CSS, Indirect CSS, dan Public CSS",
+                    "C. Local CSS, Global CSS, dan Network CSS",
+                    "D. Primary CSS, Secondary CSS, dan Tertiary CSS",
+                    "E. Header CSS, Body CSS, dan Footer CSS"
+                ],
+                a: 0,
+                p: "CSS dapat disisipkan secara Inline (di tag), Internal (di tag <style>), atau External (file .css terpisah)."
+            },
+            {
+                kategori: "CSS",
+                q: "Penulisan CSS dengan menyisipkan langsung atribut 'style=\"...\"' pada tag HTML dinamakan...",
+                o: [
+                    "A. Inline CSS",
+                    "B. Internal CSS",
+                    "C. External CSS",
+                    "D. Embedded CSS",
+                    "E. Imported CSS"
+                ],
+                a: 0,
+                p: "Inline CSS ditulis langsung di dalam atribut elemen HTML bersangkutan."
+            },
+            {
+                kategori: "CSS",
+                q: "Tag HTML yang digunakan untuk memasukkan kode Internal CSS di dalam bagian <head> adalah...",
+                o: [
+                    "A. &lt;style&gt;",
+                    "B. &lt;css&gt;",
+                    "C. &lt;script&gt;",
+                    "D. &lt;link&gt;",
+                    "E. &lt;design&gt;"
+                ],
+                a: 0,
+                p: "Internal CSS ditempatkan di dalam tag <style>...</style> di area <head> HTML."
+            },
+            {
+                kategori: "CSS",
+                q: "Tag HTML yang tepat untuk menghubungkan berkas eksternal CSS (misalnya 'style.css') ke dokumen HTML adalah...",
+                o: [
+                    "A. &lt;link rel=\"stylesheet\" href=\"style.css\"&gt;",
+                    "B. &lt;script src=\"style.css\"&gt;&lt;/script&gt;",
+                    "C. &lt;include href=\"style.css\"&gt;",
+                    "D. &lt;import file=\"style.css\"&gt;",
+                    "E. &lt;style src=\"style.css\"&gt;"
+                ],
+                a: 0,
+                p: "Menghubungkan berkas CSS luar menggunakan tag <link rel=\"stylesheet\" href=\"namafile.css\">."
+            },
+            {
+                kategori: "CSS",
+                q: "Metode penulisan CSS manakah yang paling disarankan jika kita ingin mengelola desain konsisten untuk puluhan halaman web sekaligus?",
+                o: [
+                    "A. External CSS",
+                    "B. Inline CSS",
+                    "C. Internal CSS",
+                    "D. Attribute CSS",
+                    "E. Direct CSS"
+                ],
+                a: 0,
+                p: "External CSS paling efektif karena satu file .css dapat dipakai bersama oleh seluruh halaman web."
+            },
+
+            // --- KISI 5: KODE HTML DAN CSS UNTUK WARNA DAN POSISI TEKS (21-25) ---
+            {
+                kategori: "HTML dan CSS",
+                q: "Properti CSS yang digunakan khusus untuk mengubah warna teks pada suatu elemen adalah...",
+                o: [
+                    "A. color",
+                    "B. background-color",
+                    "C. font-color",
+                    "D. text-color",
+                    "E. border-color"
+                ],
+                a: 0,
+                p: "Properti color digunakan untuk menentukan warna huruf/teks."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Properti CSS yang digunakan untuk mengatur perataan/posisi teks (rata kiri, kanan, tengah, atau rata kanan-kiri) adalah...",
+                o: [
+                    "A. text-align",
+                    "B. text-position",
+                    "C. align-content",
+                    "D. float-text",
+                    "E. vertical-align"
+                ],
+                a: 0,
+                p: "Properti text-align mengatur perataan horizontal teks."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Kode CSS yang benar untuk membuat teks paragraf <p> berwarna biru dan posisinya rata tengah adalah...",
+                o: [
+                    "A. p { color: blue; text-align: center; }",
+                    "B. p { text-color: blue; position: center; }",
+                    "C. p { font-color: blue; align: center; }",
+                    "D. p { background: blue; text-position: center; }",
+                    "E. p { color: blue; float: center; }"
+                ],
+                a: 0,
+                p: "Aturan CSS yang benar menggunakan color: blue; dan text-align: center;."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Nilai dari properti text-align yang digunakan untuk membuat teks menjadi rata kanan dan rata kiri secara seimbang (justified) adalah...",
+                o: [
+                    "A. justify",
+                    "B. center",
+                    "C. balance",
+                    "D. fill",
+                    "E. justify-all"
+                ],
+                a: 0,
+                p: "text-align: justify; membuat margin teks rata di kedua sisi kiri dan kanan."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Penulisan nilai warna menggunakan format Hexadecimal di CSS untuk memberikan warna merah yang BENAR adalah...",
+                o: [
+                    "A. #FF0000",
+                    "B. rgb(red)",
+                    "C. color: red()",
+                    "D. #RED000",
+                    "E. hex-red"
+                ],
+                a: 0,
+                p: "Warna merah penuh dalam format Hexadecimal ditulis #FF0000 (atau #F00)."
+            },
+
+            // --- KISI 6: FUNGSI TAG <h1>, <p>, DAN <br> (26-30) ---
+            {
+                kategori: "HTML",
+                q: "Fungsi utama dari kelompok tag HTML <h1> hingga <h6> adalah...",
+                o: [
+                    "A. Menentukan struktur tingkatan judul (heading) pada dokumen web",
+                    "B. Membuat tabel data",
+                    "C. Menampilkan paragraf secara otomatis",
+                    "D. Menghubungkan halaman web dengan CSS",
+                    "E. Menyisipkan berkas gambar"
+                ],
+                a: 0,
+                p: "Tag <h1> - <h6> menyusun tingkatan judul (heading hierarchy) dokumen."
+            },
+            {
+                kategori: "HTML",
+                q: "Fungsi utama dari tag <br> pada struktur dokumen HTML adalah...",
+                o: [
+                    "A. Membuat ganti baris (line break) baru tanpa membuat paragraf baru",
+                    "B. Membuat teks menjadi cetak tebal",
+                    "C. Membuat garis horizontal panjang",
+                    "D. Memberikan spasi ganda pada kalimat",
+                    "E. Menghentikan pemrosesan file HTML"
+                ],
+                a: 0,
+                p: "Tag <br> (break) memindahkan teks ke baris baru di bawahnya."
+            },
+            {
+                kategori: "HTML",
+                q: "Ciri khas utama dari tag <br> di HTML jika dibandingkan dengan tag <p> adalah...",
+                o: [
+                    "A. Tag <br> merupakan tag tunggal (void element) tanpa perlu tag penutup </br>",
+                    "B. Tag <br> wajib memiliki tag penutup </br>",
+                    "C. Tag <br> hanya dapat ditulis di bagian <head>",
+                    "D. Tag <br> digunakan khusus untuk teks berwarna",
+                    "E. Tag <br> hanya bekerja pada berkas CSS"
+                ],
+                a: 0,
+                p: "Tag <br> tergolong void element (self-closing) sehingga tidak memerlukan elemen penutup."
+            },
+            {
+                kategori: "HTML",
+                q: "Di antara tingkatan tag heading HTML berikut, mana yang menghasilkan ukuran teks paling KECIL secara bawaan?",
+                o: [
+                    "A. &lt;h6&gt;",
+                    "B. &lt;h5&gt;",
+                    "C. &lt;h4&gt;",
+                    "D. &lt;h3&gt;",
+                    "E. &lt;h1&gt;"
+                ],
+                a: 0,
+                p: "<h1> merupakan heading terbesar, sedangkan <h6> merupakan heading terkecil."
+            },
+            {
+                kategori: "HTML",
+                q: "Secara default, elemen <p> (paragraf) di HTML tergolong ke dalam tipe tampilan...",
+                o: [
+                    "A. Block-level element (mengambil seluruh lebar baris)",
+                    "B. Inline element (hanya mengambil lebar teks)",
+                    "C. Flex element",
+                    "D. Hidden element",
+                    "E. Absolute element"
+                ],
+                a: 0,
+                p: "Tag <p> bersifat block-level, secara otomatis memulai baris baru dan memenuhi lebar area."
+            },
+
+            // --- KISI 7: FUNGSI TAG <a> DAN ATRIBUT href (31-35) ---
+            {
+                kategori: "HTML",
+                q: "Tag HTML <a> merupakan singkatan dari Anchor, yang berfungsi untuk...",
+                o: [
+                    "A. Membuat pranala luar/tautan (hyperlink) ke halaman atau sumber daya lain",
+                    "B. Menyisipkan animasi video",
+                    "C. Menampilkan gambar bergerak",
+                    "D. Membuat area input formulir",
+                    "E. Mengatur ukuran bingkai halaman"
+                ],
+                a: 0,
+                p: "Tag <a> digunakan untuk membuat tautan (hyperlink)."
+            },
+            {
+                kategori: "HTML",
+                q: "Atribut wajib pada tag <a> yang berfungsi menampung alamat URL tujuan dari tautan adalah...",
+                o: [
+                    "A. href",
+                    "B. src",
+                    "C. link",
+                    "D. target",
+                    "E. action"
+                ],
+                a: 0,
+                p: "Atribut href (hypertext reference) menentukan lokasi URL tujuan."
+            },
+            {
+                kategori: "HTML",
+                q: "Penulisan sintaks HTML yang benar untuk membuat tautan menuju halaman 'about.html' dengan teks 'Tentang Kami' adalah...",
+                o: [
+                    "A. &lt;a href=\"about.html\"&gt;Tentang Kami&lt;/a&gt;",
+                    "B. &lt;a src=\"about.html\"&gt;Tentang Kami&lt;/a&gt;",
+                    "C. &lt;link href=\"about.html\"&gt;Tentang Kami&lt;/link&gt;",
+                    "D. &lt;a url=\"about.html\"&gt;Tentang Kami&lt;/a&gt;",
+                    "E. &lt;href link=\"about.html\"&gt;Tentang Kami&lt;/href&gt;"
+                ],
+                a: 0,
+                p: "Sintaks standar hyperlink: <a href=\"URL\">Teks Tautan</a>."
+            },
+            {
+                kategori: "HTML",
+                q: "Atribut target=\"_blank\" jika ditambahkan pada tag <a> memiliki fungsi untuk...",
+                o: [
+                    "A. Membuka halaman tautan di tab atau jendela browser yang baru",
+                    "B. Membuka halaman dalam kondisi kosong tanpa warna",
+                    "C. Mengunduh berkas secara otomatis tanpa membuka link",
+                    "D. Menyembunyikan link dari pengguna",
+                    "E. Mengunci halaman web agar tidak bisa diklik"
+                ],
+                a: 0,
+                p: "target=\"_blank\" memerintahkan browser membuka tautan di tab/window baru."
+            },
+            {
+                kategori: "HTML",
+                q: "Untuk membuat tautan internal yang melompat ke bagian halaman yang memiliki id=\"kontak\", nilai atribut href yang diisikan adalah...",
+                o: [
+                    "A. href=\"#kontak\"",
+                    "B. href=\".kontak\"",
+                    "C. href=\"id:kontak\"",
+                    "D. href=\"@kontak\"",
+                    "E. href=\"goto-kontak\""
+                ],
+                a: 0,
+                p: "Tautan internal menuju ID tertentu menggunakan simbol pagar (#nama_id)."
+            },
+
+            // --- KISI 8: PERBEDAAN PENGGUNAAN ID DAN CLASS (36-40) ---
+            {
+                kategori: "HTML dan CSS",
+                q: "Atribut id pada HTML bersifat unik, yang artinya adalah...",
+                o: [
+                    "A. Nama ID hanya boleh digunakan oleh satu elemen unik saja dalam satu halaman HTML",
+                    "B. Nama ID dapat dipakai berulang kali di seluruh tag",
+                    "C. Nama ID hanya berlaku untuk file CSS eksternal",
+                    "D. ID hanya bisa dipanggil menggunakan bahasa JavaScript",
+                    "E. ID hanya bekerja jika digunakan pada tag <body>"
+                ],
+                a: 0,
+                p: "Atribut id bersifat unik (unique identifier) untuk 1 elemen per halaman."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Atribut class pada HTML biasanya digunakan ketika...",
+                o: [
+                    "A. Kita ingin menerapkan gaya CSS yang sama ke beberapa elemen secara berulang",
+                    "B. Elemen tersebut adalah judul utama halaman",
+                    "C. Elemen hanya muncul satu kali di halaman",
+                    "D. Kita ingin menghubungkan database",
+                    "E. Membuat variabel rahasia pada server"
+                ],
+                a: 0,
+                p: "Atribut class digunakan secara reusable (berulang) pada banyak elemen."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Simbol penulisan selector di CSS yang digunakan untuk memanggil elemen berdasarkan atribut id adalah...",
+                o: [
+                    "A. Tanda pagar (#)",
+                    "B. Tanda titik (.)",
+                    "C. Tanda bintang (*)",
+                    "D. Tanda at (@)",
+                    "E. Tanda persen (%)"
+                ],
+                a: 0,
+                p: "Selector ID pada CSS diawali tanda pagar #, contohnya #header."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Simbol penulisan selector di CSS yang digunakan untuk memanggil elemen berdasarkan atribut class adalah...",
+                o: [
+                    "A. Tanda titik (.)",
+                    "B. Tanda pagar (#)",
+                    "C. Tanda seru (!)",
+                    "D. Tanda ampersand (&)",
+                    "E. Tanda dolar ($)"
+                ],
+                a: 0,
+                p: "Selector Class pada CSS diawali tanda titik ., contohnya .tombol-utama."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Perhatikan kode CSS berikut: '.kartu { background-color: white; }'. Maksud dari aturan selector tersebut adalah...",
+                o: [
+                    "A. Memberikan latar belakang putih untuk semua elemen yang memiliki class=\"kartu\"",
+                    "B. Memberikan warna latar belakang putih khusus untuk elemen dengan id=\"kartu\"",
+                    "C. Mengubah warna teks tag &lt;kartu&gt; menjadi putih",
+                    "D. Mengapus semua elemen kartu di HTML",
+                    "E. Membuat variabel kartu di JavaScript"
+                ],
+                a: 0,
+                p: "Simbol titik . merujuk pada atribut class bernama kartu."
+            },
+
+            // --- KISI 9: PROPERTI FONT DAN TEKS PADA CSS (41-45) ---
+            {
+                kategori: "CSS",
+                q: "Properti CSS yang digunakan untuk menentukan jenis keluarga huruf (font) yang digunakan teks adalah...",
+                o: [
+                    "A. font-family",
+                    "B. font-style",
+                    "C. font-type",
+                    "D. text-font",
+                    "E. font-variant"
+                ],
+                a: 0,
+                p: "font-family menentukan nama font (seperti Arial, Sans-Serif, Times New Roman)."
+            },
+            {
+                kategori: "CSS",
+                q: "Properti CSS yang digunakan untuk mengatur tingkat ketebalan teks (seperti bold atau normal) adalah...",
+                o: [
+                    "A. font-weight",
+                    "B. font-size",
+                    "C. font-height",
+                    "D. text-bold",
+                    "E. font-thickness"
+                ],
+                a: 0,
+                p: "font-weight mengatur ketebalan huruf (misal: bold, 600, normal)."
+            },
+            {
+                kategori: "CSS",
+                q: "Properti CSS yang digunakan untuk mengatur besar kecilnya ukuran huruf pada elemen teks adalah...",
+                o: [
+                    "A. font-size",
+                    "B. font-dimension",
+                    "C. text-size",
+                    "D. font-width",
+                    "E. text-scale"
+                ],
+                a: 0,
+                p: "font-size menentukan ukuran huruf (misal: 16px, 1.2rem)."
+            },
+            {
+                kategori: "CSS",
+                q: "Efek yang dihasilkan oleh aturan CSS 'text-transform: uppercase;' pada teks adalah...",
+                o: [
+                    "A. Mengubah seluruh huruf dalam elemen menjadi huruf KAPITAL (besar)",
+                    "B. Mengubah seluruh huruf menjadi huruf kecil",
+                    "C. Memberikan garis bawah pada teks",
+                    "D. Membuat teks berkedip",
+                    "E. Menyembunyikan teks dari layar"
+                ],
+                a: 0,
+                p: "text-transform: uppercase; mengonversi seluruh huruf menjadi kapital."
+            },
+            {
+                kategori: "CSS",
+                q: "Properti CSS yang digunakan untuk mencetak teks bergaya miring adalah...",
+                o: [
+                    "A. font-style: italic;",
+                    "B. text-decoration: italic;",
+                    "C. font-weight: italic;",
+                    "D. text-slant: yes;",
+                    "E. font-format: oblique;"
+                ],
+                a: 0,
+                p: "font-style: italic; membuat tampilan bentuk huruf menjadi miring."
+            },
+
+            // --- KISI 10: SPESIFIKASI UKURAN, BORDER, DAN POSISI TEKS (46-50) ---
+            {
+                kategori: "HTML dan CSS",
+                q: "Properti CSS yang digunakan untuk memberikan garis tepi (bingkai) di sekeliling elemen HTML adalah...",
+                o: [
+                    "A. border",
+                    "B. outline-box",
+                    "C. frame",
+                    "D. stroke",
+                    "E. margin-line"
+                ],
+                a: 0,
+                p: "Properti border mengatur garis tepi elemen."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Pada deklarasi CSS 'border: 2px solid black;', secara berurutan mengatur tentang...",
+                o: [
+                    "A. Ketebalan border (2px), gaya garis (solid), dan warna border (black)",
+                    "B. Lebar kotak, tinggi kotak, dan warna teks",
+                    "C. Jarak luar, jarak dalam, dan warna garis",
+                    "D. Gaya garis, warna garis, dan ukuran font",
+                    "E. Posisi x, posisi y, dan keburaman border"
+                ],
+                a: 0,
+                p: "Sintaks shorthand border menerima nilai ketebalan, tipe gaya garis (solid, dashed), dan warna."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Dua properti CSS yang digunakan untuk menentukan dimensi lebar dan tinggi suatu kotak elemen HTML adalah...",
+                o: [
+                    "A. width dan height",
+                    "B. size dan length",
+                    "C. margin dan padding",
+                    "D. top dan left",
+                    "E. min-size dan max-size"
+                ],
+                a: 0,
+                p: "width menentukan lebar dan height menentukan tinggi elemen."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Perbedaan mendasar antara properti margin dan padding dalam CSS Box Model adalah...",
+                o: [
+                    "A. Margin mengatur ruang jarak di LUAR border, sedangkan Padding mengatur ruang jarak di DALAM border",
+                    "B. Margin mengatur jarak dalam, Padding mengatur jarak luar",
+                    "C. Margin untuk warna border, Padding untuk warna latar",
+                    "D. Margin hanya untuk teks, Padding hanya untuk gambar",
+                    "E. Keduanya memiliki fungsi yang sama persis tanpa perbedaan"
+                ],
+                a: 0,
+                p: "Margin memberikan ruang jarak di luar garis tepi (border), sedangkan Padding memberikan spasi ruang di dalam area border."
+            },
+            {
+                kategori: "HTML dan CSS",
+                q: "Kode CSS yang tepat untuk memberikan jarak spasi dalam sebesar 15px di seluruh sisi sebuah kotak elemen adalah...",
+                o: [
+                    "A. padding: 15px;",
+                    "B. margin: 15px;",
+                    "C. spacing: 15px;",
+                    "D. inner-space: 15px;",
+                    "E. border-spacing: 15px;"
+                ],
+                a: 0,
+                p: "padding: 15px; menambahkan ruang dalam 15px pada sisi atas, kanan, bawah, dan kiri."
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Pemrograman Web (PWB)";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>

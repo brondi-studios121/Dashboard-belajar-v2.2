@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Sejarah Indonesia - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Sejarah Indonesia</h2>
+                <p class="setup-subtitle">Materi Bab 1: Masa Pendudukan Jepang di Indonesia (Masuknya Jepang, Transisi Pemerintahan, Kebijakan Pendudukan, hingga Strategi Perlawanan).</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ A. Masuknya Jepang dan Jatuhnya Hindia Belanda</div>
+                        <div>✓ B. Penjajahan Jepang &amp; Transformasi Pemerintahan</div>
+                        <div>✓ C. Kebijakan Pemerintahan Pendudukan Jepang</div>
+                        <div>✓ D. Strategi Bangsa Indonesia Menghadapi Tirani Jepang</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: Sejarah Indonesia</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Sejarah Indonesia (Masa Pendudukan Jepang).</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA SEJARAH (50 SOAL FIXED) -->
+    <script>
+        const bankSoal = [
+            // --- SUB-BAB A: MASUKNYA JEPANG DAN JATUHNYA HINDIA BELANDA (1-12) ---
+            {
+                kategori: "Masuknya Jepang",
+                q: "Perjanjian penyerahan tanpa syarat wilayah Hindia Belanda kepada Jepang pada tanggal 8 Maret 1942 berlangsung di...",
+                o: ["A. Kalijati, Subang", "B. Linggarjati, Cirebon", "C. Renville, Jakarta", "D. Tarakan, Kaltara", "E. Roem-Royen, Jakarta"],
+                a: 0,
+                p: "Pihak Belanda menyerahkan wilayah Indonesia tanpa syarat di Kalijati, Subang."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Kota di Indonesia yang pertama kali dikuasai oleh pasukan militer Jepang pada Januari 1942 adalah...",
+                o: ["A. Tarakan", "B. Balikpapan", "C. Surabaya", "D. Batavia", "E. Palembang"],
+                a: 0,
+                p: "Jepang pertama kali mendarat dan menguasai Tarakan karena kekayaan minyak buminya."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Gubernur Jenderal Hindia Belanda terakhir yang menandatangani kapitulasi tanpa syarat kepada Jepang adalah...",
+                o: ["A. Tjarda van Starkenborgh Stachouwer", "B. J.P. Coen", "C. Van den Bosch", "D. Daendels", "E. Van Deventer"],
+                a: 0,
+                p: "Tjarda van Starkenborgh merupakan Gubernur Jenderal Belanda terakhir saat penyerahan kekuasaan."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Jenderal Jepang yang memimpin penandatanganan Perjanjian Kalijati mewakili tentara Jepang adalah...",
+                o: ["A. Hitoshi Imamura", "B. Kuniaki Koiso", "C. Kumakichi Harada", "D. Maeda", "E. Terauchi"],
+                a: 0,
+                p: "Jenderal Hitoshi Imamura memimpin Panglima Tentara ke-16 Jepang di Jawa."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Tujuan utama Jepang menguasai wilayah Indonesia pada masa Perang Dunia II adalah...",
+                o: ["A. Memenuhi kebutuhan bahan baku industri dan logistik perang", "B. Membebaskan bangsa Asia dari kemiskinan", "C. Menyebarkan kebudayaan Bushido", "D. Membantu perjuangan kemerdekaan Indonesia", "E. Mendirikan pangkalan Angkatan Laut di Samudra Hindia"],
+                a: 0,
+                p: "Indonesia kaya akan minyak bumi dan bahan mentah pendukung perang Pasifik."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Gerakan propaganda buatan Jepang yang mengusung jargon 'Jepang Cahaya Asia, Pelindung Asia, Pemimpin Asia' adalah...",
+                o: ["A. Gerakan 3A", "B. PUTERA", "C. Jawa Hokokai", "D. Seinendan", "E. Keibodan"],
+                a: 0,
+                p: "Gerakan 3A dibentuk untuk menarik simpati rakyat Indonesia pada awal pendudukan."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Tokoh Indonesia yang ditunjuk Jepang untuk memimpin Gerakan 3A adalah...",
+                o: ["A. Mr. Shamsuddin", "B. Sukarno", "C. Mohammad Hatta", "D. Sutan Sjahrir", "E. Ki Hajar Dewantara"],
+                a: 0,
+                p: "Mr. Shamsuddin diangkat sebagai ketua propaganda Gerakan 3A."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Salah satu latar belakang Jepang terlibat dalam Perang Dunia II di kawasan Asia Pasifik adalah...",
+                o: ["A. Penyerangan pangkalan laut AS di Pearl Harbor", "B. Deklarasi perang oleh Kerajaan Belanda", "C. Pembentukan pakta pertahanan NATO", "D. Perebutan wilayah perbatasan China-India", "E. Invasi sekutu ke pulau Kyushu"],
+                a: 0,
+                p: "Serangan ke Pearl Harbor pada 7 Desember 1941 memulai Perang Pasifik."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Sikap awal sebagian besar rakyat Indonesia saat menyambut kedatangan tentara Jepang adalah...",
+                o: ["A. Antusias karena dianggap sebagai 'Saudara Tua'", "B. Langsung melakukan perlawanan gerilya", "C. Mengungsi ke pedalaman pulau", "D. Membantu pertahanan tentara Belanda", "E. Menolak berkomunikasi sama sekali"],
+                a: 0,
+                p: "Jepang disambut hangat karena mengaku sebagai Saudara Tua pemberantas kolonialisme."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Peristiwa penyerahan kekuasaan Belanda kepada Jepang pada tahun 1942 ditandai oleh perundingan antara Ter Poorten dan...",
+                o: ["A. Imamura", "B. Yamashita", "C. Tojo", "D. Hirohito", "E. Nishimura"],
+                a: 0,
+                p: "Panglima KNIL Ter Poorten menyerah kepada Panglima Jepang Hitoshi Imamura."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Salah satu faktor luar negeri yang mempercepat jatuhnya Hindia Belanda ke tangan Jepang adalah...",
+                o: ["A. Lemahnya pertahanan Sekutu (ABDACOM) di Asia Tenggara", "B. Pemberontakan PKI di Indonesia", "C. Bantuan senjata dari Uni Soviet ke Jepang", "D. Krisis ekonomi global tahun 1930", "E. Blokade laut oleh Jerman di Jawa"],
+                a: 0,
+                p: "Kekuatan pasukan gabungan Sekutu ABDACOM dengan cepat dipatahkan oleh Jepang."
+            },
+            {
+                kategori: "Masuknya Jepang",
+                q: "Sebelum mendarat di Jawa, pasukan Jepang terlebih dahulu menguasai wilayah penghasil minyak di Sumatra, yaitu...",
+                o: ["A. Palembang", "B. Padang", "C. Medan", "D. Lampung", "E. Bengkulu"],
+                a: 0,
+                p: "Kilang minyak Palembang berhasil dikuasai pasukan penerjun Jepang pada Februari 1942."
+            },
+
+            // --- SUB-BAB B: PENJAJAHAN JEPANG & TRANSFORMASI PEMERINTAHAN (13-25) ---
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Pemerintahan militer Jepang membagi wilayah Indonesia menjadi tiga wilayah kekuasaan. Wilayah Jawa dan Madura dikuasai oleh...",
+                o: ["A. Angkatan Darat (Tentara Ke-16)", "B. Angkatan Darat (Tentara Ke-25)", "C. Angkatan Laut (Armada Selatan Ke-2)", "D. Pasukan Khusus Kempeitai", "E. Kepolisian Militer Khusus"],
+                a: 0,
+                p: "Tentara Ke-16 (Rikugun) berpusat di Jakarta untuk menguasai Jawa dan Madura."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Pusat pemerintahan militer Angkatan Laut Jepang (Kaigun) di Indonesia berkedudukan di...",
+                o: ["A. Makassar", "B. Bukittinggi", "C. Batavia", "D. Ambon", "E. Medan"],
+                a: 0,
+                p: "Kaigun menguasai wilayah Kalimantan, Sulawesi, dan Maluku dengan pusat di Makassar."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Struktur pemerintahan militer tertinggi Jepang di tingkat kabupaten pada masa pendudukan disebut...",
+                o: ["A. Ken", "B. Shu", "C. Gun", "D. Son", "E. Ku"],
+                a: 0,
+                p: "Ken merupakan wilayah administratif setingkat Kabupaten pada masa Jepang."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Organisasi militer yang dibentuk Jepang untuk membantu pasukan Jepang dan beranggotakan pemuda Indonesia sebagai prajurit pembantu dinamakan...",
+                o: ["A. Heiho", "B. PETA", "C. Seinendan", "D. Keibodan", "E. Fujinkai"],
+                a: 0,
+                p: "Heiho adalah prajurit pembantu tentara Jepang yang diintegrasikan ke satuan militer."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Organisasi semi-militer yang dibentuk khusus untuk barisan pemuda berusia 14-22 tahun dinamakan...",
+                o: ["A. Seinendan", "B. Keibodan", "C. Suishintai", "D. Gakukotai", "E. Barisan Pelopor"],
+                a: 0,
+                p: "Seinendan berfungsi mendidik dan melatih pemuda agar mampu mempertahankan tanah air."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Pasukan semi-militer pembantu kepolisian yang bertugas menjaga lalu lintas dan keamanan desa adalah...",
+                o: ["A. Keibodan", "B. Heiho", "C. Fujinkai", "D. Kempeitai", "E. Kaigun"],
+                a: 0,
+                p: "Keibodan dibentuk sebagai pembantu kepolisian untuk menjaga ketertiban umum."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Tujuan utama pembentukan organisasi Tentara Pembela Tanah Air (PETA) oleh Jepang adalah...",
+                o: ["A. Mempertahankan Pulau Jawa dari ancaman invasi Sekutu", "B. Menindak pemberontakan petani lokal", "C. Menyebarkan paham fasisme Jepang", "D. Membantu pengumpulan hasil panen rakyat", "E. Mengawal rombongan pejabat militer Jepang"],
+                a: 0,
+                p: "PETA dibentuk sebagai pasukan pemuda lokal untuk mempertahankan wilayah dari Sekutu."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Salah satu dampak positif dari pendudukan Jepang di bidang kebudayaan dan kebahasaan adalah...",
+                o: ["A. Penggunaan Bahasa Indonesia sebagai bahasa resmi pengantar", "B. Wajibnya penggunaan Bahasa Belanda di sekolah", "C. Bebasnya penerbitan pers tanpa sensor", "D. Munculnya berbagai partai politik baru", "E. Dihapuskannya penggunaan kalender Masehi"],
+                a: 0,
+                p: "Bahasa Indonesia berkembang pesat karena Jepang melarang penggunaan bahasa Belanda."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Satu-satunya organisasi Islam yang tetap diizinkan berdiri pada awal masa pendudukan Jepang adalah...",
+                o: ["A. MIAI", "B. Muhammadiyah", "C. Nahdlatul Ulama", "D. Persis", "E. Sarekat Islam"],
+                a: 0,
+                p: "MIAI sempat diizinkan berdiri karena dinilai bersifat non-politik dan moderat."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Organisasi massa pengganti MIAI yang dibentuk Jepang untuk menghimpun dukungan umat Islam adalah...",
+                o: ["A. Masyumi", "B. Nahdlatul Ulama", "C. Parmusi", "D. Muhammadiyah", "E. Perti"],
+                a: 0,
+                p: "Masyumi dibentuk pada tahun 1943 untuk menggantikan MIAI yang dibubarkan."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Korps kepolisian militer rahasia Jepang yang terkenal sangat kejam dalam menindak penentang Jepang dinamakan...",
+                o: ["A. Kempeitai", "B. Tokubetsu", "C. Gunseikan", "D. Rikugun", "E. Kaigun"],
+                a: 0,
+                p: "Kempeitai adalah polisi militer rahasia yang bertugas menjaga keamanan internal."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Organisasi kewanitaan yang dibentuk Jepang untuk membantu garis belakang pertempuran adalah...",
+                o: ["A. Fujinkai", "B. Gakukotai", "C. Jibakutai", "D. Keibodan", "E. Heiho"],
+                a: 0,
+                p: "Fujinkai dibentuk untuk menghimpun tenaga wanita dalam menyokong kebutuhan perang."
+            },
+            {
+                kategori: "Transformasi Pemerintahan",
+                q: "Perubahan sistem penanggalan yang diberlakukan Jepang di Indonesia pada masa pendudukannya adalah...",
+                o: ["A. Menggunakan kalender Sumera (tahun Jawa/Jepang)", "B. Menggunakan kalender Hijriah secara mutlak", "C. Menghapuskan perhitungan bulan Masehi", "D. Mengadopsi sistem kalender Cina", "E. Menggunakan sistem kalender Saka"],
+                a: 0,
+                p: "Jepang mengganti penanggalan masehi dengan tahun Sumera (2602)."
+            },
+
+            // --- SUB-BAB C: KEBIJAKAN PEMERINTAHAN PENDUDUKAN JEPANG (26-38) ---
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Sistem kerja paksa tanpa upah yang diterapkan Jepang kepada rakyat Indonesia dinamakan...",
+                o: ["A. Romusha", "B. Rodi", "C. Cultuurstelsel", "D. Seikerei", "E. Tonarigumi"],
+                a: 0,
+                p: "Romusha merupakan pengerahan tenaga kerja secara paksa untuk kepentingan militer."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Para wanita Indonesia yang ditipu dan dipaksa menjadi wanita pemuas kebutuhan tentara Jepang dinamakan...",
+                o: ["A. Jugun Ianfu", "B. Romukyo", "C. Fujinkai", "D. Geisha", "E. Heiho wanita"],
+                a: 0,
+                p: "Jugun Ianfu adalah sebutan bagi wanita korban perbudakan seksual tentara Jepang."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Sistem pemerintahan tingkat bawah yang dibentuk Jepang dan menjadi cikal bakal Rukun Tetangga (RT) saat ini adalah...",
+                o: ["A. Tonarigumi", "B. Ku", "C. Son", "D. Gun", "E. Chokai"],
+                a: 0,
+                p: "Tonarigumi dibentuk untuk mempermudah pengawasan dan penyaluran logistik."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Kebijakan ekonomi yang diterapkan Jepang di Indonesia berpusat pada sistem...",
+                o: ["A. Ekonomi perang dan autarki", "B. Ekonomi pasar bebas", "C. Ekonomi kapitalisme liberal", "D. Ekonomi etis terbuka", "E. Ekonomi merkantilisme"],
+                a: 0,
+                p: "Sistem autarki mewajibkan setiap daerah memenuhi kebutuhan perangnya sendiri."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Tanaman yang diwajibkan oleh Jepang untuk ditanam secara massal guna kebutuhan minyak pelumas senjata adalah...",
+                o: ["A. Pohon Jarak", "B. Kopi", "C. Tembakau", "D. Tebu", "E. Teh"],
+                a: 0,
+                p: "Minyak biji jarak dimanfaatkan Jepang sebagai pelumas mesin dan pesawat perang."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Upacara penghormatan membungkukkan badan ke arah matahari terbit (Tokyo) untuk menghormati Kaisar dinamakan...",
+                o: ["A. Seikerei", "B. Bushido", "C. Kimigayo", "D. Hinomaru", "E. Harakiri"],
+                a: 0,
+                p: "Seikerei adalah ritual membungkuk ke arah Istana Kaisar di Tokyo."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Mengapa kebijakan Seikerei mendapat penolakan keras dari tokoh-tokoh agama Islam di Indonesia?",
+                o: ["A. Dianggap bertentangan dengan ajaran tauhid", "B. Menyebabkan rasa sakit pada pinggang", "C. Menghabiskan waktu salat", "D. Mengganggu tradisi lokal", "E. Hanya boleh dilakukan oleh tentara"],
+                a: 0,
+                p: "Menunduk menyembah Kaisar dinilai menyeringai tauhid dan menyembah selain Allah."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Dampak utama dari kebijakan eksploitasi beras yang berlebihan oleh militer Jepang adalah...",
+                o: ["A. Bencana kelaparan dan bahaya busung lapar di desa-desa", "B. Meningkatnya pendapatan petani local", "C. Surplus pangan di wilayah perkotaan", "D. Ekspor beras Indonesia meningkat pesat", "E. Penurunan harga pangan secara drastis"],
+                a: 0,
+                p: "Penyitaan hasil panen secara paksa memicu krisis pangan berat di berbagai daerah."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Organisasi propaganda Jawa Hokokai (Himpunan Kebaktian Jawa) dibentuk oleh Jepang pada tahun 1944 dengan tujuan...",
+                o: ["A. Penghimpunan setoran padi dan pengorbanan rakyat demi perang", "B. Persiapan pembentukan kabinet pemerintahan baru", "C. Pelatihan militer khusus bagi kaum terpelajar", "D. Penggalangan dana pendidikan anak yatim", "E. Mengawasi gerakan buruh tambang"],
+                a: 0,
+                p: "Jawa Hokokai merupakan organisasi resmi pemerintah untuk mobilisasi sumber daya."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Tindakan pengawasan ketat terhadap media massa dan pers pada masa pendudukan Jepang dilakukan oleh badan...",
+                o: ["A. Sendenbu", "B. Kempeitai", "C. Gunseikan", "D. Naimubu", "E. Shumubu"],
+                a: 0,
+                p: "Sendenbu adalah Departemen Propaganda Jepang yang mengontrol seluruh informasi pers."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Surat kabar berbahasa Indonesia yang diizinkan terbit oleh Jepang di bawah pengawasan ketat adalah...",
+                o: ["A. Asia Raya", "B. Medan Prijaji", "C. De Express", "D. Bintang Timur", "E. Indonesia Merdeka"],
+                a: 0,
+                p: "Asia Raya diterbitkan di Jakarta sebagai sarana propaganda pemerintah Jepang."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Perubahan sistem pendidikan pada masa pendudukan Jepang yang menguntungkan rakyat Indonesia adalah...",
+                o: ["A. Penghapusan sistem diskriminasi kasta sekolah kolonial Belanda", "B. Kewajiban belajar bahasa Inggris sejak sekolah dasar", "C. Bebasnya biaya kuliah di Perguruan Tinggi", "D. Pendirian universitas kedokteran di setiap kota", "E. Dihapuskannya ujian kenaikan kelas"],
+                a: 0,
+                p: "Jepang menyatukan tingkat sekolah dasar menjadi 6 tahun untuk semua kalangan."
+            },
+            {
+                kategori: "Kebijakan Jepang",
+                q: "Mata uang buatan Jepang yang beredar luas dan menyebabkan inflasi besar di akhir masa pendudukan adalah...",
+                o: ["A. Uang invasi / Rupiah Hindia Belanda buatan Jepang", "B. Yen Jepang", "C. Sen Emas", "D. Gulden", "E. ORI"],
+                a: 0,
+                p: "Pencetakan uang kertas Jepang tanpa kontrol memicu inflasi amat tinggi."
+            },
+
+            // --- SUB-BAB D: STRATEGI BANGSA INDONESIA MENGAHADAPI TIRANI JEPANG (39-50) ---
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Organisasi PUTERA (Pusat Tenaga Rakyat) yang dibentuk Jepang dipimpin oleh tokoh Empat Serangkai, yaitu...",
+                o: ["A. Sukarno, Moh. Hatta, Ki Hajar Dewantara, KH Mas Mansyur", "B. Sukarno, Hatta, Sjahrir, Amir Sjarifuddin", "C. Cipto Mangunkusumo, Douwes Dekker, Sukarno, Hatta", "D. Agus Salim, Wahid Hasyim, Sukarno, Hatta", "E. Supriyadi, Sukarni, Chaerul Saleh, Adam Malik"],
+                a: 0,
+                p: "PUTERA dipimpin oleh Empat Serangkai untuk memusatkan tenaga rakyat."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Mengapa para tokoh nasionalis menggunakan strategi kooperatif (bekerja sama) dengan Jepang?",
+                o: ["A. Memanfaatkan organisasi buatan Jepang untuk memupuk semangat nasionalisme", "B. Menerima sepenuhnya ideologi fasisme Jepang", "C. Karena tidak memiliki keberanian bertempur", "D. Agar diberikan jabatan tinggi dalam kerajaan Jepang", "E. Dijanjikan harta kekayaan oleh pemerintah militer"],
+                a: 0,
+                p: "Tokoh nasionalis memanfaatkan wadah resmi untuk menyiapkan kemerdekaan."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Sebab utama Jepang membubarkan organisasi PUTERA pada tahun 1944 adalah...",
+                o: ["A. Lebih menguntungkan perjuangan kemerdekaan Indonesia dibanding kepentingan Jepang", "B. Adanya korupsi dana di dalam kepengurusan", "C. Para pemimpinnya menolak membantu romusha", "D. Terjadi perselisihan antartokoh Empat Serangkai", "E. Anggotanya melakukan aksi mogok kerja massal"],
+                a: 0,
+                p: "Jepang merasa PUTERA dimanfaatkan para tokoh untuk kepentingan nasionalisme."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Perjuangan secara sembunyi-sembunyi tanpa merespons ajakan kerja sama Jepang dinamakan...",
+                o: ["A. Perjuangan bawah tanah", "B. Perjuangan kooperatif", "C. Perjuangan parlementer", "D. Gerakan diplomasi terbuka", "E. Perlawanan bersenjata resmi"],
+                a: 0,
+                p: "Gerakan bawah tanah dilakukan rahasia oleh kelompok pemuda anti-fasis."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Tokoh pemuda yang memimpin kelompok gerakan bawah tanah dan rajin mendengarkan siaran radio Sekutu adalah...",
+                o: ["A. Sutan Sjahrir", "B. Sukarno", "C. Sayuti Melik", "D. Supriyadi", "E. K.H. Zaenal Mustofa"],
+                a: 0,
+                p: "Sutan Sjahrir memimpin kelompok bawah tanah yang memantau perkembangan Perang Dunia II."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Perlawanan rakyat di Cot Plieng, Aceh melawan Jepang pada tahun 1942 dipimpin oleh...",
+                o: ["A. Tengku Abdul Jalil", "B. Teuku Umar", "C. Panglima Polim", "D. Cut Nyak Dien", "E. Tengku Hamid"],
+                a: 0,
+                p: "Tengku Abdul Jalil memimpin perlawanan ulama dan rakyat Cot Plieng Aceh."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Perlawanan santri dan rakyat Singaparna, Tasikmalaya menolak kewajiban Seikerei dipimpin oleh...",
+                o: ["A. K.H. Zaenal Mustofa", "B. K.H. Hasyim Asy'ari", "C. K.H. Ahmad Dahlan", "D. K.H. Mas Mansyur", "E. K.H. Ruhiyat"],
+                a: 0,
+                p: "KH Zaenal Mustofa menentang keras perintah Seikerei karena dianggap syirik."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Pemberontakan pasukan PETA terbesar terhadap pemerintah militer Jepang terjadi di Blitar di bawah pimpinan...",
+                o: ["A. Supriyadi", "B. Sudirman", "C. Gatot Soebroto", "D. Slamet Riyadi", "E. Moestopo"],
+                a: 0,
+                p: "Shodanco Supriyadi memimpin pahlawan PETA Blitar memberontak pada Februari 1945."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Latar belakang utama yang memicu pahlawan PETA di Blitar melakukan perlawanan terhadap Jepang adalah...",
+                o: ["A. Keprihatinan mendalam atas penderitaan rakyat akibat Romusha", "B. Janji kemerdekaan yang tidak kunjung ditepati", "C. Keinginan mengganti pimpinan markas Jepang", "D. Pembubaran pasukan PETA secara mendadak", "E. Penolakan atas kenaikan ganti rugi tanah"],
+                a: 0,
+                p: "Prajurit PETA tak tega melihat penderitaan rakyat akibat kekejaman Romusha."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Perlawanan rakyat di Biak, Papua dalam menghadapi tirani militer Jepang dikenal dengan nama...",
+                o: ["A. Gerakan Koreri", "B. Perang Cendrawasih", "C. Perlawanan Asmat", "D. Gerakan Korano", "E. Perang Suku Kamoro"],
+                a: 0,
+                p: "Gerakan Koreri dipimpin oleh L. Rumkorem di Biak menggunakan taktik gerilya."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Perlawanan petani di Indramayu, Jawa Barat pada masa pendudukan Jepang disebabkan oleh...",
+                o: ["A. Perekrutan romusha dan penyitaan padi yang sangat memberatkan", "B. Larangan beribadah di masjid lokal", "C. Penutupan pasar-pasar tradisional", "D. Sengketa lahan perkebunan teh", "E. Pembatasan penggunaan bahasa Sunda"],
+                a: 0,
+                p: "Petani Indramayu memberontak karena paksaan penyerahan hasil padi."
+            },
+            {
+                kategori: "Strategi Menghadapi Jepang",
+                q: "Janji kemerdekaan Indonesia di kelak kemudian hari pertama kali diucapkan oleh Perdana Menteri Jepang bernama...",
+                o: ["A. Kuniaki Koiso", "B. Hideki Tojo", "C. Fumimaro Konoe", "D. Nobuyuki Abe", "E. Kantaro Suzuki"],
+                a: 0,
+                p: "PM Koiso mengucapkan Janji Koiso pada September 1944 demi menarik dukungan Indonesia."
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Sejarah Indonesia";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
