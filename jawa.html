@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Bahasa Jawa - EDUPINTAR</title>
+    <!-- Hubungkan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Hubungkan berkas CSS Modular Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Portal -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <div class="logo-box">E</div>
+                <div class="logo-title">
+                    <h1>EDUPINTAR</h1>
+                    <p>Dashboard Tryout Mandiri</p>
+                </div>
+            </a>
+            <button class="theme-toggle-btn" id="themeToggleBtn">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">Mode Malam</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Kontainer Inti Aplikasi Kuis -->
+    <main>
+        <div class="quiz-card">
+            
+            <!-- SECTION 1: SETUP KELOLA SOAL -->
+            <div id="setup-section">
+                <h2 class="setup-title">Simulasi Kuis: Bahasa Jawa (Geguritan)</h2>
+                <p class="setup-subtitle">Atur jumlah soal tryout berdasarkan kisi-kisi: Bentuk Geguritan, Sifat Basa, Tema & Amanat, Estetis/Ekspresif, Simile & Personifikasi, Akulturasi, Parafrase, hingga Struktur Batin & 4W.</p>
+                
+                <div class="input-soal-wrapper">
+                    <label for="questionCountInput" class="input-soal-label">Berapa jumlah soal tryout? (Maks 50)</label>
+                    <div class="input-soal-flex">
+                        <input type="number" id="questionCountInput" class="input-soal-field" value="10" min="1" max="50">
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Soal dan pilihan jawaban diacak secara dinamis setiap kali kuis dimulai.</p>
+                    </div>
+                    <div class="info-materi-list">
+                        <div>✓ a. Menentukan Bentuk Karya Sastra Geguritan</div>
+                        <div>✓ b. Mengidentifikasi Sifat Bahasa Geguritan (Mentes, Endah, Mawa Irama)</div>
+                        <div>✓ c. Menentukan Pengertian Tema dan Amanat</div>
+                        <div>✓ d. Mengidentifikasi Sifat Estetis dan Ekspresif</div>
+                        <div>✓ e. Menentukan Tema Berdasarkan Pethikan Geguritan</div>
+                        <div>✓ f. Mengidentifikasi Lelewaning Basa (Simile & Personifikasi)</div>
+                        <div>✓ g. Menentukan Ekspresi Sesuai Isi Geguritan</div>
+                        <div>✓ h. Pengertian Akulturasi & Wirama</div>
+                        <div>✓ i. Cara Menemukan Amanat</div>
+                        <div>✓ j. Tujuan Membaca Ekspresif</div>
+                        <div>✓ k. Menjelaskan Pengertian Geguritan</div>
+                        <div>✓ l. Hal yang Diperhatikan Saat Parafrase</div>
+                        <div>✓ m. Struktur Batin & Fisik Geguritan</div>
+                        <div>✓ o. Langkah Membuat/Ngarang Geguritan</div>
+                        <div>✓ p. Menjelaskan Cara Membaca Geguritan dengan Baik (4W)</div>
+                    </div>
+                </div>
+                <div class="button-group" style="border:none; padding-top:0;">
+                    <a href="index.html" class="btn-secondary" style="text-decoration:none">← Kembali</a>
+                    <button class="btn-primary" onclick="initiateQuiz()">Mulai Kuis</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: LEMBAR INTERFACE JALANNYA KUIS -->
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <span id="currentSubjectTag">Mata Pelajaran: Bahasa Jawa</span>
+                    <span id="progressText">Soal 1 dari 10</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="question-meta" id="questionMeta">Kategori Soal</div>
+                <div class="question-text" id="questionText">Memuat narasi pertanyaan kuis di sini...</div>
+                <ul class="options-list" id="optionsContainer"></ul>
+                
+                <!-- Box Hasil & Pembahasan Kuis -->
+                <div id="feedbackBox" class="explanation-box" style="display: none;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="backBtn" onclick="navigatePrev()">Kembali</button>
+                    <button class="btn-primary" id="actionBtn" onclick="handlePrimaryAction()" disabled>Cek Jawaban</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REKAPITULASI HASIL EVALUASI -->
+            <div id="result-section" class="result-container" style="display: none;">
+                <div class="trophy-icon">🏆</div>
+                <h2 class="setup-title">Evaluasi Hasil Akhir</h2>
+                <p class="setup-subtitle">Lembar hasil capaian pemahaman materi Bahasa Jawa (Geguritan).</p>
+                <div class="score-num" id="scoreValue">0</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-box-title">Skor Kuis</div>
+                        <div class="stat-box-num" id="statScore">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Benar</div>
+                        <div class="stat-box-num" id="statCorrect" style="color:var(--success-color)">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-title">Jawaban Salah</div>
+                        <div class="stat-box-num" id="statWrong" style="color:var(--danger-color)">0</div>
+                    </div>
+                </div>
+                <div class="button-group" style="justify-content: center; gap: 1rem;">
+                    <button class="btn-secondary" onclick="location.reload()">Ulangi Kuis</button>
+                    <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block">Dashboard Utama</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hak Cipta -->
+    <footer>
+        <p class="company-brand">SUPPORT BY GGPP STUDIO</p>
+        <p>© 2026 GGPP STUDIO. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- BANK DATA BAHASA JAWA (50 SOAL COMPLETE) -->
+    <script>
+        const bankSoal = [
+            // --- KISI-KISI A & K: BENTUK & PENGERTIAN GEGURITAN ---
+            {
+                kategori: "Pengertian & Bentuk Geguritan",
+                q: "Apa kang diarani geguritan ing sastra Jawa modern?",
+                o: [
+                    "A. Puisi Jawa gagrag anyar kang ora kaiket guru gatra, guru wilangan, lan guru lagu",
+                    "B. Tembang macapat kang kaiket dening tatanan baku",
+                    "C. Karangan prosa/gancaran Jawa kang nduweni alur rinci",
+                    "D. Naskah drama tradisional kaya dene ludruk lan ketoprak",
+                    "E. Tembang tengahan kang nggunakake basa Kawi Kuno"
+                ],
+                a: 0,
+                p: "Geguritan yaiku karya sastra puisi basa Jawa modern (gagrag anyar) kang sifatipun bebas lan ora kaiket paugeran tradisional."
+            },
+            {
+                kategori: "Pengertian & Bentuk Geguritan",
+                q: "Miturut bentuk karya sastrane, geguritan kalebu ing kategori karya sastra...",
+                o: [
+                    "A. Puisi Jawa",
+                    "B. Prosa Jawa",
+                    "C. Drama Jawa",
+                    "D. Dongeng Jawa",
+                    "E. Cerkak Jawa"
+                ],
+                a: 0,
+                p: "Geguritan kalebu wujud karya sastra puisi modern ing basa Jawa."
+            },
+            {
+                kategori: "Pengertian & Bentuk Geguritan",
+                q: "Apa sing dadi titik beda utama antarane Geguritan Gagrag Lawas karo Geguritan Gagrag Anyar?",
+                o: [
+                    "A. Gagrag lawas diwiwiti ukara 'Sun gegurit' lan kaiket paugeran, dene gagrag anyar sifatipun bebas",
+                    "B. Gagrag lawas nggunakake basa Indonesia, dene gagrag anyar nggunakake basa Kawi",
+                    "C. Gagrag anyar kudu ditembangake nganggo gamelan",
+                    "D. Gagrag lawas ora nduweni pangripta/pengarang",
+                    "E. Gagrag anyar mung kasusun saka siji baris wae"
+                ],
+                a: 0,
+                p: "Geguritan gagrag lawas nduweni ciri diwiwiti 'Sun gegurit' lan kaiket aturan, dene gagrag anyar bebas."
+            },
+
+            // --- KISI-KISI B & D: SIFAT BAHASA & ESTETIS/EKSPRESIF ---
+            {
+                kategori: "Sifat Bahasa Geguritan",
+                q: "Basa kang digunakake sajroning geguritan kudu nduweni sifat 'mentes'. Tegese mentes yaiku...",
+                o: [
+                    "A. Tembung-tembunge ringkes nanging ngandhut makna kang dalam lan sugih isi",
+                    "B. Tembunge dawa banget nganti berlembar-lembar",
+                    "C. Nggunakake ejaan basa Indonesia modern",
+                    "D. Tembunge angel diutarakake lan ora nduweni arti",
+                    "E. Nggunakake tembung-tembung kasar/pasar"
+                ],
+                a: 0,
+                p: "Sifat mentes tegese pilihan tembung padhet, ringkes, nanging nduweni teges/makna kang jero."
+            },
+            {
+                kategori: "Sifat Bahasa Geguritan",
+                q: "Basa ing geguritan uga nduweni sifat 'endah'. Sifat endah iki amarga anane...",
+                o: [
+                    "A. Pilihan diksi kang mantesi, rima, lan wirama kang harmonis",
+                    "B. Tulisan nggunakake aksara Jawa wae",
+                    "C. Jumlah gatra kang kudu padha ing saben bait",
+                    "D. Gambar ilustrasi berwarna ing samping tulisan",
+                    "E. Tembung basa asing ing saben larik"
+                ],
+                a: 0,
+                p: "Keindahan basa geguritan dipengaruhi dening pambukakan diksi, rima, lan wirama kang selaras."
+            },
+            {
+                kategori: "Sifat Estetis & Ekspresif",
+                q: "Apa kang diarani sifat 'estetis' sajroning karya sastra geguritan?",
+                o: [
+                    "A. Sifat kaendahan basa kang nuwuhake rasa seneng lan kepenakan ing atine pamaca",
+                    "B. Sifat kang ngandhut piwulang babagan sejarah kuno",
+                    "C. Tatanan nulis huruf kapital ing awal baris",
+                    "D. Teknik maca kanthi suara sengau",
+                    "E. Aturan nemtokake jumlah baris ing saben padha"
+                ],
+                a: 0,
+                p: "Estetis gegandhengan karo nilai kaendahan (estetika) basa kang bisa dirasakake dening pamaca."
+            },
+            {
+                kategori: "Sifat Estetis & Ekspresif",
+                q: "Geguritan kalebu karya kang nduweni sifat 'ekspresif'. Iki tegese geguritan minangka...",
+                o: [
+                    "A. Wadhah kanggo ngandharake ungkapan emosi, pikiran, lan perasaan batin pangripta",
+                    "B. Berita resmi saka pemerintah",
+                    "C. Laporan keuangan proyek pembangunan",
+                    "D. Alat pamer kasekten ing jaman sejarah",
+                    "E. Tatanan lagu wajib nasional"
+                ],
+                a: 0,
+                p: "Ekspresif tegese geguritan dadi sarana pengungkapan emosi lan ekspresi jiwa penulis."
+            },
+
+            // --- KISI-KISI C, E & I: TEMA, AMANAT & CARA NEMOKAKE ---
+            {
+                kategori: "Tema & Amanat",
+                q: "Gagasan pokok utawa ide dasar kang dadi lelendhesane nulis sawijining geguritan diarani...",
+                o: [
+                    "A. Tema",
+                    "B. Amanat",
+                    "C. Diksi",
+                    "D. Tipografi",
+                    "E. Wirasa"
+                ],
+                a: 0,
+                p: "Tema yaiku ide dasar utawa gagasan utama kang dadi landhesan panggubahan geguritan."
+            },
+            {
+                kategori: "Tema & Amanat",
+                q: "Piwulang luhur, pesen moral, utawa pitutur becik kang pengin disampaikan penyair marang pamaca diarani...",
+                o: [
+                    "A. Amanat",
+                    "B. Tema",
+                    "C. Rima",
+                    "D. Ritme",
+                    "E. Diksi"
+                ],
+                a: 0,
+                p: "Amanat yaiku pesen moral utawa piwulang becik ing sajroning karya sastra."
+            },
+            {
+                kategori: "Tema Pethikan Geguritan",
+                q: "Perhatikna pethikan geguritan iki: 'Bumi iki wus tuwa / Banjir lan longsor dadi panganan saben dina / Amarga manungsa kang rakus ngrusak alas'. Tema kang trep karo pethikan ing ndhuwur yaiku...",
+                o: [
+                    "A. Lingkungan alam lan karusakan bumi",
+                    "B. Kerukunan antar tangga",
+                    "C. Perjuangan para pahlawan",
+                    "D. Bakti marang wong tuo",
+                    "E. Pendidikan lan sekolah"
+                ],
+                a: 0,
+                p: "Pethikan nyritakake bumi tuwa, banjir, lan alas rusak, saengga temane yaiku Lingkungan alam."
+            },
+            {
+                kategori: "Cara Menemukan Amanat",
+                q: "Kepiye cara paling tepat kanggo nemokake amanat ing sajroning geguritan?",
+                o: [
+                    "A. Maca lan memahami sakabehing isi geguritan kanthi wutuh saka awal nganti pungkasan",
+                    "B. Mung moco judul geguritane wae",
+                    "C. Ngetung jumlah huruf ing baris pertama",
+                    "D. Nggoleki tembung-tembung paling dawa",
+                    "E. Mirsani gambar ilustrasi ing sampul"
+                ],
+                a: 0,
+                p: "Amanat tersirat bisa ditemokake kanthi memahami sakabehing isi geguritan kanthi cermat."
+            },
+
+            // --- KISI-KISI F: LELEWANING BASA (SIMILE & PERSONIFIKASI) ---
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Gaya bahasa (lelewaning basa) kang mbandhingake rong bab kanthi cetha nggunakake tembung pembanding kayata 'kaya', 'kadi', 'lir', utawa 'pindha' diarani...",
+                o: [
+                    "A. Simile",
+                    "B. Personifikasi",
+                    "C. Metafora",
+                    "D. Hiperbola",
+                    "E. Ironi"
+                ],
+                a: 0,
+                p: "Majas Simile nggunakake kata pembanding langsung kayata kaya, kadi, lir, pindha."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Gaya bahasa personifikasi ing geguritan yaiku gaya bahasa kang...",
+                o: [
+                    "A. Nggambarake benda mati/tanpa nyawa seolah-olah nduweni sifat lan tumindak kaya manungsa",
+                    "B. Mbandhingake rong bab tanpa kata pembanding",
+                    "C. Nggunakake ungkapan kang keluwih-luwih (berlebihan)",
+                    "D. Nyindhir kanthi halus",
+                    "E. Nggunakake tembung-tembung pengulangan"
+                ],
+                a: 0,
+                p: "Personifikasi menehi sifat-sifat manungsa marang benda mati utawa makluk saliyane manungsa."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Perhatikna ukara iki: 'Angin esuk ngambung pipiku kanthi lembut.' Ukara kasebut ngandhut majas...",
+                o: [
+                    "A. Personifikasi",
+                    "B. Simile",
+                    "C. Repetisi",
+                    "D. Litotes",
+                    "E. Paradox"
+                ],
+                a: 0,
+                p: "Angin (benda mati) didadekake bisa 'ngambung' (tindakan manungsa), mula kalebu Personifikasi."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Perhatikna ukara iki: 'Esemmu manis kadi madu ing sajroning botol.' Ukara kasebut nggunakake majas...",
+                o: [
+                    "A. Simile",
+                    "B. Personifikasi",
+                    "C. Ironi",
+                    "D. Pleonasme",
+                    "E. Alegori"
+                ],
+                a: 0,
+                p: "Panganggone tembung pembanding 'kadi' nandhakake majas Simile."
+            },
+
+            // --- KISI-KISI G & J: EKSPRESI & TUJUAN MACA EKSPRESIF ---
+            {
+                kategori: "Ekspresi & Maca Ekspresif",
+                q: "Nalika maca geguritan ing ngarep pamiarsa, ekspresi rai (mimik) lan penjiwaan kudu disesuaikan karo...",
+                o: [
+                    "A. Isi, nada, lan suasana geguritan kang diwaca",
+                    "B. Busana kang dipake penyair",
+                    "C. Permintaan penonton ing panggung",
+                    "D. Merk mikrofon kang digunakake",
+                    "E. Jumlah penonton ing ruangan"
+                ],
+                a: 0,
+                p: "Ekspresi rai kudu selaras lan jumbuh karo makna/suasana isi geguritan (sedhih, semangat, utawa nesu)."
+            },
+            {
+                kategori: "Ekspresi & Maca Ekspresif",
+                q: "Tujuan utama saka kegiatan maca geguritan kanthi 'ekspresif' yaiku...",
+                o: [
+                    "A. Supaya pamiarsa bisa nrasakake, memahami, lan nangkep pesen emosi ing geguritan",
+                    "B. Mung kanggo ngentekake wektu",
+                    "C. Supaya dianggep wong paling banter suarane",
+                    "D. Ngetes kekuatan vokal pemaos",
+                    "E. Supaya pamiarsa padha turu"
+                ],
+                a: 0,
+                p: "Maca ekspresif nduweni tujuan nyalurake emosi lan pesen geguritan marang pendengar."
+            },
+
+            // --- KISI-KISI H: AKULTURASI & WIRAMA ---
+            {
+                kategori: "Akulturasi & Wirama",
+                q: "Sajroning sejarah sastra lan budaya Jawa, istilah 'Akulturasi' tegese...",
+                o: [
+                    "A. Proses percampuran rong kebudayaan tanpa ngilangi ciri lan kepribadian budaya asline",
+                    "B. Ngilangi kebudayaan lama diganti total kebudayaan asing",
+                    "C. Perang antarane rong tradisi daerah",
+                    "D. Penulisan geguritan tanpa nggunakake basa Jawa",
+                    "E. Pembakaran naskah-naskah kuno"
+                ],
+                a: 0,
+                p: "Akulturasi yaiku nyawijine rong kabudayan tanpa ngilangi unsur kebudayaan asline."
+            },
+            {
+                kategori: "Akulturasi & Wirama",
+                q: "Unsur 'Wirama' ing sajroning teknik maca geguritan gegandhengan karo...",
+                o: [
+                    "A. Tatanan irama, intonasi, tempo, lan dhuwur-endheke swara nalika maca",
+                    "B. Penghayatan perasaan emosi",
+                    "C. Gerak obahing tangan lan badan",
+                    "D. Kejelasan ucapan konsonan lan vokal",
+                    "E. Busana tradisional kang dipakai"
+                ],
+                a: 0,
+                p: "Wirama yaiku irama, intonasi, lan tempo lagu pamedhale swara nalika maca geguritan."
+            },
+
+            // --- KISI-KISI L: PARAFRASE GEGURITAN ---
+            {
+                kategori: "Parafrase Geguritan",
+                q: "Apa kang dimaksud kanthi kegiatan 'Parafrase Geguritan'?",
+                o: [
+                    "A. Ngowahi wujud geguritan (puisi) dadi wujud gancaran (prosa) tanpa ngowahi isi lan maknane",
+                    "B. Njarwakake geguritan menyang basa Inggris",
+                    "C. Nulis maneh geguritan nganggo aksara Jawa",
+                    "D. Mbusak bait-bait kang dianggep angel",
+                    "E. Ngarang lagu adhedhasar judul geguritan"
+                ],
+                a: 0,
+                p: "Parafrase yaiku proses ngowahi geguritan dadi bentuk prosa/gancaran tanpa ngowahi intine."
+            },
+            {
+                kategori: "Parafrase Geguritan",
+                q: "Ing ngisor iki bab kang perlu digatekake nalika nindakake parafrase geguritan, KAJABA...",
+                o: [
+                    "A. Ngowahi sakabehing jalan cerita lan makna asli penyair dadi kosok baline",
+                    "B. Memahami isi lan maksud ing saben larik geguritan",
+                    "C. Bisa nambah tembung panyambung supaya ukara luwih cetha",
+                    "D. Chek maneh supaya intine ora menyimpang saka asli",
+                    "E. Nggunakake basa gancaran kang gampang dimangerteni"
+                ],
+                a: 0,
+                p: "Parafrase ORA OLEH ngowahi makna asli penyair."
+            },
+
+            // --- KISI-KISI M: STRUKTUR BATIN & FISIK ---
+            {
+                kategori: "Struktur Batin Geguritan",
+                q: "Unsur-unsur kang kalebu ing sajroning Struktur Batin Geguritan yaiku...",
+                o: [
+                    "A. Tema, Rasa (Wirasa), Nada (Suasana), lan Amanat",
+                    "B. Diksi, Tipografi, Rima, lan Imaji",
+                    "C. Guru gatra, Guru wilangan, lan Guru lagu",
+                    "D. Judul, Pengarang, lan Halaman",
+                    "E. Font, Ukuran kertas, lan Margin"
+                ],
+                a: 0,
+                p: "Struktur Batin geguritan kasusun saka: Tema, Rasa (Wirasa), Nada (Suasana), lan Amanat."
+            },
+            {
+                kategori: "Struktur Batin Geguritan",
+                q: "Ing struktur batin geguritan, 'Rasa' (Wirasa) nuduhake babagan...",
+                o: [
+                    "A. Sikap lan perasaan emosional pangripta marang masalah kang dicritakake",
+                    "B. Tata letak penulisan larik ing kertas",
+                    "C. Unsur bunyi rima ing pungkasan baris",
+                    "D. Kejelasan nada swara pemอ่าน",
+                    "E. Jumlah gatra ing saben padha"
+                ],
+                a: 0,
+                p: "Rasa (Wirasa) yaiku emosi batin penulis kayata sedhih, seneng, utawa cemas."
+            },
+            {
+                kategori: "Struktur Fisik Geguritan",
+                q: "Unsur struktur fisik geguritan kang ngatur babagan perwajahan visual, tatanan baris, lan penulisan bait dinamakan...",
+                o: [
+                    "A. Tipografi",
+                    "B. Diksi",
+                    "C. Amanat",
+                    "D. Wirasa",
+                    "E. Akulturasi"
+                ],
+                a: 0,
+                p: "Tipografi yaiku wujud perwajahan visual/tatanan penulisan larik lan bait ing geguritan."
+            },
+
+            // --- KISI-KISI O: LANGKAH NGARANG GEGURITAN ---
+            {
+                kategori: "Ngarang Geguritan",
+                q: "Langkah sepisanan (paling awal) kang kudu ditindakake nalika arep ngarang/nulis geguritan yaiku...",
+                o: [
+                    "A. Nemtokake Tema kang arep diangkat",
+                    "B. Milih piala/hadiah lomba",
+                    "C. Mbusak diksi kang ora perlu",
+                    "D. Maca ing ngarep kelas",
+                    "E. Nggambar ilustrasi sampul"
+                ],
+                a: 0,
+                p: "Nemtokake Tema minangka langkah dasar lan paling awal nalika ngarang geguritan."
+            },
+            {
+                kategori: "Ngarang Geguritan",
+                q: "Sawise nemtokake tema lan ngumpulake ide, langkah sabanjure yaiku milih tembung-tembung kang mantesi lan indah. Proses iki diarani...",
+                o: [
+                    "A. Pemilihan Diksi",
+                    "B. Parafrase",
+                    "C. Akulturasi",
+                    "D. Editor riset",
+                    "E. Evaluasi wiraga"
+                ],
+                a: 0,
+                p: "Diksi yaiku pemilihan tembung kang trep lan mantesi kanggo ngandharake ide."
+            },
+
+            // --- KISI-KISI P: MACA GEGURITAN KANTHI BECIK (4W) ---
+            {
+                kategori: "Cara Membaca Geguritan (4W)",
+                q: "Sajroning teknik maca geguritan kang becik, ana rumus 4W. Kang kalebu ing 4W yaiku...",
+                o: [
+                    "A. Wicara, Wirama, Wirasa, lan Wiraga",
+                    "B. Wawasan, Warta, Wiyata, lan Waspada",
+                    "C. Wanci, Watesan, Wacana, lan Wewengkon",
+                    "D. Wigati, Wira, Waskitha, lan Wisma",
+                    "E. Wilangan, Wutuh, Wutah, lan Weruh"
+                ],
+                a: 0,
+                p: "Unsur 4W maca geguritan yaiku Wicara, Wirama, Wirasa, lan Wiraga."
+            },
+            {
+                kategori: "Cara Membaca Geguritan (4W)",
+                q: "Apa bedane antarane 'Wicara' lan 'Wiraga' nalika maca geguritan?",
+                o: [
+                    "A. Wicara babagan kejelasan lafal/artikulasi swara, dene Wiraga babagan obahing awak lan gestur tubuh",
+                    "B. Wicara babagan busana, dene Wiraga babagan nada",
+                    "C. Wicara babagan perasaan, dene Wiraga babagan ejaan",
+                    "D. Wicara lan Wiraga nduweni teges kang padha persis",
+                    "E. Wicara khusus kanggo pria, Wiraga khusus wanita"
+                ],
+                a: 0,
+                p: "Wicara = artikulasi/pelafalan swara cetha; Wiraga = gerakan awak, posisi, lan gestur."
+            },
+
+            // --- SOAL TAMBAHAN PENGUATAN KISI-KISI (SOAL 29 - 50) ---
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Pethikan geguritan: 'Rembulan sembunyi ing balik mega / Ndeleng manungsa kang padha tukaran'. Majas ing pethikan kasebut yaiku...",
+                o: [
+                    "A. Personifikasi",
+                    "B. Simile",
+                    "C. Hiperbola",
+                    "D. Litotes",
+                    "E. Ironi"
+                ],
+                a: 0,
+                p: "Rembulan didadekake seolah-olah bisa 'sembunyi' lan 'ndeleng' (Personifikasi)."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Ukara: 'Semangate para pemuda membara lir geni kang nggelar.' Tembung 'lir' nduweni fungsi minangka...",
+                o: [
+                    "A. Tembung pembanding ing majas Simile",
+                    "B. Tembung panyambung sebab akibat",
+                    "C. Tembung pituduh tempat",
+                    "D. Tembung ganti wong kaping telu",
+                    "E. Tembung kriya pasif"
+                ],
+                a: 0,
+                p: "Tembung 'lir' tegese seperti/kayata, dadi pembanding majas Simile."
+            },
+            {
+                kategori: "Sifat Bahasa Geguritan",
+                q: "Pengertian istilah 'mawa irama' ing panggubahan basa geguritan yaiku...",
+                o: [
+                    "A. Nduweni alunan irama lan nada kang kepenak dirungokake nalika diwaca",
+                    "B. Kudu diiringi musik gamelan Jawa lengkap",
+                    "C. Kudu nggunakake nada diatonis mayor",
+                    "D. Ora kena diwaca yen ora ana musik latar",
+                    "E. Nggunakake tempo paling cepet"
+                ],
+                a: 0,
+                p: "Mawa irama tegese nggunakake ritme lan nada kang harmonis."
+            },
+            {
+                kategori: "Struktur Fisik Geguritan",
+                q: "Basa kang digunakake ing geguritan asring nggunakake tembung 'konotatif'. Tembung konotatif yaiku...",
+                o: [
+                    "A. Tembung kang nduweni teges kiasan/ora sejatine",
+                    "B. Tembung kang tegese sebenarnya (denotatif)",
+                    "C. Tembung kang salah ejaan",
+                    "D. Tembung serapan basa asing",
+                    "E. Tembung panyambung ukara"
+                ],
+                a: 0,
+                p: "Konotatif tegese tembung kiasan kang nduweni teges tersirat."
+            },
+            {
+                kategori: "Tema Pethikan Geguritan",
+                q: "Pethikan: 'Ibu... panjenengan ngrumat kula tanpa sambat / Kringet lan eluh kabuang demi mbenjang kula sukses'. Tema geguritan iki yaiku...",
+                o: [
+                    "A. Bakti lan katresnan marang wong tuwa (Ibu)",
+                    "B. Bencana alam ing desa",
+                    "C. Keandahan pemandangan pegunungan",
+                    "D. Politik lan pemilu",
+                    "E. Perang kemerdekaan"
+                ],
+                a: 0,
+                p: "Isi pethikan jelas nggambarake pangorbanan lan katresnan Ibu."
+            },
+            {
+                kategori: "Pengertian Geguritan",
+                q: "Kata 'Geguritan' asale saka tembung lingga 'gurit' kang nduweni teges...",
+                o: [
+                    "A. Tulisan, goresan, utawa kidung/kidung Jawa",
+                    "B. Tarian tradisional",
+                    "C. Gambar lukisan",
+                    "D. Ukiran kayu",
+                    "E. Cerita sejarah"
+                ],
+                a: 0,
+                p: "Gurit tegese tulisan, goresan, utawa tata susunan kidung."
+            },
+            {
+                kategori: "Cara Membaca Geguritan (4W)",
+                q: "Unsur 'Wicara' ing 4W maca geguritan nyakup bab-bab ing ngisor iki, KAJABA...",
+                o: [
+                    "A. Pola obahing suku lan melangkah ing panggung",
+                    "B. Kejelasan artikulasi vokal lan konsonan",
+                    "C. Kedhal lan ketepatan ngucapake tembung",
+                    "D. Ketepatan intonasi ucapan",
+                    "E. Suara kang cetha lan ora sengau"
+                ],
+                a: 0,
+                p: "Obahing suku/melangkah ing panggung kalebu unsur Wiraga, dudu Wicara."
+            },
+            {
+                kategori: "Struktur Batin Geguritan",
+                q: "Sikap batin penyair marang pamaca kang nuwuhake suasana tartamtu (umpamane nasehati, nyindhir, utawa ngajak) diarani...",
+                o: [
+                    "A. Nada (Suasana)",
+                    "B. Tipografi",
+                    "C. Diksi",
+                    "D. Wiraga",
+                    "E. Enjambemen"
+                ],
+                a: 0,
+                p: "Nada (Suasana) yaiku sikap penyair marang pamaca kang nglairake suasana batin."
+            },
+
+            // SOAL 36 - 50: PEMANTAPAN KISI-KISI
+            {
+                kategori: "Parafrase Geguritan",
+                q: "Langkah awal nalika arep nggawe parafrase geguritan yaiku...",
+                o: [
+                    "A. Maca geguritan kanthi bolak-balik nganti paham maknane",
+                    "B. Langsung mbusak kabeh tembung sulit",
+                    "C. Ngganti judul dadi basa Indonesia",
+                    "D. Ngetung jumlah huruf ing baris pungkasan",
+                    "E. Membuat gambar sketsa"
+                ],
+                a: 0,
+                p: "Langkah pertama parafrase yaiku maca lan memahami makna geguritan kanthi wutuh."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Manakah ing ngisor iki kang kalebu tuladha majas Personifikasi?",
+                o: [
+                    "A. Pucuking cemara manthuk-manthuk katempuh angin",
+                    "B. Suwarane banter banget kaya bledek ing langit",
+                    "C. Raine putih resik kadi rembulan",
+                    "D. Dheweke mlaku alon banget",
+                    "E. Ibu tindak menyang pasar"
+                ],
+                a: 0,
+                p: "Pucuking cemara manthuk-manthuk (sifat manungsa) kalebu Personifikasi."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Manakah ing ngisor iki kang kalebu tuladha majas Simile?",
+                o: [
+                    "A. Tekadku wus mantep pindha gunung anjejeg",
+                    "B. Srengenge mesem ing esuk iki",
+                    "C. Ombak segara padha ngamuk lan oyak-oyakan",
+                    "D. Awan nangis nelesi bumi",
+                    "E. Wengi bisik-bisik ing kupingku"
+                ],
+                a: 0,
+                p: "Nggunakake tembung pembanding 'pindha' (seperti), mula kalebu Simile."
+            },
+            {
+                kategori: "Cara Membaca Geguritan (4W)",
+                q: "Penghayatan jiwa, penjiwaan perasaan, lan pendalaman isi geguritan kalebu unsur 4W yaiku...",
+                o: [
+                    "A. Wirasa",
+                    "B. Wicara",
+                    "C. Wirama",
+                    "D. Wiraga",
+                    "E. Wiyata"
+                ],
+                a: 0,
+                p: "Wirasa yaiku penghayatan lan penjiwaan emosi isi geguritan."
+            },
+            {
+                kategori: "Sifat Bahasa Geguritan",
+                q: "Tembung 'Diksi' sajroning karya sastra geguritan tegese...",
+                o: [
+                    "A. Pemilihan tembung kang cermat lan trep",
+                    "B. Cara maca ing ngarep kelas",
+                    "C. Tatanan bait lan larik",
+                    "D. Pesen moral ing pungkasan",
+                    "E. Nada dhuwur endhek"
+                ],
+                a: 0,
+                p: "Diksi yaiku pilihan tembung kang trep lan indah kanggo ngandharake ide."
+            },
+            {
+                kategori: "Tema Pethikan Geguritan",
+                q: "Pethikan: 'Guritku dadi saksi / Basa Jawa aja nganti mati / Ayo para mudha padha nglestarekake'. Tema pethikan kasebut yaiku...",
+                o: [
+                    "A. Kebudayaan lan pelestarian Basa Jawa",
+                    "B. Bencana alam ing kota",
+                    "C. Pendidikan matematika",
+                    "D. Perdagangan ekspor impor",
+                    "E. Kesehatan jasmani"
+                ],
+                a: 0,
+                p: "Pethikan ngajak para mudha nglestarekake Basa Jawa."
+            },
+            {
+                kategori: "Struktur Fisik Geguritan",
+                q: "Unsur panyusun geguritan kang katon langsung dening mripat (kayata diksi, majas, rima, tipografi) diarani...",
+                o: [
+                    "A. Struktur Fisik",
+                    "B. Struktur Batin",
+                    "C. Struktur Gaib",
+                    "D. Struktur Sosial",
+                    "E. Struktur Ekonomi"
+                ],
+                a: 0,
+                p: "Struktur Fisik yaiku unsur estetis visual kang katon langsung ing tulisan."
+            },
+            {
+                kategori: "Ngarang Geguritan",
+                q: "Langkah pungkasan sawise nulis geguritan sadurunge dipublikasikake yaiku...",
+                o: [
+                    "A. Nyunting/ngedit geguritan supaya luwih sempurna",
+                    "B. Mbusak kabeh isi tulisan",
+                    "C. Ngarang judul anyar tanpa isi",
+                    "D. Langsung dibakar",
+                    "E. Ngganti tema dadi sejarah"
+                ],
+                a: 0,
+                p: "Nyunting/editing yaiku mriksa lan nyempurnakake diksi sarta ejaan."
+            },
+            {
+                kategori: "Ekspresi & Maca Ekspresif",
+                q: "Yen isi geguritan ngenani rasa syukur lan kabungahan, mimik rai pemaos kudu...",
+                o: [
+                    "A. Cerah, sumringah, lan kebak rasa seneng",
+                    "B. Sedhih lan mripat berkaca-kaca",
+                    "C. Nesu lan tangan mengepal",
+                    "D. Medeni lan sangar",
+                    "E. Lesu lan ngantuk"
+                ],
+                a: 0,
+                p: "Ekspresi rasa syukur lan kabungahan kudu ditampilake kanthi rai cerah lan sumringah."
+            },
+            {
+                kategori: "Akulturasi & Wirama",
+                q: "Kejelasan tempo, kaya ta kapan kudu mandheg (jeda) lan kapan terus maca, kalebu bagian saka...",
+                o: [
+                    "A. Wirama",
+                    "B. Wiraga",
+                    "C. Diksi",
+                    "D. Tipografi",
+                    "E. Akulturasi"
+                ],
+                a: 0,
+                p: "Wirama ngatur tempo, jeda, lan ritme pamedhale swara."
+            },
+            {
+                kategori: "Cara Menemukan Amanat",
+                q: "Amanat ing sajroning geguritan biasane bersifat tersirat. Tegese tersirat yaiku...",
+                o: [
+                    "A. Ora tertulis kanthi langsung nanging kudu dipahami saka sakabehing isi",
+                    "B. Tertulis cetha ing baris pertama",
+                    "C. Tertulis ing judul wae",
+                    "D. Ora nduweni arti apa-apa",
+                    "E. Tertulis ing aksara Latin wae"
+                ],
+                a: 0,
+                p: "Tersirat tegese tersembunyi/kandhut ing sakabehing isi geguritan."
+            },
+
+            // SOAL 47 - 50: FINAL CHECK
+            {
+                kategori: "Pengertian & Bentuk Geguritan",
+                q: "Sapa sejatine wong kang ngarang/nulis karya sastra geguritan dinamakan...",
+                o: [
+                    "A. Pangripta / Penyair / Penggurit",
+                    "B. Pamiarsa",
+                    "C. Paraga utama",
+                    "D. Sutradara",
+                    "E. Produser"
+                ],
+                a: 0,
+                p: "Pengarang geguritan diarani Pangripta, Penyair, utawa Penggurit."
+            },
+            {
+                kategori: "Lelewaning Basa (Majas)",
+                q: "Tembung-tembung pembanding ing majas Simile kayata 'kaya', 'kadi', lan 'lir' ing basa Indonesia padha tegese karo...",
+                o: [
+                    "A. Seperti / Bagaikan",
+                    "B. Walaupun / Meskipun",
+                    "C. Sebab / Karena",
+                    "D. Karena itu / Maka",
+                    "E. Dan / Serta"
+                ],
+                a: 0,
+                p: "Kaya, kadi, lir, pindha ing basa Indonesia tegese seperti/bagaikan/ibarat."
+            },
+            {
+                kategori: "Cara Membaca Geguritan (4W)",
+                q: "Kerapian busana, posisi ngadeg ing panggung, lan pandangan mripat marang penonton kalebu unsur...",
+                o: [
+                    "A. Wiraga",
+                    "B. Wicara",
+                    "C. Wirama",
+                    "D. Diksi",
+                    "E. Tipografi"
+                ],
+                a: 0,
+                p: "Wiraga kalebu penampilan fisik, gestur, posisi panggung, lan penataan raga."
+            },
+            {
+                kategori: "Pengertian & Bentuk Geguritan",
+                q: "Ringkesing tembung, geguritan yaiku salah siji wujud karya sastra Jawa kang nuduhake kaendahan basa lan...",
+                o: [
+                    "A. Jeroing makna perasaan (batin) penggurite",
+                    "B. Kecepatan nulis aksara Jawa",
+                    "C. Kepinteran njoget ing panggung",
+                    "D. Kerumitan rumus matematika",
+                    "E. Ketrampilan nggawe kerajinan"
+                ],
+                a: 0,
+                p: "Geguritan nyawijikake kaendahan basa lan kedalaman makna perasaan batin penggurite."
+            }
+        ];
+
+        let quizQuestions = [];
+        let currentIdx = 0;
+        let answersState = [];
+        let tempSelectedIdx = null;
+
+        // TEMA GELAP / TERANG
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        }
+
+        function setTheme(theme) {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (themeToggleIcon && themeToggleText) {
+                if (theme === 'dark') {
+                    themeToggleIcon.textContent = '☀️';
+                    themeToggleText.textContent = 'Mode Siang';
+                } else {
+                    themeToggleIcon.textContent = '🌙';
+                    themeToggleText.textContent = 'Mode Malam';
+                }
+            }
+        }
+
+        // ENGINE FUNGSI PENGACAK
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // FUNGSI PENGACAK PILIHAN JAWABAN (A, B, C, D, E) & PEMBARUAN KUNCI JAWABAN
+        function randomizeQuestionOptions(question) {
+            const rawOptions = question.o.map(opt => opt.replace(/^[A-E]\.\s*/, ''));
+            const correctText = rawOptions[question.a];
+
+            const shuffledRaw = shuffleArray([...rawOptions]);
+            const newOptions = shuffledRaw.map((txt, idx) => `${String.fromCharCode(65 + idx)}. ${txt}`);
+            const newCorrectIndex = shuffledRaw.indexOf(correctText);
+
+            return {
+                ...question,
+                o: newOptions,
+                a: newCorrectIndex
+            };
+        }
+
+        function initiateQuiz() {
+            const countInput = document.getElementById('questionCountInput');
+            let maxCount = parseInt(countInput.value);
+            if(isNaN(maxCount) || maxCount < 1) maxCount = 10;
+            if(maxCount > bankSoal.length) maxCount = bankSoal.length;
+
+            const shuffledSoal = shuffleArray([...bankSoal]);
+            const selectedSoal = shuffledSoal.slice(0, maxCount);
+            
+            quizQuestions = selectedSoal.map(q => randomizeQuestionOptions(q));
+            
+            currentIdx = 0;
+            answersState = new Array(maxCount).fill(null);
+            tempSelectedIdx = null;
+
+            document.getElementById('setup-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const activeQuestion = quizQuestions[currentIdx];
+            const totalQuestions = quizQuestions.length;
+
+            document.getElementById('progressText').textContent = `Soal ${currentIdx + 1} dari ${totalQuestions}`;
+            const percent = ((currentIdx + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            document.getElementById('questionMeta').textContent = activeQuestion.kategori || "Bahasa Jawa";
+            document.getElementById('questionText').textContent = activeQuestion.q;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const confirmedAnswer = answersState[currentIdx];
+
+            activeQuestion.o.forEach((optStr, optIdx) => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                
+                if (confirmedAnswer !== null) {
+                    btn.disabled = true;
+                    
+                    if (optIdx === activeQuestion.a) {
+                        btn.style.borderColor = 'var(--success-color)';
+                        btn.style.backgroundColor = 'var(--success-bg)';
+                        btn.style.color = 'var(--success-color)';
+                    } else if (optIdx === confirmedAnswer) {
+                        btn.style.borderColor = 'var(--danger-color)';
+                        btn.style.backgroundColor = 'var(--danger-bg)';
+                        btn.style.color = 'var(--danger-color)';
+                    } else {
+                        btn.style.opacity = '0.5';
+                    }
+                } else {
+                    if (tempSelectedIdx === optIdx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.onclick = () => handleTempSelection(optIdx);
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'option-badge';
+                badge.textContent = String.fromCharCode(65 + optIdx);
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = optStr.substring(3);
+
+                btn.appendChild(badge);
+                btn.appendChild(textSpan);
+                li.appendChild(btn);
+                container.appendChild(li);
+            });
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if (confirmedAnswer !== null) {
+                feedbackBox.style.display = 'block';
+                if (confirmedAnswer === activeQuestion.a) {
+                    feedbackBox.className = 'explanation-box correct';
+                    feedbackBox.innerHTML = `<strong>✓ BENAR!</strong> ${activeQuestion.p}`;
+                } else {
+                    feedbackBox.className = 'explanation-box wrong';
+                    feedbackBox.innerHTML = `<strong>✕ SALAH!</strong> Jawaban: <strong>${activeQuestion.o[activeQuestion.a]}</strong>. (${activeQuestion.p})`;
+                }
+                
+                actionBtn.disabled = false;
+                if (currentIdx === totalQuestions - 1) {
+                    actionBtn.textContent = 'Selesai & Lihat Skor';
+                } else {
+                    actionBtn.textContent = 'Lanjut';
+                }
+            } else {
+                feedbackBox.style.display = 'none';
+                actionBtn.textContent = 'Cek Jawaban';
+                actionBtn.disabled = (tempSelectedIdx === null);
+            }
+
+            document.getElementById('backBtn').disabled = (currentIdx === 0);
+        }
+
+        function handleTempSelection(optIdx) {
+            tempSelectedIdx = optIdx;
+            renderQuestion();
+        }
+
+        function handlePrimaryAction() {
+            const confirmedAnswer = answersState[currentIdx];
+
+            if (confirmedAnswer === null) {
+                if (tempSelectedIdx !== null) {
+                    answersState[currentIdx] = tempSelectedIdx;
+                    renderQuestion();
+                }
+            } else {
+                if (currentIdx < quizQuestions.length - 1) {
+                    currentIdx++;
+                    tempSelectedIdx = (answersState[currentIdx] !== null) ? answersState[currentIdx] : null;
+                    renderQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function navigatePrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                tempSelectedIdx = answersState[currentIdx];
+                renderQuestion();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (answersState[idx] === q.a) correctCount++;
+            });
+
+            const total = quizQuestions.length;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            document.getElementById('scoreValue').textContent = finalScore;
+            document.getElementById('statScore').textContent = `${finalScore}/100`;
+            document.getElementById('statCorrect').textContent = correctCount;
+            document.getElementById('statWrong').textContent = total - correctCount;
+        }
+    </script>
+</body>
+</html>
